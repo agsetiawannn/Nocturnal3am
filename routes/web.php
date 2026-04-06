@@ -24,6 +24,10 @@ Route::get('/clients', function () {
     return view('app');
 })->name('client');
 
+Route::get('/landing', function () {
+    return view('app');
+})->name('landing');
+
 // Tracking System Routes (Native PHP) - Without CSRF Protection
 Route::any('/login.php', function () {
     include resource_path('views/login.php');

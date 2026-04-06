@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import Footer from '../components/Footer';
 import Loader from '../components/Loader';
 
-function Home() {
+function Landing() {
     const [formData, setFormData] = useState({
         name: '',
         email: '',
@@ -89,8 +89,47 @@ function Home() {
     const runImages = [...Array(6)];
 
     return (
-        <div>
+        <div className="min-h-screen bg-black text-white font-sans">
             <Loader />
+            {/* Header - Logo and Contact Button */}
+            <div className="fixed top-3 left-3 md:top-6 md:left-6 z-50">
+                <a href="/">
+                    <img
+                        src="/img/tb.png"
+                        alt="Tigapagi Logo"
+                        className="h-9 md:h-12 object-contain"
+                    />
+                </a>
+            </div>
+
+            <div className="fixed top-3 right-3 md:top-6 md:right-6 z-50 flex items-center gap-2 md:gap-3 overflow-visible">
+                {/* Contact Button */}
+                <a
+                    href="https://api.whatsapp.com/send/?phone=6289638893601&text&type=phone_number&app_absent=0"
+                    className="
+        h-9 md:h-12
+        flex items-center justify-center gap-2
+        bg-transparent
+        border border-white/30
+        px-3 md:px-4
+        rounded-lg
+        text-xs md:text-sm font-medium text-white
+        hover:border-white/50
+        transition-colors
+        "
+                    style={{ backdropFilter: 'blur(40px)', WebkitBackdropFilter: 'blur(40px)' }}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
+                    <img
+                        src="/img/wa.png"
+                        alt="WhatsApp"
+                        className="w-4 h-4 md:w-5 md:h-5 rounded-full object-cover"
+                    />
+                    Contact
+                </a>
+            </div>
+
             {/* Hero Section */}
             <section className="relative min-h-screen flex items-center justify-center overflow-hidden px-6 md:px-12">
                 {/* Background Layer 1 - BG.png (bottom layer, with blur and pan animation) */}
@@ -153,7 +192,7 @@ function Home() {
             <section className="relative py-20 bg-black overflow-hidden">
                 <div className="relative z-10 max-w-6xl mx-auto px-6">
                     <p className="text-base md:text-lg text-white/70 leading-relaxed text-justify mb-16">
-                        <strong className="text-white">Studio Tigapagi</strong> is a creative makerspace located in Sanur, Bali. Powered by “Passionate nocturnal folks” with high standarts and high commitment. Helping brands grow through branding, digital content strategy, social media campaigns, and visual production.
+                        <strong className="text-white">Studio Tigapagi</strong> is a creative makerspace located in Sanur, Bali. Powered by &ldquo;Passionate nocturnal folks&rdquo; with high standarts and high commitment. Helping brands grow through branding, digital content strategy, social media campaigns, and visual production.
                     </p>
 
                     <h2 className="text-white mb-16 leading-tight w-full" style={{ fontSize: 'clamp(1rem, 2.8vw, 2.6rem)' }}>
@@ -161,7 +200,48 @@ function Home() {
                     </h2>
 
                     {/* Service Pills Image */}
-                    <img src="/img/todo.svg" alt="Our Services" className="w-full mx-auto" style={{ maxWidth: '1100px' }} />
+                    <img src="/img/todo.svg" alt="Our Services" className="w-full mx-auto mb-20" style={{ maxWidth: '1100px' }} />
+
+                    {/* Selected Works */}
+                    <div className="mt-4">
+                        <h2 className="text-4xl md:text-5xl font-light text-white mb-12 leading-tight">
+                            Selected <strong className="font-bold">Works</strong>
+                        </h2>
+
+                        <div className="space-y-0">
+                            {[
+                                { num: '01', name: 'Tanuki Sushi & Bar', tags: ['Branding', 'Social Media Management', 'Photo Production'] },
+                                { num: '02', name: 'The Smoke House', tags: ['Social Media Management', 'Photo Production'] },
+                                { num: '03', name: 'Blue Marlin Komodo', tags: ['Ads Management', 'Photo Production'] },
+                                { num: '04', name: 'Yamaha Bali', tags: ['Content Creation'] },
+                                { num: '05', name: 'Pertamina', tags: ['Social Media Management'] },
+                            ].map((work) => (
+                                <div
+                                    key={work.num}
+                                    className="border-t border-white/20 py-6 flex flex-col md:flex-row md:items-center gap-3 md:gap-8"
+                                >
+                                    <span className="text-white/60 text-base font-light shrink-0 md:w-20">{work.num}</span>
+                                    <span className="text-white font-bold text-lg md:text-xl shrink-0 md:w-[520px]">{work.name}</span>
+                                    <div className="flex flex-col gap-2 md:items-start">
+                                        {work.tags.map((tag) => (
+                                            <span
+                                                key={tag}
+                                                className="px-4 py-1.5 rounded-full border border-white/40 text-white text-xs md:text-sm font-light whitespace-nowrap"
+                                            >
+                                                {tag}
+                                            </span>
+                                        ))}
+                                    </div>
+                                </div>
+                            ))}
+                            {/* Bottom border */}
+                            <div className="border-t border-white/20" />
+                        </div>
+
+                        <h2 className="text-4xl md:text-5xl lg:text-6xl font-light text-white mt-16 leading-tight">
+                            And <strong className="font-bold">Many More</strong>
+                        </h2>
+                    </div>
                 </div>
             </section>
 
@@ -688,8 +768,11 @@ function Home() {
                     to { opacity: 1; transform: scale(1) rotate(0deg); }
                 }
             `}</style>
+
+            {/* Footer */}
+            <Footer />
         </div>
     );
 }
 
-export default Home;
+export default Landing;

@@ -34,10 +34,19 @@
             font-weight: bold;
             color: #667eea;
             display: inline-block;
-            width: 100px;
+            width: 140px;
         }
         .value {
             color: #333;
+        }
+        .section-title {
+            font-weight: bold;
+            color: #764ba2;
+            font-size: 14px;
+            margin-top: 25px;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
         .footer {
             margin-top: 20px;
@@ -58,6 +67,8 @@
     <div class="content">
         <p>You have received a new contact form submission from your website.</p>
         
+        <div class="section-title">Contact Info</div>
+        
         <div class="info-row">
             <span class="label">Name:</span>
             <span class="value">{{ $contact->name }}</span>
@@ -72,6 +83,50 @@
             <span class="label">Phone:</span>
             <span class="value">{{ $contact->phone }}</span>
         </div>
+
+        @if($contact->business_goals)
+        <div class="section-title">Business Details</div>
+        
+        <div class="info-row">
+            <span class="label">Business Goals:</span>
+            <span class="value">{{ is_array($contact->business_goals) ? implode(', ', $contact->business_goals) : $contact->business_goals }}</span>
+        </div>
+        @endif
+
+        @if($contact->others_text)
+        <div class="info-row">
+            <span class="label">Others (Custom):</span>
+            <span class="value">{{ $contact->others_text }}</span>
+        </div>
+        @endif
+
+        @if($contact->business_stage)
+        <div class="info-row">
+            <span class="label">Business Stage:</span>
+            <span class="value">{{ $contact->business_stage }}</span>
+        </div>
+        @endif
+
+        @if($contact->budget)
+        <div class="info-row">
+            <span class="label">Budget Range:</span>
+            <span class="value">{{ $contact->budget }}</span>
+        </div>
+        @endif
+
+        @if($contact->timeline)
+        <div class="info-row">
+            <span class="label">Timeline:</span>
+            <span class="value">{{ $contact->timeline }}</span>
+        </div>
+        @endif
+
+        @if($contact->additional_details)
+        <div class="section-title">Additional Details</div>
+        <div class="info-row">
+            <span class="value">{{ $contact->additional_details }}</span>
+        </div>
+        @endif
         
         <div class="info-row">
             <span class="label">Submitted:</span>

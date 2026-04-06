@@ -115,4 +115,12 @@ return [
         'name' => env('MAIL_FROM_NAME', 'Example'),
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Admin Email Address
+    |--------------------------------------------------------------------------
+    */
+
+    'admin_address' => env('MAIL_ADMIN_ADDRESS', 'admin@tigapagi.com'),
+
 ];

@@ -14,5 +14,19 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Contact extends Model
 {
-    protected $fillable = ['name', 'email', 'phone'];
+    protected $fillable = [
+        'name',
+        'email',
+        'phone',
+        'business_goals',
+        'others_text',
+        'business_stage',
+        'budget',
+        'timeline',
+        'additional_details',
+    ];
+
+    protected $casts = [
+        'business_goals' => 'array',
+    ];
 }

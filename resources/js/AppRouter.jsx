@@ -7,13 +7,14 @@ import Work from './pages/Work';
 import WorkDetail from './pages/WorkDetail';
 import Team from './pages/Team';
 import Clients from './pages/Clients';
+import Landing from './pages/Landing';
 
 function App() {
   const location = useLocation();
 
   return (
     <>
-      <Loader />
+      {/* <Loader /> */}
       <Routes location={location} key={location.pathname}>
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
@@ -22,6 +23,7 @@ function App() {
           <Route path="team" element={<Team />} />
           <Route path="clients" element={<Clients />} />
         </Route>
+        <Route path="landing" element={<Landing />} />
       </Routes>
     </>
   );

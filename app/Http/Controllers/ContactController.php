@@ -37,6 +37,12 @@ class ContactController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|email|max:255',
             'phone' => 'required|string|max:20',
+            'business_goals' => 'nullable|array',
+            'others_text' => 'nullable|string|max:255',
+            'business_stage' => 'nullable|string|max:255',
+            'budget' => 'nullable|string|max:255',
+            'timeline' => 'nullable|string|max:255',
+            'additional_details' => 'nullable|string|max:2000',
         ]);
 
         $contact = Contact::create($validated);
@@ -44,7 +50,7 @@ class ContactController extends Controller
         // Send email notification
         try {
             // Send to admin email from .env
-            $adminEmail = env('MAIL_ADMIN_ADDRESS', 'admin@tigapagi.com');
+            $adminEmail = config('mail.admin_address', 'produksitigapagi@gmail.com');
             Mail::to($adminEmail)->send(new NewContactNotification($contact));
         } catch (\Exception $e) {
             // Log error but don't fail the submission
