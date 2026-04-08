@@ -406,7 +406,7 @@ function Landing() {
 
 
             {/* Responsive Wrapper to swap Video and Contact order on mobile/desktop */}
-            <div className="flex flex-col lg:flex-col-reverse">
+            <div className="flex flex-col-reverse lg:flex-col">
                 {/* Video Section */}
                 <section className="bg-black">
                     <video
