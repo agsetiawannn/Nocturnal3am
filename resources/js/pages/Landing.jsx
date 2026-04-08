@@ -408,7 +408,7 @@ function Landing() {
             {/* Responsive Wrapper to swap Video and Contact order on mobile/desktop */}
             <div className="flex flex-col">
                 {/* Contact Section */}
-                <section className="relative bg-black order-2 flex flex-col justify-center lg:min-h-[600px]">
+                <section className="relative bg-black order-1 md:order-2 flex flex-col justify-center lg:min-h-[600px]">
                     <div className="absolute inset-0">
                         <img
                             src="/public/img/inquiries.webp"
@@ -713,7 +713,7 @@ function Landing() {
                 </section>
 
                 {/* Motion Video Section */}
-                <section className="bg-black order-1">
+                <section className="bg-black order-2 md:order-1">
                     <video
                         src="/public/img/MOTION TP.MP4"
                         autoPlay
