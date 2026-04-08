@@ -286,7 +286,7 @@ function Home() {
 
 
             {/* Responsive Wrapper to swap Video and Contact order on mobile/desktop */}
-            <div className="flex flex-col-reverse lg:flex-col">
+            <div className="flex flex-col lg:flex-col-reverse">
                 {/* Contact Section */}
                 <section className="relative bg-black flex flex-col justify-center lg:min-h-[600px]">
                     <div className="absolute inset-0">
