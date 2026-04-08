@@ -406,9 +406,9 @@ function Landing() {
 
 
             {/* Responsive Wrapper to swap Video and Contact order on mobile/desktop */}
-            <div className="flex flex-col">
-                {/* Video Section - shown below contact form on mobile, above on desktop */}
-                <section className="bg-black order-2 lg:order-1">
+            <div className="flex flex-col lg:flex-col-reverse">
+                {/* Video Section */}
+                <section className="bg-black">
                     <video
                         src="/public/img/MOTION TP.MP4"
                         autoPlay
@@ -420,8 +420,8 @@ function Landing() {
                     />
                 </section>
 
-                {/* Contact Section - shown above on mobile, below on desktop */}
-                <section className="relative bg-black order-1 lg:order-2 flex flex-col justify-center lg:min-h-[600px]">
+                {/* Contact Section */}
+                <section className="relative bg-black flex flex-col justify-center lg:min-h-[600px]">
                     <div className="absolute inset-0">
                         <img
                             src="/public/img/inquiries.webp"
