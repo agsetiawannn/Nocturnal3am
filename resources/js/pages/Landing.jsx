@@ -406,9 +406,22 @@ function Landing() {
 
 
             {/* Responsive Wrapper to swap Video and Contact order on mobile/desktop */}
-            <div className="flex flex-col lg:flex-col-reverse">
-                {/* Contact Section */}
-                <section className="relative bg-black flex flex-col justify-center lg:min-h-[600px]">
+            <div className="flex flex-col">
+                {/* Video Section - shown first on mobile, last on desktop */}
+                <section className="bg-black lg:order-2">
+                    <video
+                        src="/public/img/MOTION TP.MP4"
+                        autoPlay
+                        muted
+                        loop
+                        playsInline
+                        className="w-full"
+                        style={{ display: 'block', objectFit: 'cover' }}
+                    />
+                </section>
+
+                {/* Contact Section - shown last on mobile, first on desktop */}
+                <section className="relative bg-black lg:order-1 flex flex-col justify-center lg:min-h-[600px]">
                     <div className="absolute inset-0">
                         <img
                             src="/public/img/inquiries.webp"
@@ -710,19 +723,6 @@ function Landing() {
                             </div>
                         </div>
                     </div>
-                </section>
-
-                {/* Motion Video Section */}
-                <section className="bg-black">
-                    <video
-                        src="/public/img/MOTION TP.MP4"
-                        autoPlay
-                        muted
-                        loop
-                        playsInline
-                        className="w-full"
-                        style={{ display: 'block', objectFit: 'cover' }}
-                    />
                 </section>
             </div>
 
