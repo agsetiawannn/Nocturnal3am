@@ -21,7 +21,7 @@ return (
                 className="animate-pan-smooth h-full"
                 style={{
                     width: '300%',
-                    backgroundImage: 'url(/img/BG.png)',
+                    backgroundImage: 'url(/public/img/BG.png)',
                     backgroundSize: '50% auto',
                     backgroundRepeat: 'repeat-x',
                     backgroundPosition: 'center',
@@ -35,7 +35,7 @@ return (
         <div
             className="absolute inset-0 bg-cover bg-center pointer-events-none"
             style={{
-                backgroundImage: 'url(/img/BG2.png)',
+                backgroundImage: 'url(/public/img/BG2.png)',
                 opacity: 0.35,
                 zIndex: 2
             }}

@@ -121,7 +121,7 @@ function Home() {
                         className="animate-pan-smooth h-full"
                         style={{
                             width: '300%',
-                            backgroundImage: 'url(/img/BG.png)',
+                            backgroundImage: 'url(/public/img/BG.png)',
                             backgroundSize: '50% auto',
                             backgroundRepeat: 'repeat-x',
                             backgroundPosition: 'center',
@@ -135,7 +135,7 @@ function Home() {
                 <div
                     className="absolute inset-0 bg-cover bg-center pointer-events-none"
                     style={{
-                        backgroundImage: 'url(/img/BG2.png)',
+                        backgroundImage: 'url(/public/img/BG2.png)',
                         opacity: 0.35,
                         zIndex: 2
                     }}
@@ -595,7 +595,7 @@ function Home() {
                 {/* Motion Video Section */}
                 <section className="bg-black order-1">
                     <video
-                        src="/public/img/MOTION TP.mp4"
+                        src="/public/img/MOTION TP.MP4"
                         autoPlay
                         muted
                         loop
