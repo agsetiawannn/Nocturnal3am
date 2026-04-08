@@ -14,8 +14,12 @@
     <link rel="apple-touch-icon" href="{{ asset('img/Exclude.png') }}">
     <link rel="shortcut icon" href="{{ asset('img/Exclude.png') }}" type="image/x-icon">
 
-    @viteReactRefresh
-    @vite(['resources/css/app.css', 'resources/js/app.jsx'])
+    @if(!app()->environment('production'))
+        @viteReactRefresh
+        @vite(['resources/css/app.css', 'resources/js/app.jsx'])
+    @else
+        <link rel="stylesheet" href="{{ asset('build/assets/app-Bt7rgsUh.css') }}">
+    @endif
 </head>
 
 <body class="antialiased bg-black" style="background-color: #000;">

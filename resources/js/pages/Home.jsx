@@ -288,7 +288,7 @@ function Home() {
             {/* Responsive Wrapper to swap Video and Contact order on mobile/desktop */}
             <div className="flex flex-col">
                 {/* Contact Section */}
-                <section className="relative bg-black order-1 lg:order-2 flex flex-col justify-center lg:min-h-[600px]">
+                <section className="relative bg-black order-2 flex flex-col justify-center lg:min-h-[600px]">
                     <div className="absolute inset-0">
                         <img
                             src="/img/inquiries.webp"
@@ -303,15 +303,7 @@ function Home() {
 
                     <div className="relative z-10 w-full max-w-7xl mx-auto px-6 md:px-8 py-24 pb-32 md:py-20 lg:py-0">
                         <div className="flex flex-col lg:grid lg:grid-cols-2 gap-6 md:gap-16 items-center">
-                            {/* Text Header (Mobile: Top) */}
-                            <div className="flex items-center justify-start lg:hidden w-full">
-                                <h2 className="text-[44px] leading-[0.9] tracking-tighter font-bold text-white text-left w-full" style={{ fontFamily: "'Montserrat', sans-serif" }}>
-                                    Get your<br />
-                                    instant<br />
-                                    quotation<br />
-                                    here
-                                </h2>
-                            </div>
+
 
                             <div
                                 className="rounded-[20px] p-6 md:p-10 w-full max-w-md lg:order-1"
@@ -601,7 +593,7 @@ function Home() {
                 </section>
 
                 {/* Motion Video Section */}
-                <section className="bg-black order-2 lg:order-1">
+                <section className="bg-black order-1">
                     <video
                         src="/img/MOTION TP.mp4"
                         autoPlay
