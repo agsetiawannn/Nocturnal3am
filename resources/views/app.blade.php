@@ -18,7 +18,9 @@
         @viteReactRefresh
         @vite(['resources/css/app.css', 'resources/js/app.jsx'])
     @else
-        <link rel="stylesheet" href="{{ asset('build/assets/app-Bt7rgsUh.css') }}">
+        <link rel="stylesheet" href="{{ asset('build/assets/app-mYcLQiXB.css') }}">
+        <link rel="stylesheet" href="{{ asset('build/assets/app-DMRFCb7R.css') }}">
+        <script type="module" src="{{ asset('build/assets/app-BfhnR-N7.js') }}"></script>
     @endif
 </head>
 
