@@ -19,7 +19,7 @@ function Header() {
     return (
         <>
             {/* Logo */}
-            <div className="fixed top-3 left-3 md:top-6 md:left-6 z-50">
+            <div className="fixed top-3 left-3 md:top-6 md:left-[5.5rem] z-50">
                 <Link to="/">
                     <img
                         src="/img/tb.png"
@@ -30,7 +30,7 @@ function Header() {
             </div>
 
             {/* Controls */}
-            <div className="fixed top-3 right-3 md:top-6 md:right-6 z-50 flex items-center gap-2 md:gap-3 overflow-visible">
+            <div className="fixed top-3 right-3 md:top-6 md:right-[5.5rem] z-50 flex items-center gap-2 md:gap-3 overflow-visible">
                 {/* Navigation Menu - Slides out from left of hamburger */}
                 <div className="hidden md:block overflow-hidden">
                     <nav
@@ -107,8 +107,8 @@ function Header() {
                     <a
                         href="https://api.whatsapp.com/send/?phone=6289638893601&text&type=phone_number&app_absent=0"
                         className="
-            h-9 md:h-12
-            flex items-center justify-center gap-2
+            hidden md:flex h-9 md:h-12
+            items-center justify-center gap-2
             bg-transparent
             border border-white/30
             px-3 md:px-4

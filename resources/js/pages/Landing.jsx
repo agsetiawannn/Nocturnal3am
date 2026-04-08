@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Footer from '../components/Footer';
 import Loader from '../components/Loader';
+import FloatingPopups from '../components/FloatingPopups';
 
 function Landing() {
     const [formData, setFormData] = useState({
@@ -18,6 +19,10 @@ function Landing() {
     const [showClientWrap, setShowClientWrap] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [popup, setPopup] = useState({ show: false, success: true, message: '' });
+    const [hoveredWork, setHoveredWork] = useState(null);
+    const [cursorPos, setCursorPos] = useState({ x: 0, y: 0 });
+
+
 
     useEffect(() => {
         if (popup.show) {
@@ -86,13 +91,29 @@ function Landing() {
         setAdditionalDetails('');
     };
 
-    const runImages = [...Array(6)];
+    const runImages = [...Array(1)];
 
     return (
         <div className="min-h-screen bg-black text-white font-sans">
+            {/* Desktop Floating Image Preview on Hover */}
+            <div
+                className={`hidden md:block fixed pointer-events-none z-[100] transition-all duration-300 ease-out ${hoveredWork ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}
+                style={{
+                    left: cursorPos.x + 'px',
+                    top: cursorPos.y + 'px',
+                    width: '320px',
+                    height: '420px',
+                    transform: 'translate(20px, -50%)',
+                }}
+            >
+                {hoveredWork && (
+                    <img src={hoveredWork} alt="Preview" className="w-full h-full object-cover rounded-xl shadow-2xl border border-white/10" />
+                )}
+            </div>
+
             <Loader />
             {/* Header - Logo and Contact Button */}
-            <div className="fixed top-3 left-3 md:top-6 md:left-6 z-50">
+            <div className="fixed top-3 left-3 md:top-6 md:left-[5.5rem] z-50">
                 <a href="/">
                     <img
                         src="/img/tb.png"
@@ -102,13 +123,13 @@ function Landing() {
                 </a>
             </div>
 
-            <div className="fixed top-3 right-3 md:top-6 md:right-6 z-50 flex items-center gap-2 md:gap-3 overflow-visible">
+            <div className="fixed top-3 right-3 md:top-6 md:right-[5.5rem] z-50 flex items-center gap-2 md:gap-3 overflow-visible">
                 {/* Contact Button */}
                 <a
                     href="https://api.whatsapp.com/send/?phone=6289638893601&text&type=phone_number&app_absent=0"
                     className="
-        h-9 md:h-12
-        flex items-center justify-center gap-2
+        hidden md:flex h-9 md:h-12
+        items-center justify-center gap-2
         bg-transparent
         border border-white/30
         px-3 md:px-4
@@ -176,31 +197,65 @@ function Landing() {
                     }}
                 />
 
-                <div className="relative z-10 w-full px-6 md:px-12 text-left">
+                {/* Floating Popups */}
+                <FloatingPopups />
+
+                <div className="relative z-10 w-full px-2 md:px-10 text-left mt-10 md:mt-0">
                     <h1
-                        className="text-7xl md:text-8xl lg:text-9xl leading-[1.1] text-white"
+                        className="text-[5.5vw] md:text-[60px] lg:text-[80px] text-white leading-[1.2] md:leading-[1.1]"
                         style={{ fontFamily: "'Montserrat', sans-serif", fontWeight: 800 }}
                     >
-                        Brands trust us.<br />
-                        Results prove it.<br />
-                        Now it&rsquo;s your turn.
+                        Hundreds of businesses<br />
+                        transformed through our vision.<br />
+                        Now, it&rsquo;s your turn.
                     </h1>
+                </div>
+
+                {/* Mobile Contact Button in Hero */}
+                <div className="absolute bottom-12 left-6 z-20 md:hidden">
+                    <a
+                        href="https://api.whatsapp.com/send/?phone=6289638893601&text&type=phone_number&app_absent=0"
+                        className="
+                            h-10 flex items-center justify-center gap-2
+                            bg-transparent border border-white/30 hover:border-white/50
+                            px-5 rounded-xl text-xs font-light text-white transition-colors
+                        "
+                        style={{ backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)' }}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
+                        <img
+                            src="/img/wa.png"
+                            alt="WhatsApp"
+                            className="w-4 h-4 rounded-full object-cover"
+                        />
+                        Contact
+                    </a>
                 </div>
             </section>
 
             {/* Works Section */}
-            <section className="relative py-20 bg-black overflow-hidden">
+            <section className="relative py-16 md:py-20 bg-black overflow-hidden">
                 <div className="relative z-10 max-w-6xl mx-auto px-6">
-                    <p className="text-base md:text-lg text-white/70 leading-relaxed text-justify mb-16">
-                        <strong className="text-white">Studio Tigapagi</strong> is a creative makerspace located in Sanur, Bali. Powered by &ldquo;Passionate nocturnal folks&rdquo; with high standarts and high commitment. Helping brands grow through branding, digital content strategy, social media campaigns, and visual production.
+                    <p className="text-[15px] md:text-lg text-white/90 md:text-white/70 leading-[1.7] md:leading-relaxed text-justify mb-14 md:mb-16 font-light md:font-normal tracking-wide md:tracking-normal">
+                        <strong className="text-white font-bold md:font-normal">Studio Tigapagi</strong> is a creative makerspace located in Sanur, Bali. Powered by &ldquo;Passionate nocturnal folks&rdquo; with high standarts and high commitment. Helping brands grow through branding, digital content strategy, social media campaigns, and visual production.
                     </p>
 
-                    <h2 className="text-white mb-16 leading-tight w-full" style={{ fontSize: 'clamp(1rem, 2.8vw, 2.6rem)' }}>
+                    {/* Desktop Version */}
+                    <h2 className="text-white mb-16 leading-tight w-full hidden md:block" style={{ fontSize: 'clamp(1rem, 2.8vw, 2.6rem)' }}>
                         Let&rsquo;s Unlock Your Brand's <strong className="font-bold italic">Potential</strong> with our Strategy
+                    </h2>
+                    {/* Mobile Version */}
+                    <h2 className="text-white text-[26px] mb-14 leading-[1.3] w-full font-normal block md:hidden">
+                        Let&rsquo;s Unlock Your Brand's <strong className="font-bold">Potential</strong><br />
+                        with our Strategy
                     </h2>
 
                     {/* Service Pills Image */}
-                    <img src="/img/todo.svg" alt="Our Services" className="w-full mx-auto mb-20" style={{ maxWidth: '1100px' }} />
+                    <picture>
+                        <source media="(max-width: 767px)" srcSet="/img/brand%20potential.webp" />
+                        <img src="/img/todo.svg" alt="Our Services" className="w-full h-auto object-contain mx-auto mb-20" style={{ maxWidth: '1100px' }} />
+                    </picture>
 
                     {/* Selected Works */}
                     <div className="mt-4">
@@ -208,17 +263,20 @@ function Landing() {
                             Selected <strong className="font-bold">Works</strong>
                         </h2>
 
-                        <div className="space-y-0">
+                        {/* Desktop List Layout */}
+                        <div className="space-y-0 hidden md:block" onMouseLeave={() => setHoveredWork(null)}>
                             {[
-                                { num: '01', name: 'Tanuki Sushi & Bar', tags: ['Branding', 'Social Media Management', 'Photo Production'] },
-                                { num: '02', name: 'The Smoke House', tags: ['Social Media Management', 'Photo Production'] },
-                                { num: '03', name: 'Blue Marlin Komodo', tags: ['Ads Management', 'Photo Production'] },
-                                { num: '04', name: 'Yamaha Bali', tags: ['Content Creation'] },
-                                { num: '05', name: 'Pertamina', tags: ['Social Media Management'] },
+                                { num: '01', name: 'BaliSabi Poke Bowl Bar', tags: ['Branding', 'Social Media Management', 'Photo Production'], img: '/img/balisabi.webp' },
+                                { num: '02', name: 'The Smoke House', tags: ['Social Media Management', 'Photo Production'], img: '/img/smoke%20house.webp' },
+                                { num: '03', name: 'Blue Marlin Komodo', tags: ['Ads Management', 'Photo Production'], img: '/img/blue%20marlin.webp' },
+                                { num: '04', name: 'Pertamina Bali', tags: ['Content Creation'], img: '/img/pertamina.webp' },
+                                { num: '05', name: 'Hot Stone', tags: ['Social Media Management'], img: '/img/hot%20stone.webp' },
                             ].map((work) => (
                                 <div
                                     key={work.num}
-                                    className="border-t border-white/20 py-6 flex flex-col md:flex-row md:items-center gap-3 md:gap-8"
+                                    className="border-t border-white/20 py-6 flex flex-col md:flex-row md:items-center gap-3 md:gap-8 group relative transition-colors duration-300 hover:bg-white/5 cursor-pointer"
+                                    onMouseEnter={() => setHoveredWork(work.img)}
+                                    onMouseMove={(e) => setCursorPos({ x: e.clientX, y: e.clientY })}
                                 >
                                     <span className="text-white/60 text-base font-light shrink-0 md:w-20">{work.num}</span>
                                     <span className="text-white font-bold text-lg md:text-xl shrink-0 md:w-[520px]">{work.name}</span>
@@ -238,6 +296,43 @@ function Landing() {
                             <div className="border-t border-white/20" />
                         </div>
 
+                        {/* Mobile Horizontal Slide Layout */}
+                        <div className="block md:hidden -mx-6 mt-6">
+                            <div className="flex overflow-x-auto gap-4 px-6 pb-6 snap-x snap-mandatory scrollbar-hide">
+                                {[
+                                    { num: '01', name: 'Balisabi Poke Bowl Bar', img: '/img/balisabi.webp', tags: ['Branding', 'Social Media Management', 'Photo Production'] },
+                                    { num: '02', name: 'The Smoke House', img: '/img/smoke%20house.webp', tags: ['Photo Production', 'Social Media Management'] },
+                                    { num: '03', name: 'Blue Marlin Komodo', img: '/img/blue%20marlin.webp', tags: ['Photo Production', 'Ads Management'] },
+                                    { num: '04', name: 'Pertamina Bali', img: '/img/pertamina.webp', tags: ['Social Media Management'] },
+                                    { num: '05', name: 'Hot Stone', img: '/img/hot%20stone.webp', tags: ['Social Media Management'] },
+                                ].map((work) => (
+                                    <div key={work.num} className="snap-center shrink-0 w-[85vw] md:w-[400px] h-auto relative overflow-hidden group">
+                                        <img src={work.img} alt={work.name} className="w-full aspect-[3/4] object-cover" />
+                                        {/* Gradient Overlay */}
+                                        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
+
+                                        {/* Content container at the bottom */}
+                                        <div className="absolute bottom-5 left-5 right-5 flex flex-col gap-3">
+                                            <div className="flex items-center gap-2">
+                                                <span className="text-white/80 text-sm font-light">{work.num}</span>
+                                                <span className="text-white font-bold text-lg leading-tight">{work.name}</span>
+                                            </div>
+                                            <div className="flex flex-wrap gap-2">
+                                                {work.tags.map((tag) => (
+                                                    <span
+                                                        key={tag}
+                                                        className="px-3 py-1 rounded-full border border-white/50 text-white text-[10px] font-light whitespace-nowrap"
+                                                    >
+                                                        {tag}
+                                                    </span>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+
                         <h2 className="text-4xl md:text-5xl lg:text-6xl font-light text-white mt-16 leading-tight">
                             And <strong className="font-bold">Many More</strong>
                         </h2>
@@ -245,26 +340,16 @@ function Landing() {
                 </div>
             </section>
 
-            {/* Running Animation Section */}
+            {/* Photo Showcase Section */}
             <section className="bg-black overflow-hidden">
-                <div className="flex overflow-hidden">
-                    <div className="flex w-max animate-scroll">
-                        {runImages.map((_, index) => (
-                            <img
-                                key={`run-a-${index}`}
-                                src="/img/run.png"
-                                alt="Running"
-                                className="h-[60vh] md:h-[70vh] lg:h-[60vh] w-auto object-cover shrink-0"
-                            />
-                        ))}
-                        {runImages.map((_, index) => (
-                            <img
-                                key={`run-b-${index}`}
-                                src="/img/run.png"
-                                alt="Running"
-                                className="h-[60vh] md:h-[70vh] lg:h-[60vh] w-auto object-cover shrink-0"
-                            />
-                        ))}
+                <div className="w-full overflow-hidden whitespace-nowrap text-[0]">
+                    <div className="inline-block animate-scroll align-top">
+                        <div className="inline-block w-[400vw] md:w-[300vw] lg:w-[200vw]">
+                            <img src="/img/photowrap.webp" alt="Photo Showcase" className="w-full h-auto block" />
+                        </div>
+                        <div className="inline-block w-[400vw] md:w-[300vw] lg:w-[200vw]">
+                            <img src="/img/photowrap.webp" alt="Photo Showcase" className="w-full h-auto block" />
+                        </div>
                     </div>
                 </div>
             </section>
@@ -281,11 +366,14 @@ function Landing() {
                         className="relative overflow-hidden transition-all duration-700 ease-in-out"
                         style={{ maxHeight: showClientWrap ? '2000px' : '80px' }}
                     >
-                        <img
-                            src="/img/full client.webp"
-                            alt="Our Clients"
-                            className="w-full"
-                        />
+                        <picture>
+                            <source media="(max-width: 767px)" srcSet="/img/clientm.webp" />
+                            <img
+                                src="/img/full client.webp"
+                                alt="Our Clients"
+                                className="w-full"
+                            />
+                        </picture>
                         {/* Gradient fade at bottom when collapsed */}
                         {!showClientWrap && (
                             <div
@@ -315,52 +403,48 @@ function Landing() {
                 </div>
             </section>
 
-            {/* Motion Video Section */}
-            <section className="bg-black">
-                <video
-                    src="/img/MOTION TP.mp4"
-                    autoPlay
-                    muted
-                    loop
-                    playsInline
-                    className="w-full"
-                    style={{ display: 'block', objectFit: 'cover' }}
-                />
-            </section>
 
-            {/* Contact Section */}
-            <section className="relative bg-black">
-                {/* Background Image - full width like the video */}
-                <img
-                    src="/img/inquiries.webp"
-                    alt=""
-                    className="w-full block min-h-[600px] md:min-h-0"
-                    style={{ objectFit: 'cover' }}
-                />
-                {/* Overlay with content */}
-                <div className="absolute inset-0" style={{ background: 'linear-gradient(to right, rgba(0,0,0,0.45) 0%, rgba(0,0,0,0.15) 50%, rgba(0,0,0,0.05) 100%)' }} />
 
-                {/* Gradient top edge */}
-                <div className="absolute top-0 left-0 right-0 h-[30px] pointer-events-none" style={{ background: 'linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%)', zIndex: 5 }} />
-                {/* Gradient bottom edge */}
-                <div className="absolute bottom-0 left-0 right-0 h-[30px] pointer-events-none" style={{ background: 'linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%)', zIndex: 5 }} />
+            {/* Responsive Wrapper to swap Video and Contact order on mobile/desktop */}
+            <div className="flex flex-col">
+                {/* Contact Section */}
+                <section className="relative bg-black order-1 lg:order-2 flex flex-col justify-center lg:min-h-[600px]">
+                    <div className="absolute inset-0">
+                        <img
+                            src="/img/inquiries.webp"
+                            alt=""
+                            className="w-full h-full"
+                            style={{ objectFit: 'cover' }}
+                        />
+                        <div className="absolute inset-0" style={{ background: 'linear-gradient(to right, rgba(0,0,0,0.45) 0%, rgba(0,0,0,0.15) 50%, rgba(0,0,0,0.05) 100%)' }} />
+                        <div className="absolute top-0 left-0 right-0 h-[30px] pointer-events-none" style={{ background: 'linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%)', zIndex: 5 }} />
+                        <div className="absolute bottom-0 left-0 right-0 h-[30px] pointer-events-none" style={{ background: 'linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%)', zIndex: 5 }} />
+                    </div>
 
-                <div className="absolute inset-0 z-10 flex items-center">
-                    <div className="w-full max-w-7xl mx-auto px-4 md:px-8">
-                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                    <div className="relative z-10 w-full max-w-7xl mx-auto px-6 md:px-8 py-24 pb-32 md:py-20 lg:py-0">
+                        <div className="flex flex-col lg:grid lg:grid-cols-2 gap-6 md:gap-16 items-center">
+                            {/* Text Header (Mobile: Top) */}
+                            <div className="flex items-center justify-start lg:hidden w-full">
+                                <h2 className="text-[44px] leading-[0.9] tracking-tighter font-bold text-white text-left w-full" style={{ fontFamily: "'Montserrat', sans-serif" }}>
+                                    Get your<br />
+                                    instant<br />
+                                    quotation<br />
+                                    here
+                                </h2>
+                            </div>
+
                             <div
-                                className="rounded-2xl p-8 md:p-10 max-w-md"
+                                className="rounded-[20px] p-6 md:p-10 w-full max-w-md lg:order-1"
                                 style={{
-                                    background: 'rgba(0, 0, 0, 0.65)',
+                                    background: 'rgba(0, 0, 0, 0.45)',
                                     backdropFilter: 'blur(10px)',
                                     WebkitBackdropFilter: 'blur(10px)',
-                                    border: '1px solid rgba(255,255,255,0.06)',
                                 }}
                             >
                                 {/* Step 1: Contact Info */}
                                 {formStep === 1 && (
                                     <div>
-                                        <h3 className="text-2xl md:text-3xl font-bold text-white mb-6">
+                                        <h3 className="text-[32px] md:text-3xl font-bold text-white mb-8">
                                             Let&rsquo;s Get Started
                                         </h3>
                                         <div className="space-y-4">
@@ -369,31 +453,31 @@ function Landing() {
                                                 placeholder="Name"
                                                 value={formData.name}
                                                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                                                className="w-full bg-zinc-900/70 border border-zinc-600 rounded-xl px-6 py-4 text-white placeholder-zinc-400 focus:outline-none focus:border-green-400 transition-colors"
+                                                className="w-full bg-[#3d3d3d]/95 border-none rounded-[10px] px-5 py-4 text-white placeholder-white/80 focus:outline-none focus:ring-1 focus:ring-white/30 transition-colors text-[15px]"
                                             />
                                             <input
                                                 type="email"
                                                 placeholder="Email"
                                                 value={formData.email}
                                                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                                                className="w-full bg-zinc-900/70 border border-zinc-600 rounded-xl px-6 py-4 text-white placeholder-zinc-400 focus:outline-none focus:border-green-400 transition-colors"
+                                                className="w-full bg-[#3d3d3d]/95 border-none rounded-[10px] px-5 py-4 text-white placeholder-white/80 focus:outline-none focus:ring-1 focus:ring-white/30 transition-colors text-[15px]"
                                             />
                                             <input
                                                 type="tel"
                                                 placeholder="Phone number"
                                                 value={formData.phone}
                                                 onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                                                className="w-full bg-zinc-900/70 border border-zinc-600 rounded-xl px-6 py-4 text-white placeholder-zinc-400 focus:outline-none focus:border-green-400 transition-colors"
+                                                className="w-full bg-[#3d3d3d]/95 border-none rounded-[10px] px-5 py-4 text-white placeholder-white/80 focus:outline-none focus:ring-1 focus:ring-white/30 transition-colors text-[15px]"
                                             />
                                         </div>
                                         <button
                                             onClick={handleNext}
-                                            className="mt-6 bg-green-500 hover:bg-green-400 text-black font-semibold rounded-lg px-8 py-3 transition-colors cursor-pointer"
+                                            className="mt-8 bg-[#16d110] hover:bg-[#11b00c] text-black font-bold rounded-[8px] px-8 py-3 text-[14px] transition-colors cursor-pointer"
                                         >
-                                            Next
+                                            Submit
                                         </button>
-                                        <p className="text-white/50 text-sm mt-6 leading-relaxed">
-                                            Fill this up, and tell us about your brand :<br />
+                                        <p className="text-white text-[13px] mt-10 leading-[1.6]">
+                                            Fill this up, and tell us about your brand .<br />
                                             We will approach you soon
                                         </p>
                                     </div>
@@ -624,8 +708,8 @@ function Landing() {
                                 )}
                             </div>
 
-                            {/* Right Text */}
-                            <div className="hidden lg:flex items-center justify-end">
+                            {/* Right Text / Desktop */}
+                            <div className="hidden lg:flex items-center justify-end lg:order-2">
                                 <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white text-right leading-tight">
                                     Get your instant <br />
                                     quotation<br />
@@ -634,8 +718,21 @@ function Landing() {
                             </div>
                         </div>
                     </div>
-                </div>
-            </section>
+                </section>
+
+                {/* Motion Video Section */}
+                <section className="bg-black order-2 lg:order-1">
+                    <video
+                        src="/img/MOTION TP.mp4"
+                        autoPlay
+                        muted
+                        loop
+                        playsInline
+                        className="w-full"
+                        style={{ display: 'block', objectFit: 'cover' }}
+                    />
+                </section>
+            </div>
 
             {/* Success/Error Popup */}
             {popup.show && (

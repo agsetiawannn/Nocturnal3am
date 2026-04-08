@@ -15,7 +15,7 @@ function Footer() {
             </div>
             <div>
               <h4 className="text-sm font-bold text-white mb-2">Contact</h4>
-              <p className="text-white/70 text-sm">0896-3889-3601 - Felix</p>
+              <p className="text-white/70 text-sm">0896-3889-3601 - Felix Marbun</p>
             </div>
             <div>
               <h4 className="text-sm font-bold text-white mb-2">Email</h4>
