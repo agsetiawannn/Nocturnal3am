@@ -22,7 +22,7 @@ function Header() {
             <div className="fixed top-3 left-3 md:top-6 md:left-[5.5rem] z-50">
                 <Link to="/">
                     <img
-                        src="/img/tb.png"
+                        src="/public/img/tb.png"
                         alt="Tigapagi Logo"
                         className="h-9 md:h-12 object-contain"
                     />
@@ -122,7 +122,7 @@ function Header() {
                         rel="noopener noreferrer"
                     >
                         <img
-                            src="/img/wa.png"
+                            src="/public/img/wa.png"
                             alt="WhatsApp"
                             className="w-4 h-4 md:w-5 md:h-5 rounded-full object-cover"
                         />

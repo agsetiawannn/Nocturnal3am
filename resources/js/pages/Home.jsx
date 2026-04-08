@@ -40,7 +40,7 @@ function Home() {
                 link.rel = rel;
                 document.head.appendChild(link);
             }
-            link.href = '/img/Exclude.ico?v=' + new Date().getTime();
+            link.href = '/public/img/Exclude.ico?v=' + new Date().getTime();
         };
 
         updateIcon('icon');
@@ -187,7 +187,7 @@ function Home() {
                         rel="noopener noreferrer"
                     >
                         <img
-                            src="/img/wa.png"
+                            src="/public/img/wa.png"
                             alt="WhatsApp"
                             className="w-4 h-4 rounded-full object-cover"
                         />
@@ -215,8 +215,8 @@ function Home() {
 
                     {/* Service Pills Image */}
                     <picture>
-                        <source media="(max-width: 767px)" srcSet="/img/brand%20potential.webp" />
-                        <img src="/img/todo.svg" alt="Our Services" className="w-full h-auto object-contain mx-auto" style={{ maxWidth: '1100px' }} />
+                        <source media="(max-width: 767px)" srcSet="/public/img/brand%20potential.webp" />
+                        <img src="/public/img/todo.svg" alt="Our Services" className="w-full h-auto object-contain mx-auto" style={{ maxWidth: '1100px' }} />
                     </picture>
                 </div>
             </section>
@@ -226,10 +226,10 @@ function Home() {
                 <div className="w-full overflow-hidden whitespace-nowrap text-[0]">
                     <div className="inline-block animate-scroll align-top">
                         <div className="inline-block w-[400vw] md:w-[300vw] lg:w-[200vw]">
-                            <img src="/img/photowrap.webp" alt="Photo Showcase" className="w-full h-auto block" />
+                            <img src="/public/img/photowrap.webp" alt="Photo Showcase" className="w-full h-auto block" />
                         </div>
                         <div className="inline-block w-[400vw] md:w-[300vw] lg:w-[200vw]">
-                            <img src="/img/photowrap.webp" alt="Photo Showcase" className="w-full h-auto block" />
+                            <img src="/public/img/photowrap.webp" alt="Photo Showcase" className="w-full h-auto block" />
                         </div>
                     </div>
                 </div>
@@ -248,9 +248,9 @@ function Home() {
                         style={{ maxHeight: showClientWrap ? '2000px' : '80px' }}
                     >
                         <picture>
-                            <source media="(max-width: 767px)" srcSet="/img/clientm.webp" />
+                            <source media="(max-width: 767px)" srcSet="/public/img/clientm.webp" />
                             <img
-                                src="/img/full client.webp"
+                                src="/public/img/full client.webp"
                                 alt="Our Clients"
                                 className="w-full"
                             />
@@ -291,7 +291,7 @@ function Home() {
                 <section className="relative bg-black order-2 flex flex-col justify-center lg:min-h-[600px]">
                     <div className="absolute inset-0">
                         <img
-                            src="/img/inquiries.webp"
+                            src="/public/img/inquiries.webp"
                             alt=""
                             className="w-full h-full"
                             style={{ objectFit: 'cover' }}
@@ -595,7 +595,7 @@ function Home() {
                 {/* Motion Video Section */}
                 <section className="bg-black order-1">
                     <video
-                        src="/img/MOTION TP.mp4"
+                        src="/public/img/MOTION TP.mp4"
                         autoPlay
                         muted
                         loop

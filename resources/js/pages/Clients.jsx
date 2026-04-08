@@ -11,7 +11,7 @@ return (
         
         <div className="relative z-10 max-w-6xl mx-auto px-6 text-center">
         <img
-            src="/img/ClientWrap.png"
+            src="/public/img/ClientWrap.png"
             alt="Clients"
             className="w-full max-w-4xl mx-auto mb-8"
         />

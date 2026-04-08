@@ -116,7 +116,7 @@ function Landing() {
             <div className="fixed top-3 left-3 md:top-6 md:left-[5.5rem] z-50">
                 <a href="/">
                     <img
-                        src="/img/tb.png"
+                        src="/public/img/tb.png"
                         alt="Tigapagi Logo"
                         className="h-9 md:h-12 object-contain"
                     />
@@ -143,7 +143,7 @@ function Landing() {
                     rel="noopener noreferrer"
                 >
                     <img
-                        src="/img/wa.png"
+                        src="/public/img/wa.png"
                         alt="WhatsApp"
                         className="w-4 h-4 md:w-5 md:h-5 rounded-full object-cover"
                     />
@@ -225,7 +225,7 @@ function Landing() {
                         rel="noopener noreferrer"
                     >
                         <img
-                            src="/img/wa.png"
+                            src="/public/img/wa.png"
                             alt="WhatsApp"
                             className="w-4 h-4 rounded-full object-cover"
                         />
@@ -253,8 +253,8 @@ function Landing() {
 
                     {/* Service Pills Image */}
                     <picture>
-                        <source media="(max-width: 767px)" srcSet="/img/brand%20potential.webp" />
-                        <img src="/img/todo.svg" alt="Our Services" className="w-full h-auto object-contain mx-auto mb-20" style={{ maxWidth: '1100px' }} />
+                        <source media="(max-width: 767px)" srcSet="/public/img/brand%20potential.webp" />
+                        <img src="/public/img/todo.svg" alt="Our Services" className="w-full h-auto object-contain mx-auto mb-20" style={{ maxWidth: '1100px' }} />
                     </picture>
 
                     {/* Selected Works */}
@@ -266,11 +266,11 @@ function Landing() {
                         {/* Desktop List Layout */}
                         <div className="space-y-0 hidden md:block" onMouseLeave={() => setHoveredWork(null)}>
                             {[
-                                { num: '01', name: 'BaliSabi Poke Bowl Bar', tags: ['Branding', 'Social Media Management', 'Photo Production'], img: '/img/balisabi.webp' },
-                                { num: '02', name: 'The Smoke House', tags: ['Social Media Management', 'Photo Production'], img: '/img/smoke%20house.webp' },
-                                { num: '03', name: 'Blue Marlin Komodo', tags: ['Ads Management', 'Photo Production'], img: '/img/blue%20marlin.webp' },
-                                { num: '04', name: 'Pertamina Bali', tags: ['Content Creation'], img: '/img/pertamina.webp' },
-                                { num: '05', name: 'Hot Stone', tags: ['Social Media Management'], img: '/img/hot%20stone.webp' },
+                                { num: '01', name: 'BaliSabi Poke Bowl Bar', tags: ['Branding', 'Social Media Management', 'Photo Production'], img: '/public/img/balisabi.webp' },
+                                { num: '02', name: 'The Smoke House', tags: ['Social Media Management', 'Photo Production'], img: '/public/img/smoke%20house.webp' },
+                                { num: '03', name: 'Blue Marlin Komodo', tags: ['Ads Management', 'Photo Production'], img: '/public/img/blue%20marlin.webp' },
+                                { num: '04', name: 'Pertamina Bali', tags: ['Content Creation'], img: '/public/img/pertamina.webp' },
+                                { num: '05', name: 'Hot Stone', tags: ['Social Media Management'], img: '/public/img/hot%20stone.webp' },
                             ].map((work) => (
                                 <div
                                     key={work.num}
@@ -300,11 +300,11 @@ function Landing() {
                         <div className="block md:hidden -mx-6 mt-6">
                             <div className="flex overflow-x-auto gap-4 px-6 pb-6 snap-x snap-mandatory scrollbar-hide">
                                 {[
-                                    { num: '01', name: 'Balisabi Poke Bowl Bar', img: '/img/balisabi.webp', tags: ['Branding', 'Social Media Management', 'Photo Production'] },
-                                    { num: '02', name: 'The Smoke House', img: '/img/smoke%20house.webp', tags: ['Photo Production', 'Social Media Management'] },
-                                    { num: '03', name: 'Blue Marlin Komodo', img: '/img/blue%20marlin.webp', tags: ['Photo Production', 'Ads Management'] },
-                                    { num: '04', name: 'Pertamina Bali', img: '/img/pertamina.webp', tags: ['Social Media Management'] },
-                                    { num: '05', name: 'Hot Stone', img: '/img/hot%20stone.webp', tags: ['Social Media Management'] },
+                                    { num: '01', name: 'Balisabi Poke Bowl Bar', img: '/public/img/balisabi.webp', tags: ['Branding', 'Social Media Management', 'Photo Production'] },
+                                    { num: '02', name: 'The Smoke House', img: '/public/img/smoke%20house.webp', tags: ['Photo Production', 'Social Media Management'] },
+                                    { num: '03', name: 'Blue Marlin Komodo', img: '/public/img/blue%20marlin.webp', tags: ['Photo Production', 'Ads Management'] },
+                                    { num: '04', name: 'Pertamina Bali', img: '/public/img/pertamina.webp', tags: ['Social Media Management'] },
+                                    { num: '05', name: 'Hot Stone', img: '/public/img/hot%20stone.webp', tags: ['Social Media Management'] },
                                 ].map((work) => (
                                     <div key={work.num} className="snap-center shrink-0 w-[85vw] md:w-[400px] h-auto relative overflow-hidden group">
                                         <img src={work.img} alt={work.name} className="w-full aspect-[3/4] object-cover" />
@@ -345,10 +345,10 @@ function Landing() {
                 <div className="w-full overflow-hidden whitespace-nowrap text-[0]">
                     <div className="inline-block animate-scroll align-top">
                         <div className="inline-block w-[400vw] md:w-[300vw] lg:w-[200vw]">
-                            <img src="/img/photowrap.webp" alt="Photo Showcase" className="w-full h-auto block" />
+                            <img src="/public/img/photowrap.webp" alt="Photo Showcase" className="w-full h-auto block" />
                         </div>
                         <div className="inline-block w-[400vw] md:w-[300vw] lg:w-[200vw]">
-                            <img src="/img/photowrap.webp" alt="Photo Showcase" className="w-full h-auto block" />
+                            <img src="/public/img/photowrap.webp" alt="Photo Showcase" className="w-full h-auto block" />
                         </div>
                     </div>
                 </div>
@@ -367,9 +367,9 @@ function Landing() {
                         style={{ maxHeight: showClientWrap ? '2000px' : '80px' }}
                     >
                         <picture>
-                            <source media="(max-width: 767px)" srcSet="/img/clientm.webp" />
+                            <source media="(max-width: 767px)" srcSet="/public/img/clientm.webp" />
                             <img
-                                src="/img/full client.webp"
+                                src="/public/img/full client.webp"
                                 alt="Our Clients"
                                 className="w-full"
                             />
@@ -411,7 +411,7 @@ function Landing() {
                 <section className="relative bg-black order-2 flex flex-col justify-center lg:min-h-[600px]">
                     <div className="absolute inset-0">
                         <img
-                            src="/img/inquiries.webp"
+                            src="/public/img/inquiries.webp"
                             alt=""
                             className="w-full h-full"
                             style={{ objectFit: 'cover' }}
@@ -715,7 +715,7 @@ function Landing() {
                 {/* Motion Video Section */}
                 <section className="bg-black order-1">
                     <video
-                        src="/img/MOTION TP.mp4"
+                        src="/public/img/MOTION TP.mp4"
                         autoPlay
                         muted
                         loop

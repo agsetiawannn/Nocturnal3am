@@ -127,7 +127,7 @@ return (
                     {/* Left - 2 large portrait images */}
                     <div className="col-span-1">
                     <img
-                        src="/img/work/cbt1.svg"
+                        src="/public/img/work/cbt1.svg"
                         alt={`${work.title} Work 1`}
                         className="object-cover rounded-xl bg-white/5"
                         style={{ width: '339px', height: '603px' }}
@@ -135,7 +135,7 @@ return (
                     </div>
                     <div className="col-span-1">
                     <img
-                        src="/img/work/cbt1.svg"
+                        src="/public/img/work/cbt1.svg"
                         alt={`${work.title} Work 2`}
                         className="object-cover rounded-xl bg-white/5"
                         style={{ width: '339px', height: '603px' }}
@@ -143,12 +143,12 @@ return (
                     </div>
                     {/* Right - 3x2 grid of smaller images */}
                     <div className="col-span-2 grid grid-cols-3 grid-rows-2 gap-4">
-                    <img src="/img/work/cbt2.svg" alt={`${work.title} Work 3`} className="object-cover rounded-xl bg-white/5" style={{ width: '228px', height: '285px' }} />
-                    <img src="/img/work/cbt2.svg" alt={`${work.title} Work 4`} className="object-cover rounded-xl bg-white/5" style={{ width: '228px', height: '285px' }} />
-                    <img src="/img/work/cbt2.svg" alt={`${work.title} Work 5`} className="object-cover rounded-xl bg-white/5" style={{ width: '228px', height: '285px' }} />
-                    <img src="/img/work/cbt2.svg" alt={`${work.title} Work 6`} className="object-cover rounded-xl bg-white/5" style={{ width: '228px', height: '285px' }} />
-                    <img src="/img/work/cbt2.svg" alt={`${work.title} Work 7`} className="object-cover rounded-xl bg-white/5" style={{ width: '228px', height: '285px' }} />
-                    <img src="/img/work/cbt2.svg" alt={`${work.title} Work 8`} className="object-cover rounded-xl bg-white/5" style={{ width: '228px', height: '285px' }} />
+                    <img src="/public/img/work/cbt2.svg" alt={`${work.title} Work 3`} className="object-cover rounded-xl bg-white/5" style={{ width: '228px', height: '285px' }} />
+                    <img src="/public/img/work/cbt2.svg" alt={`${work.title} Work 4`} className="object-cover rounded-xl bg-white/5" style={{ width: '228px', height: '285px' }} />
+                    <img src="/public/img/work/cbt2.svg" alt={`${work.title} Work 5`} className="object-cover rounded-xl bg-white/5" style={{ width: '228px', height: '285px' }} />
+                    <img src="/public/img/work/cbt2.svg" alt={`${work.title} Work 6`} className="object-cover rounded-xl bg-white/5" style={{ width: '228px', height: '285px' }} />
+                    <img src="/public/img/work/cbt2.svg" alt={`${work.title} Work 7`} className="object-cover rounded-xl bg-white/5" style={{ width: '228px', height: '285px' }} />
+                    <img src="/public/img/work/cbt2.svg" alt={`${work.title} Work 8`} className="object-cover rounded-xl bg-white/5" style={{ width: '228px', height: '285px' }} />
                     </div>
                 </div>
                 </div>

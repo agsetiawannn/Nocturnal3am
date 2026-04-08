@@ -39,8 +39,8 @@ function Loader() {
             </div>
 
             <div className="logo-container">
-                <img src="/img/tp.svg" className="logo-circle" alt="Logo" />
-                <img src="/img/tp1.svg" className="brand-text" alt="TIGAPAGI" />
+                <img src="/public/img/tp.svg" className="logo-circle" alt="Logo" />
+                <img src="/public/img/tp1.svg" className="brand-text" alt="TIGAPAGI" />
             </div>
         </div>
     );
