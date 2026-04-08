@@ -19,8 +19,8 @@
         @vite(['resources/css/app.css', 'resources/js/app.jsx'])
     @else
         <link rel="stylesheet" href="/public/build/assets/app-mYcLQiXB.css">
-        <link rel="stylesheet" href="/public/build/assets/app-BXhVl-vF.css">
-        <script type="module" src="/public/build/assets/app-DzAP8PH_.js"></script>
+        <link rel="stylesheet" href="/public/build/assets/app-DyRjpeh6.css">
+        <script type="module" src="/public/build/assets/app-Cir_dcdc.js"></script>
     @endif
 </head>
 

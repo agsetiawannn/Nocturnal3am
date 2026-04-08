@@ -405,23 +405,10 @@ function Landing() {
 
 
 
-            {/* Responsive Wrapper to swap Video and Contact order on mobile/desktop */}
-            <div className="flex flex-col-reverse lg:flex-col">
-                {/* Video Section */}
-                <section className="bg-black">
-                    <video
-                        src="/public/img/MOTION TP.MP4"
-                        autoPlay
-                        muted
-                        loop
-                        playsInline
-                        className="w-full"
-                        style={{ display: 'block', objectFit: 'cover' }}
-                    />
-                </section>
-
-                {/* Contact Section */}
-                <section className="relative bg-black flex flex-col justify-center lg:min-h-[600px]">
+            {/* Responsive Wrapper - Form first in DOM, Video second */}
+            <div className="flex flex-col">
+                {/* Contact Section - appears first on mobile */}
+                <section className="relative bg-black flex flex-col justify-center lg:min-h-[600px] lg:order-2">
                     <div className="absolute inset-0">
                         <img
                             src="/public/img/inquiries.webp"
