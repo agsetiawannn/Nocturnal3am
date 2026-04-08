@@ -1,13 +1,16 @@
 <IfModule mod_rewrite.c>
     RewriteEngine On
     
-    # Handle public directory
-    RewriteCond %{REQUEST_URI} ^/public/
-    RewriteRule ^public/(.*)$ public/index.php?/$1 [QSA,L]
+    # Exclude real files and directories
+    RewriteCond %{REQUEST_FILENAME} -f
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteRule ^ - [L]
     
-    # Redirect direct public access
-    RewriteCond %{REQUEST_URI} !^/public/
+    # Exclude /build/ and /public/ directories - serve directly
+    RewriteRule ^(build|public)/ - [L]
+    
+    # Route everything else through index.php
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d
-    RewriteRule ^(.*)$ index.php?/$1 [QSA,L]
+    RewriteRule ^ index.php [L]
 </IfModule>
