@@ -286,9 +286,22 @@ function Home() {
 
 
             {/* Responsive Wrapper to swap Video and Contact order on mobile/desktop */}
-            <div className="flex flex-col lg:flex-col-reverse">
+            <div className="flex flex-col">
+                {/* Motion Video Section */}
+                <section className="bg-black order-2 lg:order-1">
+                    <video
+                        src="/public/img/MOTION TP.MP4"
+                        autoPlay
+                        muted
+                        loop
+                        playsInline
+                        className="w-full"
+                        style={{ display: 'block', objectFit: 'cover' }}
+                    />
+                </section>
+
                 {/* Contact Section */}
-                <section className="relative bg-black flex flex-col justify-center lg:min-h-[600px]">
+                <section className="relative bg-black order-1 lg:order-2 flex flex-col justify-center lg:min-h-[600px]">
                     <div className="absolute inset-0">
                         <img
                             src="/public/img/inquiries.webp"
@@ -590,19 +603,6 @@ function Home() {
                             </div>
                         </div>
                     </div>
-                </section>
-
-                {/* Motion Video Section */}
-                <section className="bg-black">
-                    <video
-                        src="/public/img/MOTION TP.MP4"
-                        autoPlay
-                        muted
-                        loop
-                        playsInline
-                        className="w-full"
-                        style={{ display: 'block', objectFit: 'cover' }}
-                    />
                 </section>
             </div>
 
