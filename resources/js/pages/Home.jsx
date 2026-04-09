@@ -19,18 +19,16 @@ function Home() {
     const [showClientWrap, setShowClientWrap] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [popup, setPopup] = useState({ show: false, success: true, message: '' });
-    const [isLargeScreen, setIsLargeScreen] = useState(true);
-    const [mounted, setMounted] = useState(false);
+    const [screenSize, setScreenSize] = useState(null);
 
-    // Set mounted flag and check screen size on client
+    // Set screen size on client
     useEffect(() => {
-        setMounted(true);
-        const checkScreen = () => {
-            setIsLargeScreen(window.innerWidth >= 1024);
+        const updateScreenSize = () => {
+            setScreenSize(window.innerWidth < 1024 ? 'mobile' : 'desktop');
         };
-        checkScreen();
-        window.addEventListener('resize', checkScreen);
-        return () => window.removeEventListener('resize', checkScreen);
+        updateScreenSize();
+        window.addEventListener('resize', updateScreenSize);
+        return () => window.removeEventListener('resize', updateScreenSize);
     }, []);
 
     useEffect(() => {
@@ -297,7 +295,7 @@ function Home() {
 
 
             {/* Responsive Wrapper to swap Video and Contact order on mobile/desktop */}
-            <div className="flex" style={{ flexDirection: mounted && !isLargeScreen ? 'column-reverse' : 'column' }}>
+            <div className="flex" style={{ flexDirection: screenSize === 'mobile' ? 'column-reverse' : 'column' }}>
                 {/* Motion Video Section */}
                 <section className="bg-black">
                     <video
