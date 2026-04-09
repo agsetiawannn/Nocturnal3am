@@ -19,15 +19,18 @@ function Home() {
     const [showClientWrap, setShowClientWrap] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [popup, setPopup] = useState({ show: false, success: true, message: '' });
-    const [isLargeScreen, setIsLargeScreen] = useState(typeof window !== 'undefined' && window.innerWidth >= 1024);
+    const [isLargeScreen, setIsLargeScreen] = useState(true);
+    const [mounted, setMounted] = useState(false);
 
-    // Listen for window resize to handle viewport changes
+    // Set mounted flag and check screen size on client
     useEffect(() => {
-        const handleResize = () => {
+        setMounted(true);
+        const checkScreen = () => {
             setIsLargeScreen(window.innerWidth >= 1024);
         };
-        window.addEventListener('resize', handleResize);
-        return () => window.removeEventListener('resize', handleResize);
+        checkScreen();
+        window.addEventListener('resize', checkScreen);
+        return () => window.removeEventListener('resize', checkScreen);
     }, []);
 
     useEffect(() => {
@@ -294,7 +297,7 @@ function Home() {
 
 
             {/* Responsive Wrapper to swap Video and Contact order on mobile/desktop */}
-            <div className="flex" style={{ flexDirection: isLargeScreen ? 'column' : 'column-reverse' }}>
+            <div className="flex" style={{ flexDirection: mounted && !isLargeScreen ? 'column-reverse' : 'column' }}>
                 {/* Motion Video Section */}
                 <section className="bg-black">
                     <video

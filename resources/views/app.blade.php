@@ -20,7 +20,7 @@
     @else
         <link rel="stylesheet" href="/public/build/assets/app-mYcLQiXB.css">
         <link rel="stylesheet" href="/public/build/assets/app-DNMKSYnc.css">
-        <script type="module" src="/public/build/assets/app-C_5zN43x.js"></script>
+        <script type="module" src="/public/build/assets/app-BP6JdGaT.js"></script>
     @endif
 </head>
 
