@@ -19,8 +19,16 @@ function Home() {
     const [showClientWrap, setShowClientWrap] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [popup, setPopup] = useState({ show: false, success: true, message: '' });
+    const [isLargeScreen, setIsLargeScreen] = useState(typeof window !== 'undefined' && window.innerWidth >= 1024);
 
-
+    // Listen for window resize to handle viewport changes
+    useEffect(() => {
+        const handleResize = () => {
+            setIsLargeScreen(window.innerWidth >= 1024);
+        };
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
 
     useEffect(() => {
         if (popup.show) {
@@ -286,7 +294,7 @@ function Home() {
 
 
             {/* Responsive Wrapper to swap Video and Contact order on mobile/desktop */}
-            <div className="flex flex-col-reverse lg:flex-col">
+            <div className="flex" style={{ flexDirection: isLargeScreen ? 'column' : 'column-reverse' }}>
                 {/* Motion Video Section */}
                 <section className="bg-black">
                     <video
