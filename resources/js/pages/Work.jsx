@@ -27,6 +27,7 @@ return (
                     backgroundPosition: 'center',
                     opacity: 0.95,
                     filter: 'blur(100px)',
+                    WebkitFilter: 'blur(100px)',
                 }}
             />
         </div>

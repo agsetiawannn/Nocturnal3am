@@ -153,10 +153,12 @@ header button:active {
 @keyframes scroll {
     0% {
         transform: translateX(0);
+        -webkit-transform: translateX(0);
     }
 
     100% {
         transform: translateX(-50%);
+        -webkit-transform: translateX(-50%);
     }
 }
 
@@ -196,21 +198,22 @@ header button:active {
     animation: fadeOut 0.8s ease-out forwards;
 }
 
-/* Hero background pan animation - GPU accelerated */
+/* Hero background pan animation */
 @keyframes panSmooth {
     0% {
-        transform: translateX(0) translateZ(0);
+        transform: translateX(0);
+        -webkit-transform: translateX(0);
     }
 
     100% {
-        transform: translateX(-50%) translateZ(0);
+        transform: translateX(-50%);
+        -webkit-transform: translateX(-50%);
     }
 }
 
 .animate-pan-smooth {
     animation: panSmooth 10s linear infinite;
-    will-change: transform;
-    backface-visibility: hidden;
+    -webkit-animation: panSmooth 10s linear infinite;
 }
 
 /* Footer background pan animation - right to left, GPU accelerated */
@@ -227,6 +230,5 @@ header button:active {
 
 .animate-footer-pan {
     animation: footerPan 20s linear infinite;
-    will-change: transform;
-    backface-visibility: hidden;
+    -webkit-animation: footerPan 20s linear infinite;
 }
