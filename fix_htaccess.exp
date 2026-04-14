@@ -1,0 +1,33 @@
+#!/usr/bin/expect -f
+set timeout -1
+set password "Nocturnal3am."
+spawn ssh -p 65002 u240557956@153.92.11.7
+expect {
+    "yes/no" { send "yes\r"; exp_continue }
+    "password:" { send "$password\r" }
+}
+expect "$ "
+send "cat << 'HTACCESS' > domains/studiotigapagi.com/public_html/.htaccess
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    
+    # Route /build/ directly to /public/build/
+    RewriteRule ^build/(.*)\$ public/build/\$1 \[L\]
+
+    # Exclude real files and directories
+    RewriteCond %{REQUEST_FILENAME} -f
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteRule ^ - \[L\]
+    
+    # Exclude /public/ directory - serve directly
+    RewriteRule ^public/ - \[L\]
+    
+    # Route everything else through index.php
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^ index.php \[L\]
+</IfModule>
+HTACCESS\r"
+expect "$ "
+send "exit\r"
+expect eof
