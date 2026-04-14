@@ -601,7 +601,7 @@ function Home() {
                                                 disabled={isSubmitting}
                                                 className="bg-green-500 hover:bg-green-400 text-black font-semibold rounded-lg px-8 py-3 transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                                             >
-                                                {isSubmitting ? 'Sending...' : 'Finish'}
+                                                {isSubmitting ? 'Sending...' : 'Get Quote Now'}
                                             </button>
                                         </div>
                                     </div>
