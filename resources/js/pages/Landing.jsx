@@ -209,28 +209,28 @@ function Landing() {
 
             {/* Hero Section */}
             <section className="relative min-h-screen flex items-center justify-center overflow-hidden px-6 md:px-12">
-                {/* Background Layer 1 - bg.webp (bottom layer, with blur and pan animation) */}
+                {/* Background Layer 1 - bg.webp?v=3 (bottom layer, with blur and pan animation) */}
                 <div className="absolute inset-0 overflow-hidden pointer-events-none" style={{ zIndex: 0 }}>
                     <div
                         className="animate-pan-smooth h-full"
                         style={{
                             width: '300%',
-                            backgroundImage: 'url(/img/bg.webp)',
+                            backgroundImage: 'url(/img/bg.webp?v=3)',
                             backgroundSize: '50% auto',
                             backgroundRepeat: 'repeat-x',
                             backgroundPosition: 'center',
                             opacity: 0.95,
-                            filter: 'blur(100px)',
-                            WebkitFilter: 'blur(100px)',
                         }}
                     />
+                    {/* Safari-safe GPU blur overlay */}
+                    <div className="absolute inset-0 pointer-events-none" style={{ backdropFilter: 'blur(100px)', WebkitBackdropFilter: 'blur(100px)' }} />
                 </div>
 
-                {/* Background Layer 2 - glass_mirror.webp (top layer, static) */}
+                {/* Background Layer 2 - glass_mirror.webp?v=3 (top layer, static) */}
                 <div
                     className="absolute inset-0 bg-cover bg-center pointer-events-none"
                     style={{
-                        backgroundImage: 'url(/img/glass_mirror.webp)',
+                        backgroundImage: 'url(/img/glass_mirror.webp?v=3)',
                         opacity: 0.35,
                         zIndex: 2
                     }}
@@ -309,7 +309,7 @@ function Landing() {
 
                     {/* Service Pills Image */}
                     <picture>
-                        <source media="(max-width: 767px)" srcSet="/img/brand%20potential.webp" />
+                        <source media="(max-width: 767px)" srcSet="/img/brand%20potential.webp?v=3" />
                         <img src="/img/todo.svg" alt="Our Services" className="w-full h-auto object-contain mx-auto mb-20" style={{ maxWidth: '1100px' }} />
                     </picture>
 
@@ -322,11 +322,11 @@ function Landing() {
                         {/* Desktop List Layout */}
                         <div className="space-y-0 hidden md:block" onMouseLeave={() => setHoveredWork(null)}>
                             {[
-                                { num: '01', name: 'BaliSabi Poke Bowl Bar', tags: ['Branding', 'Social Media Management', 'Photo Production'], img: '/img/balisabi.webp' },
-                                { num: '02', name: 'The Smoke House', tags: ['Social Media Management', 'Photo Production'], img: '/img/smoke%20house.webp' },
-                                { num: '03', name: 'Blue Marlin Komodo', tags: ['Ads Management', 'Photo Production'], img: '/img/blue%20marlin.webp' },
-                                { num: '04', name: 'Pertamina Bali', tags: ['Content Creation'], img: '/img/pertamina.webp' },
-                                { num: '05', name: 'Hot Stone', tags: ['Social Media Management'], img: '/img/hot%20stone.webp' },
+                                { num: '01', name: 'BaliSabi Poke Bowl Bar', tags: ['Branding', 'Social Media Management', 'Photo Production'], img: '/img/balisabi.webp?v=3' },
+                                { num: '02', name: 'The Smoke House', tags: ['Social Media Management', 'Photo Production'], img: '/img/smoke%20house.webp?v=3' },
+                                { num: '03', name: 'Blue Marlin Komodo', tags: ['Ads Management', 'Photo Production'], img: '/img/blue%20marlin.webp?v=3' },
+                                { num: '04', name: 'Pertamina Bali', tags: ['Content Creation'], img: '/img/pertamina.webp?v=3' },
+                                { num: '05', name: 'Hot Stone', tags: ['Social Media Management'], img: '/img/hot%20stone.webp?v=3' },
                             ].map((work) => (
                                 <div
                                     key={work.num}
@@ -356,11 +356,11 @@ function Landing() {
                         <div className="block md:hidden -mx-6 mt-6">
                             <div className="flex overflow-x-auto gap-4 px-6 pb-6 snap-x snap-mandatory scrollbar-hide">
                                 {[
-                                    { num: '01', name: 'Balisabi Poke Bowl Bar', img: '/img/balisabi.webp', tags: ['Branding', 'Social Media Management', 'Photo Production'] },
-                                    { num: '02', name: 'The Smoke House', img: '/img/smoke%20house.webp', tags: ['Photo Production', 'Social Media Management'] },
-                                    { num: '03', name: 'Blue Marlin Komodo', img: '/img/blue%20marlin.webp', tags: ['Photo Production', 'Ads Management'] },
-                                    { num: '04', name: 'Pertamina Bali', img: '/img/pertamina.webp', tags: ['Social Media Management'] },
-                                    { num: '05', name: 'Hot Stone', img: '/img/hot%20stone.webp', tags: ['Social Media Management'] },
+                                    { num: '01', name: 'Balisabi Poke Bowl Bar', img: '/img/balisabi.webp?v=3', tags: ['Branding', 'Social Media Management', 'Photo Production'] },
+                                    { num: '02', name: 'The Smoke House', img: '/img/smoke%20house.webp?v=3', tags: ['Photo Production', 'Social Media Management'] },
+                                    { num: '03', name: 'Blue Marlin Komodo', img: '/img/blue%20marlin.webp?v=3', tags: ['Photo Production', 'Ads Management'] },
+                                    { num: '04', name: 'Pertamina Bali', img: '/img/pertamina.webp?v=3', tags: ['Social Media Management'] },
+                                    { num: '05', name: 'Hot Stone', img: '/img/hot%20stone.webp?v=3', tags: ['Social Media Management'] },
                                 ].map((work) => (
                                     <div key={work.num} className="snap-center shrink-0 w-[85vw] md:w-[400px] h-auto relative overflow-hidden group">
                                         <img src={work.img} alt={work.name} className="w-full aspect-[3/4] object-cover" />
@@ -401,10 +401,10 @@ function Landing() {
                 <div className="w-full overflow-hidden whitespace-nowrap text-[0]">
                     <div className="inline-block animate-scroll align-top">
                         <div className="inline-block w-[400vw] md:w-[300vw] lg:w-[200vw]">
-                            <img src="/img/photowrap.webp" alt="Photo Showcase" className="w-full h-auto block" />
+                            <img src="/img/photowrap.webp?v=3" alt="Photo Showcase" className="w-full h-auto block" />
                         </div>
                         <div className="inline-block w-[400vw] md:w-[300vw] lg:w-[200vw]">
-                            <img src="/img/photowrap.webp" alt="Photo Showcase" className="w-full h-auto block" />
+                            <img src="/img/photowrap.webp?v=3" alt="Photo Showcase" className="w-full h-auto block" />
                         </div>
                     </div>
                 </div>
@@ -423,9 +423,9 @@ function Landing() {
                         style={{ maxHeight: showClientWrap ? '2000px' : '80px' }}
                     >
                         <picture>
-                            <source media="(max-width: 767px)" srcSet="/img/clientm.webp" />
+                            <source media="(max-width: 767px)" srcSet="/img/clientm.webp?v=3" />
                             <img
-                                src="/img/full client.webp"
+                                src="/img/full client.webp?v=3"
                                 alt="Our Clients"
                                 className="w-full"
                             />
@@ -467,7 +467,7 @@ function Landing() {
                 <section className="relative bg-black flex flex-col justify-center lg:min-h-[600px] lg:order-2">
                     <div className="absolute inset-0">
                         <img
-                            src="/img/inquiries.webp"
+                            src="/img/inquiries.webp?v=3"
                             alt=""
                             className="w-full h-full"
                             style={{ objectFit: 'cover' }}

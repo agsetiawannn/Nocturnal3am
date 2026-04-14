@@ -162,28 +162,28 @@ function Home() {
             <Loader />
             {/* Hero Section */}
             <section className="relative min-h-screen flex items-center justify-center overflow-hidden px-6 md:px-12">
-                {/* Background Layer 1 - bg.webp (bottom layer, with blur and pan animation) */}
+                {/* Background Layer 1 - bg.webp?v=3 (bottom layer, with blur and pan animation) */}
                 <div className="absolute inset-0 overflow-hidden pointer-events-none" style={{ zIndex: 0 }}>
                     <div
                         className="animate-pan-smooth h-full"
                         style={{
                             width: '300%',
-                            backgroundImage: 'url(/img/bg.webp)',
+                            backgroundImage: 'url(/img/bg.webp?v=3)',
                             backgroundSize: '50% auto',
                             backgroundRepeat: 'repeat-x',
                             backgroundPosition: 'center',
                             opacity: 0.95,
-                            filter: 'blur(100px)',
-                            WebkitFilter: 'blur(100px)',
                         }}
                     />
+                    {/* Safari-safe GPU blur overlay */}
+                    <div className="absolute inset-0 pointer-events-none" style={{ backdropFilter: 'blur(100px)', WebkitBackdropFilter: 'blur(100px)' }} />
                 </div>
 
-                {/* Background Layer 2 - glass_mirror.webp (top layer, static) */}
+                {/* Background Layer 2 - glass_mirror.webp?v=3 (top layer, static) */}
                 <div
                     className="absolute inset-0 bg-cover bg-center pointer-events-none"
                     style={{
-                        backgroundImage: 'url(/img/glass_mirror.webp)',
+                        backgroundImage: 'url(/img/glass_mirror.webp?v=3)',
                         opacity: 0.35,
                         zIndex: 2
                     }}
@@ -262,7 +262,7 @@ function Home() {
 
                     {/* Service Pills Image */}
                     <picture>
-                        <source media="(max-width: 767px)" srcSet="/img/brand%20potential.webp" />
+                        <source media="(max-width: 767px)" srcSet="/img/brand%20potential.webp?v=3" />
                         <img src="/img/todo.svg" alt="Our Services" className="w-full h-auto object-contain mx-auto" style={{ maxWidth: '1100px' }} />
                     </picture>
                 </div>
@@ -273,10 +273,10 @@ function Home() {
                 <div className="w-full overflow-hidden whitespace-nowrap text-[0]">
                     <div className="inline-block animate-scroll align-top">
                         <div className="inline-block w-[400vw] md:w-[300vw] lg:w-[200vw]">
-                            <img src="/img/photowrap.webp" alt="Photo Showcase" className="w-full h-auto block" />
+                            <img src="/img/photowrap.webp?v=3" alt="Photo Showcase" className="w-full h-auto block" />
                         </div>
                         <div className="inline-block w-[400vw] md:w-[300vw] lg:w-[200vw]">
-                            <img src="/img/photowrap.webp" alt="Photo Showcase" className="w-full h-auto block" />
+                            <img src="/img/photowrap.webp?v=3" alt="Photo Showcase" className="w-full h-auto block" />
                         </div>
                     </div>
                 </div>
@@ -295,9 +295,9 @@ function Home() {
                         style={{ maxHeight: showClientWrap ? '2000px' : '80px' }}
                     >
                         <picture>
-                            <source media="(max-width: 767px)" srcSet="/img/clientm.webp" />
+                            <source media="(max-width: 767px)" srcSet="/img/clientm.webp?v=3" />
                             <img
-                                src="/img/full client.webp"
+                                src="/img/full client.webp?v=3"
                                 alt="Our Clients"
                                 className="w-full"
                             />
@@ -338,7 +338,7 @@ function Home() {
                 <section className="relative bg-black flex flex-col justify-center lg:min-h-[600px] lg:order-2" style={{ width: '100%' }}>
                     <div className="absolute inset-0">
                         <img
-                            src="/img/inquiries.webp"
+                            src="/img/inquiries.webp?v=3"
                             alt=""
                             className="w-full h-full"
                             style={{ objectFit: 'cover' }}

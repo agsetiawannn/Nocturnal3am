@@ -15,28 +15,28 @@ return (
     <div>
       {/* Hero Stats Section */}
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-        {/* Background Layer 1 - bg.webp (blur + pan animation) */}
+        {/* Background Layer 1 - bg.webp?v=3 (blur + pan animation) */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none" style={{ zIndex: 0 }}>
             <div
                 className="animate-pan-smooth h-full"
                 style={{
                     width: '300%',
-                    backgroundImage: 'url(/img/bg.webp)',
+                    backgroundImage: 'url(/img/bg.webp?v=3)',
                     backgroundSize: '50% auto',
                     backgroundRepeat: 'repeat-x',
                     backgroundPosition: 'center',
                     opacity: 0.95,
-                    filter: 'blur(100px)',
-                    WebkitFilter: 'blur(100px)',
                 }}
             />
+            {/* Safari-safe GPU blur overlay */}
+            <div className="absolute inset-0 pointer-events-none" style={{ backdropFilter: 'blur(100px)', WebkitBackdropFilter: 'blur(100px)' }} />
         </div>
 
-        {/* Background Layer 2 - glass_mirror.webp (static overlay) */}
+        {/* Background Layer 2 - glass_mirror.webp?v=3 (static overlay) */}
         <div
             className="absolute inset-0 bg-cover bg-center pointer-events-none"
             style={{
-                backgroundImage: 'url(/img/glass_mirror.webp)',
+                backgroundImage: 'url(/img/glass_mirror.webp?v=3)',
                 opacity: 0.35,
                 zIndex: 2
             }}

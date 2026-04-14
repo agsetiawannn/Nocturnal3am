@@ -43,7 +43,7 @@ const FloatingPopups = () => {
 
             const newPopup = {
                 id: newId,
-                img: `/img/client_all/client_${clientId}.webp`,
+                img: `/img/client_all/brand_${clientId}.webp?v=3`,
                 x: slot.x,
                 y: slot.y,
                 slotIndex,
@@ -95,7 +95,7 @@ const FloatingPopups = () => {
                 >
                     <img
                         src={popup.img}
-                        alt="Client Popup"
+                        alt="Brand Logo"
                         className="w-[140px] md:w-[260px] h-auto object-contain drop-shadow-2xl max-w-full inline-block"
                     />
                 </div>
