@@ -209,13 +209,13 @@ function Landing() {
 
             {/* Hero Section */}
             <section className="relative min-h-screen flex items-center justify-center overflow-hidden px-6 md:px-12">
-                {/* Background Layer 1 - BG.png (bottom layer, with blur and pan animation) */}
+                {/* Background Layer 1 - bg.webp (bottom layer, with blur and pan animation) */}
                 <div className="absolute inset-0 overflow-hidden pointer-events-none" style={{ zIndex: 0 }}>
                     <div
                         className="animate-pan-smooth h-full"
                         style={{
                             width: '300%',
-                            backgroundImage: 'url(/img/BG.png)',
+                            backgroundImage: 'url(/img/bg.webp)',
                             backgroundSize: '50% auto',
                             backgroundRepeat: 'repeat-x',
                             backgroundPosition: 'center',
@@ -225,11 +225,11 @@ function Landing() {
                     />
                 </div>
 
-                {/* Background Layer 2 - BG2.png (top layer, static) */}
+                {/* Background Layer 2 - glass_mirror.webp (top layer, static) */}
                 <div
                     className="absolute inset-0 bg-cover bg-center pointer-events-none"
                     style={{
-                        backgroundImage: 'url(/img/BG2.png)',
+                        backgroundImage: 'url(/img/glass_mirror.webp)',
                         opacity: 0.35,
                         zIndex: 2
                     }}

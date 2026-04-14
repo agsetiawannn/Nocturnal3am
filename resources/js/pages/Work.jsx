@@ -15,13 +15,13 @@ return (
     <div>
       {/* Hero Stats Section */}
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-        {/* Background Layer 1 - BG.png (blur + pan animation) */}
+        {/* Background Layer 1 - bg.webp (blur + pan animation) */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none" style={{ zIndex: 0 }}>
             <div
                 className="animate-pan-smooth h-full"
                 style={{
                     width: '300%',
-                    backgroundImage: 'url(/img/BG.png)',
+                    backgroundImage: 'url(/img/bg.webp)',
                     backgroundSize: '50% auto',
                     backgroundRepeat: 'repeat-x',
                     backgroundPosition: 'center',
@@ -31,11 +31,11 @@ return (
             />
         </div>
 
-        {/* Background Layer 2 - BG2.png (static overlay) */}
+        {/* Background Layer 2 - glass_mirror.webp (static overlay) */}
         <div
             className="absolute inset-0 bg-cover bg-center pointer-events-none"
             style={{
-                backgroundImage: 'url(/img/BG2.png)',
+                backgroundImage: 'url(/img/glass_mirror.webp)',
                 opacity: 0.35,
                 zIndex: 2
             }}
