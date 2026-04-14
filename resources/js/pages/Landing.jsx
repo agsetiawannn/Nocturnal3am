@@ -24,14 +24,17 @@ function Landing() {
 
     useEffect(() => {
         // Meta Pixel Code
-        !function(f,b,e,v,n,t,s)
-        {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-        n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-        if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-        n.queue=[];t=b.createElement(e);t.async=!0;
-        t.src=v;s=b.getElementsByTagName(e)[0];
-        s.parentNode.insertBefore(t,s)}(window, document,'script',
-        'https://connect.facebook.net/en_US/fbevents.js');
+        !function (f, b, e, v, n, t, s) {
+            if (f.fbq) return; n = f.fbq = function () {
+                n.callMethod ?
+                n.callMethod.apply(n, arguments) : n.queue.push(arguments)
+            };
+            if (!f._fbq) f._fbq = n; n.push = n; n.loaded = !0; n.version = '2.0';
+            n.queue = []; t = b.createElement(e); t.async = !0;
+            t.src = v; s = b.getElementsByTagName(e)[0];
+            s.parentNode.insertBefore(t, s)
+        }(window, document, 'script',
+            'https://connect.facebook.net/en_US/fbevents.js');
         window.fbq('init', '1439408024111143');
         window.fbq('track', 'PageView');
     }, []);
@@ -85,6 +88,44 @@ function Landing() {
     };
 
     const handleNext = () => {
+        let isValid = true;
+        let errorMessage = 'Please fill in all required fields.';
+
+        if (formStep === 1) {
+            if (!formData.name.trim() || !formData.email.trim() || !formData.phone.trim()) {
+                isValid = false;
+            }
+        } else if (formStep === 2) {
+            if (businessGoals.length === 0) {
+                isValid = false;
+                errorMessage = 'Please select at least one business goal.';
+            } else if (businessGoals.includes('Others') && !othersText.trim()) {
+                isValid = false;
+                errorMessage = 'Please provide details for Others.';
+            }
+        } else if (formStep === 3) {
+            if (!businessStage) {
+                isValid = false;
+                errorMessage = 'Please select your current business stage.';
+            }
+        } else if (formStep === 4) {
+            if (!budget) {
+                isValid = false;
+                errorMessage = 'Please select your budget range.';
+            }
+        } else if (formStep === 5) {
+            if (!timeline) {
+                isValid = false;
+                errorMessage = 'Please select your estimated timeline.';
+            }
+        }
+        // Step 6 (Additional details) is optional by default
+
+        if (!isValid) {
+            setPopup({ show: true, success: false, message: errorMessage });
+            return;
+        }
+
         if (formStep === 6) {
             handleSubmit();
         } else {
@@ -689,7 +730,7 @@ function Landing() {
                                                 disabled={isSubmitting}
                                                 className="bg-green-500 hover:bg-green-400 text-black font-semibold rounded-lg px-8 py-3 transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                                             >
-                                                {isSubmitting ? 'Sending...' : 'Next'}
+                                                {isSubmitting ? 'Sending...' : 'Finish'}
                                             </button>
                                         </div>
                                     </div>
