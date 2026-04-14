@@ -13,7 +13,7 @@ function Header() {
         { path: '/', label: 'Home' },
         { path: '/work', label: 'Work' },
         { path: '/team', label: 'Team' },
-        { path: '/tracking/login.php', label: 'Tracking', external: true },
+        { path: '/tracking/login', label: 'Tracking' },
     ];
 
     return (
@@ -22,7 +22,7 @@ function Header() {
             <div className="fixed top-3 left-3 md:top-6 md:left-[5.5rem] z-50">
                 <Link to="/">
                     <img
-                        src="/public/img/tb.png"
+                        src="/img/tb.png"
                         alt="Tigapagi Logo"
                         className="h-9 md:h-12 object-contain"
                     />
@@ -122,7 +122,7 @@ function Header() {
                         rel="noopener noreferrer"
                     >
                         <img
-                            src="/public/img/wa.png"
+                            src="/img/wa.png"
                             alt="WhatsApp"
                             className="w-4 h-4 md:w-5 md:h-5 rounded-full object-cover"
                         />

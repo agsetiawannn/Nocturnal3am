@@ -28,46 +28,31 @@ Route::get('/landing', function () {
     return view('app');
 })->name('landing');
 
-// Tracking System Routes (Native PHP) - Without CSRF Protection
-Route::any('/login.php', function () {
-    include resource_path('views/login.php');
-    exit;
-})->withoutMiddleware(['web']);
+use App\Http\Controllers\TrackingController;
 
-Route::any('/dashboard.php', function () {
-    include resource_path('views/dashboard.php');
-    exit;
-})->withoutMiddleware(['web']);
+// Tracking System API Routes (Stateful/Session-based)
+Route::prefix('api/tracking')->group(function () {
+    Route::post('/client/login', [TrackingController::class, 'clientLogin']);
+    Route::post('/admin/login', [TrackingController::class, 'adminLogin']);
+    Route::get('/auth/check', [TrackingController::class, 'checkAuth']);
+    Route::post('/logout', [TrackingController::class, 'logout']);
+    
+    Route::get('/client/dashboard', [TrackingController::class, 'getClientDashboard']);
+    
+    Route::get('/admin/dashboard', [TrackingController::class, 'getAdminDashboard']);
+    Route::post('/admin/client', [TrackingController::class, 'addClient']);
+    Route::delete('/admin/client/{id}', [TrackingController::class, 'deleteClient']);
+    Route::get('/admin/client/{id}', [TrackingController::class, 'getClientDetails']);
+    Route::post('/admin/client/{id}/progress', [TrackingController::class, 'saveProgress']);
+    Route::post('/client/{id}/note', [TrackingController::class, 'addNote']);
+});
 
-Route::any('/admin_login.php', function () {
-    include resource_path('views/admin_login.php');
-    exit;
-})->withoutMiddleware(['web']);
-
-Route::any('/admin_dashboard.php', function () {
-    include resource_path('views/admin_dashboard.php');
-    exit;
-})->withoutMiddleware(['web']);
-
-Route::any('/save_progress.php', function () {
-    include resource_path('views/save_progress.php');
-    exit;
-})->withoutMiddleware(['web']);
-
-Route::any('/edit_client.php', function () {
-    include resource_path('views/edit_client.php');
-    exit;
-})->withoutMiddleware(['web']);
-
-Route::any('/logout.php', function () {
-    include resource_path('views/logout.php');
-    exit;
-})->withoutMiddleware(['web']);
-
-Route::any('/test_db.php', function () {
-    include resource_path('views/test_db.php');
-    exit;
-})->withoutMiddleware(['web']);
+// React SPA - Tracking System Routes
+Route::get('/tracking/login', function () { return view('app'); });
+Route::get('/tracking/dashboard', function () { return view('app'); });
+Route::get('/tracking/admin/login', function () { return view('app'); });
+Route::get('/tracking/admin/dashboard', function () { return view('app'); });
+Route::get('/tracking/admin/client/{id}', function () { return view('app'); });
 
 // API Routes for React
 Route::post('/api/contact', [ContactController::class, 'store'])->name('contact.store');

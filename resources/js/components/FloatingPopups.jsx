@@ -43,7 +43,7 @@ const FloatingPopups = () => {
 
             const newPopup = {
                 id: newId,
-                img: `/public/img/client_all/client_${clientId}.webp`,
+                img: `/img/client_all/client_${clientId}.webp`,
                 x: slot.x,
                 y: slot.y,
                 slotIndex,

@@ -11,17 +11,12 @@
     <meta http-equiv="X-Content-Type-Options" content="nosniff">
     <meta name="referrer" content="strict-origin-when-cross-origin">
     <link rel="icon" type="image/png" href="{{ asset('img/Exclude.png') }}?v=3am_update_4">
+    <link rel="icon" type="image/x-icon" href="{{ asset('img/Exclude.ico') }}?v=update_1">
     <link rel="apple-touch-icon" href="{{ asset('img/Exclude.png') }}">
-    <link rel="shortcut icon" href="{{ asset('img/Exclude.png') }}" type="image/x-icon">
+    <link rel="shortcut icon" href="{{ asset('img/Exclude.ico') }}" type="image/x-icon">
 
-    @if(!app()->environment('production'))
-        @viteReactRefresh
-        @vite(['resources/css/app.css', 'resources/js/app.jsx'])
-    @else
-        <link rel="stylesheet" href="/public/build/assets/app-mYcLQiXB.css">
-        <link rel="stylesheet" href="/public/build/assets/app-DNMKSYnc.css">
-        <script type="module" src="/public/build/assets/app-j76vYJlU.js"></script>
-    @endif
+    @viteReactRefresh
+    @vite(['resources/css/app.css', 'resources/js/app.jsx'])
 </head>
 
 <body class="antialiased bg-black" style="background-color: #000;">

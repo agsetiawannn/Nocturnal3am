@@ -5,7 +5,7 @@ return (
     <div 
     className="min-h-screen flex items-center justify-center"
     style={{
-        backgroundImage: "url('/public/img/COver 1.png')",
+        backgroundImage: "url('/img/COver 1.png')",
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',

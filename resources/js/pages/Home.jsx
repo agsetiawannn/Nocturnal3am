@@ -49,7 +49,7 @@ function Home() {
                 link.rel = rel;
                 document.head.appendChild(link);
             }
-            link.href = '/public/img/Exclude.ico?v=' + new Date().getTime();
+            link.href = '/img/Exclude.ico?v=' + new Date().getTime();
         };
 
         updateIcon('icon');
@@ -130,7 +130,7 @@ function Home() {
                         className="animate-pan-smooth h-full"
                         style={{
                             width: '300%',
-                            backgroundImage: 'url(/public/img/BG.png)',
+                            backgroundImage: 'url(/img/BG.png)',
                             backgroundSize: '50% auto',
                             backgroundRepeat: 'repeat-x',
                             backgroundPosition: 'center',
@@ -144,7 +144,7 @@ function Home() {
                 <div
                     className="absolute inset-0 bg-cover bg-center pointer-events-none"
                     style={{
-                        backgroundImage: 'url(/public/img/BG2.png)',
+                        backgroundImage: 'url(/img/BG2.png)',
                         opacity: 0.35,
                         zIndex: 2
                     }}
@@ -196,7 +196,7 @@ function Home() {
                         rel="noopener noreferrer"
                     >
                         <img
-                            src="/public/img/wa.png"
+                            src="/img/wa.png"
                             alt="WhatsApp"
                             className="w-4 h-4 rounded-full object-cover"
                         />
@@ -224,8 +224,8 @@ function Home() {
 
                     {/* Service Pills Image */}
                     <picture>
-                        <source media="(max-width: 767px)" srcSet="/public/img/brand%20potential.webp" />
-                        <img src="/public/img/todo.svg" alt="Our Services" className="w-full h-auto object-contain mx-auto" style={{ maxWidth: '1100px' }} />
+                        <source media="(max-width: 767px)" srcSet="/img/brand%20potential.webp" />
+                        <img src="/img/todo.svg" alt="Our Services" className="w-full h-auto object-contain mx-auto" style={{ maxWidth: '1100px' }} />
                     </picture>
                 </div>
             </section>
@@ -235,10 +235,10 @@ function Home() {
                 <div className="w-full overflow-hidden whitespace-nowrap text-[0]">
                     <div className="inline-block animate-scroll align-top">
                         <div className="inline-block w-[400vw] md:w-[300vw] lg:w-[200vw]">
-                            <img src="/public/img/photowrap.webp" alt="Photo Showcase" className="w-full h-auto block" />
+                            <img src="/img/photowrap.webp" alt="Photo Showcase" className="w-full h-auto block" />
                         </div>
                         <div className="inline-block w-[400vw] md:w-[300vw] lg:w-[200vw]">
-                            <img src="/public/img/photowrap.webp" alt="Photo Showcase" className="w-full h-auto block" />
+                            <img src="/img/photowrap.webp" alt="Photo Showcase" className="w-full h-auto block" />
                         </div>
                     </div>
                 </div>
@@ -257,9 +257,9 @@ function Home() {
                         style={{ maxHeight: showClientWrap ? '2000px' : '80px' }}
                     >
                         <picture>
-                            <source media="(max-width: 767px)" srcSet="/public/img/clientm.webp" />
+                            <source media="(max-width: 767px)" srcSet="/img/clientm.webp" />
                             <img
-                                src="/public/img/full client.webp"
+                                src="/img/full client.webp"
                                 alt="Our Clients"
                                 className="w-full"
                             />
@@ -297,10 +297,10 @@ function Home() {
             {/* Responsive Wrapper to swap Video and Contact order on mobile/desktop */}
             <div className="flex flex-col">
                 {/* Contact Section - FIRST in DOM */}
-                <section className="relative bg-black flex flex-col justify-center lg:min-h-[600px] lg:order-2" style={{ width: '100%', minHeight: 0 }}>
+                <section className="relative bg-black flex flex-col justify-center lg:min-h-[600px] lg:order-2" style={{ width: '100%' }}>
                     <div className="absolute inset-0">
                         <img
-                            src="/public/img/inquiries.webp"
+                            src="/img/inquiries.webp"
                             alt=""
                             className="w-full h-full"
                             style={{ objectFit: 'cover' }}
@@ -604,7 +604,7 @@ function Home() {
                 {/* Motion Video Section - SECOND in DOM, lg:order-1 for desktop */}
                 <section className="bg-black lg:order-1">
                     <video
-                        src="/public/img/MOTION TP.MP4"
+                        src="/img/MOTION TP.MP4"
                         autoPlay
                         muted
                         loop

@@ -27,13 +27,13 @@ function Footer() {
             <h4 className="text-sm font-bold text-white mb-4">Our Social Media</h4>
             <div className="flex items-center gap-4">
               <a href="https://instagram.com/studio.tigapagi" target="_blank" rel="noopener noreferrer">
-                <img src="/public/img/IG.png" alt="Instagram" className="w-10 h-10" />
+                <img src="/img/IG.png" alt="Instagram" className="w-10 h-10" />
               </a>
               <a href="https://tiktok.com/@studio.tigapagi" target="_blank" rel="noopener noreferrer">
-                <img src="/public/img/TT.png" alt="TikTok" className="w-10 h-10" />
+                <img src="/img/TT.png" alt="TikTok" className="w-10 h-10" />
               </a>
               <a href="https://threads.net/@studio.tigapagi" target="_blank" rel="noopener noreferrer">
-                <img src="/public/img/T.png" alt="Threads" className="w-10 h-10" />
+                <img src="/img/T.png" alt="Threads" className="w-10 h-10" />
               </a>
             </div>
           </div>
@@ -74,13 +74,13 @@ function Footer() {
             <h4 className="text-sm font-bold text-white mb-4">Our Social Media</h4>
             <div className="flex items-center gap-4">
               <a href="https://instagram.com/studio.tigapagi" target="_blank" rel="noopener noreferrer">
-                <img src="/public/img/IG.png" alt="Instagram" className="w-11 h-11" />
+                <img src="/img/IG.png" alt="Instagram" className="w-11 h-11" />
               </a>
               <a href="https://tiktok.com/@studio.tigapagi" target="_blank" rel="noopener noreferrer">
-                <img src="/public/img/TT.png" alt="TikTok" className="w-11 h-11" />
+                <img src="/img/TT.png" alt="TikTok" className="w-11 h-11" />
               </a>
               <a href="https://threads.net/@studio.tigapagi" target="_blank" rel="noopener noreferrer">
-                <img src="/public/img/T.png" alt="Threads" className="w-11 h-11" />
+                <img src="/img/T.png" alt="Threads" className="w-11 h-11" />
               </a>
             </div>
           </div>

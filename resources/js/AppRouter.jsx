@@ -9,6 +9,11 @@ import Team from './pages/Team';
 import Clients from './pages/Clients';
 import Landing from './pages/Landing';
 
+import ClientLogin from './pages/tracking/ClientLogin';
+import ClientDashboard from './pages/tracking/ClientDashboard';
+import AdminLogin from './pages/tracking/AdminLogin';
+import AdminDashboard from './pages/tracking/AdminDashboard';
+
 function App() {
   const location = useLocation();
 
@@ -24,6 +29,12 @@ function App() {
           <Route path="clients" element={<Clients />} />
         </Route>
         <Route path="landing" element={<Landing />} />
+        
+        {/* Tracking System Routes */}
+        <Route path="tracking/login" element={<ClientLogin />} />
+        <Route path="tracking/dashboard" element={<ClientDashboard />} />
+        <Route path="tracking/admin/login" element={<AdminLogin />} />
+        <Route path="tracking/admin/dashboard" element={<AdminDashboard />} />
       </Routes>
     </>
   );

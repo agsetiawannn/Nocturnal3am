@@ -34,10 +34,10 @@ function WorkDetail() {
         </div>
 
         <div className="mt-10 grid grid-cols-2 lg:grid-cols-4 gap-4">
-          <img src="/public/img/work/cbt1.svg" alt={`${work.title} Detail 1`} className="object-cover rounded-xl bg-white/5 w-full h-48 md:h-64" />
-          <img src="/public/img/work/cbt1.svg" alt={`${work.title} Detail 2`} className="object-cover rounded-xl bg-white/5 w-full h-48 md:h-64" />
-          <img src="/public/img/work/cbt2.svg" alt={`${work.title} Detail 3`} className="object-cover rounded-xl bg-white/5 w-full h-48 md:h-64" />
-          <img src="/public/img/work/cbt2.svg" alt={`${work.title} Detail 4`} className="object-cover rounded-xl bg-white/5 w-full h-48 md:h-64" />
+          <img src="/img/work/cbt1.svg" alt={`${work.title} Detail 1`} className="object-cover rounded-xl bg-white/5 w-full h-48 md:h-64" />
+          <img src="/img/work/cbt1.svg" alt={`${work.title} Detail 2`} className="object-cover rounded-xl bg-white/5 w-full h-48 md:h-64" />
+          <img src="/img/work/cbt2.svg" alt={`${work.title} Detail 3`} className="object-cover rounded-xl bg-white/5 w-full h-48 md:h-64" />
+          <img src="/img/work/cbt2.svg" alt={`${work.title} Detail 4`} className="object-cover rounded-xl bg-white/5 w-full h-48 md:h-64" />
         </div>
       </div>
     </section>
