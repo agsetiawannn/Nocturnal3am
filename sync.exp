@@ -1,9 +1,0 @@
-#!/usr/bin/expect -f
-set timeout -1
-set password "Nocturnal3am."
-spawn rsync -avz --exclude="node_modules" --exclude=".git" --exclude=".env" -e "ssh -p 65002" ./ u240557956@153.92.11.7:~/domains/studiotigapagi.com/public_html/
-expect {
-    "yes/no" { send "yes\r"; exp_continue }
-    "password:" { send "$password\r" }
-}
-expect eof
