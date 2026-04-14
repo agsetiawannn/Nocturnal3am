@@ -456,7 +456,7 @@ function Landing() {
                                             />
                                             <input
                                                 type="tel"
-                                                placeholder="Phone number"
+                                                placeholder="Whatsapp Number"
                                                 value={formData.phone}
                                                 onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                                                 className="w-full bg-[#3d3d3d]/95 border-none rounded-[10px] px-5 py-4 text-white placeholder-white/80 focus:outline-none focus:ring-1 focus:ring-white/30 transition-colors text-[15px]"
