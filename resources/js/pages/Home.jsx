@@ -177,8 +177,7 @@ function Home() {
                         style={{ fontFamily: "'Montserrat', sans-serif", fontWeight: 800 }}
                     >
                         Hundreds of businesses<br />
-                        transformed through our vision.<br />
-                        Now, it&rsquo;s your turn.
+                        transformed through our vision.
                     </h1>
                 </div>
 
