@@ -157,15 +157,15 @@ export default function ClientDashboard() {
             <div className="relative z-10 w-full h-full min-h-screen p-6 md:p-10 lg:p-14 flex flex-col">
                 
                 {/* Header Navbar */}
-                <div className="flex justify-between items-center w-full max-w-7xl mx-auto mb-12 md:mb-16">
+                <div className="flex flex-col md:flex-row md:justify-between items-start md:items-center w-full max-w-7xl mx-auto mb-6 md:mb-16 gap-16 md:gap-0">
                     <img src="/img/tpfulllg.webp" alt="Tigapagi" className="h-[32px] md:h-[40px] opacity-90 drop-shadow-lg" />
-                    <div className="flex items-center gap-4 md:gap-6">
-                        <span className="text-white/70 text-sm md:text-base font-light">
-                            Hi, <span className="font-semibold text-white">{data.client.name}</span>
+                    <div className="flex flex-col items-start md:items-end gap-1">
+                        <span className="text-white text-lg md:text-xl font-light">
+                            Hi, <span className="font-normal">{data.client.name}</span>
                         </span>
                         <button 
                             onClick={handleLogout}
-                            className="text-white/40 hover:text-white transition-colors cursor-pointer text-[10px] md:text-xs font-medium tracking-widest uppercase z-20"
+                            className="text-white/60 hover:text-white transition-colors cursor-pointer text-[10px] md:text-xs font-medium tracking-widest uppercase z-20 text-left md:text-right mt-1"
                         >
                             Sign Out
                         </button>
@@ -173,10 +173,10 @@ export default function ClientDashboard() {
                 </div>
 
                 {/* Main Content */}
-                <div className="flex-1 w-full max-w-7xl mx-auto flex flex-col justify-start pt-8 md:pt-16">
+                <div className="flex-1 w-full max-w-7xl mx-auto flex flex-col justify-start pt-2 md:pt-16">
                     
                     {/* Phase Label */}
-                    <p className="text-white/40 text-sm md:text-base tracking-wider font-light mb-10 md:mb-14">
+                    <p className="text-white/40 text-sm md:text-base tracking-wider font-light mb-8 md:mb-14">
                         [phase] <span className="text-white/60">{activePhase.label}</span>
                     </p>
 
@@ -190,28 +190,24 @@ export default function ClientDashboard() {
                                 const isHighlighted = itemStatus === 'in_progress' || itemStatus === 'ongoing';
                                 
                                 return (
-                                    <div key={idx} className="flex items-center justify-between gap-6 md:gap-12">
-                                        {/* Item Name */}
-                                        <div className="flex-1 min-w-0">
+                                    <div key={idx} className="flex items-center justify-between gap-4 md:gap-8">
+                                        {/* Item Info */}
+                                        <div className="flex flex-col gap-1 md:gap-2 flex-1 min-w-0 pr-4">
                                             <h2 
-                                                className={`tracking-tight transition-all duration-500 leading-tight
+                                                className={`tracking-tight transition-all duration-500 leading-snug
                                                 ${isHighlighted 
-                                                    ? 'text-white text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black' 
-                                                    : 'text-white/50 text-lg sm:text-xl md:text-2xl lg:text-3xl font-normal'
+                                                    ? 'text-white text-xl sm:text-2xl md:text-3xl font-bold' 
+                                                    : 'text-white/70 text-lg sm:text-xl md:text-2xl font-normal'
                                                 }`}
                                                 style={{ fontFamily: "'Montserrat', sans-serif" }}
                                             >
                                                 {itemName}
                                             </h2>
-                                        </div>
-
-                                        {/* Date */}
-                                        <div className="flex-shrink-0 text-right">
                                             <p 
                                                 className={`tracking-tight transition-all duration-500
                                                 ${isHighlighted 
-                                                    ? 'text-white text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black' 
-                                                    : 'text-white/35 text-base sm:text-lg md:text-xl lg:text-2xl font-normal'
+                                                    ? 'text-white font-bold text-base md:text-lg' 
+                                                    : 'text-white/50 text-base md:text-lg font-normal'
                                                 }`}
                                                 style={{ fontFamily: "'Montserrat', sans-serif" }}
                                             >
@@ -220,7 +216,9 @@ export default function ClientDashboard() {
                                         </div>
 
                                         {/* Status Icon */}
-                                        <StatusIcon status={itemStatus} />
+                                        <div className="flex-shrink-0">
+                                            <StatusIcon status={itemStatus} />
+                                        </div>
                                     </div>
                                 );
                             })}
