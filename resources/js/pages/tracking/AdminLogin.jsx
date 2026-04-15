@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 export default function AdminLogin() {
+    const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
@@ -20,7 +21,7 @@ export default function AdminLogin() {
                     'Accept': 'application/json',
                     'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content'),
                 },
-                body: JSON.stringify({ password })
+                body: JSON.stringify({ username, password })
             });
             const data = await res.json();
             
@@ -50,11 +51,22 @@ export default function AdminLogin() {
                 
                 <form onSubmit={handleSubmit} className="flex flex-col gap-5">
                     <div>
+                        <label className="block text-sm font-medium text-gray-300 mb-2">Username</label>
+                        <input 
+                            type="text" 
+                            className="w-full bg-black/50 border border-white/20 rounded-xl px-5 py-3.5 text-white placeholder-gray-500 focus:outline-none focus:border-white transition-colors"
+                            placeholder="Enter username"
+                            value={username}
+                            onChange={(e) => setUsername(e.target.value)}
+                            required 
+                        />
+                    </div>
+                    <div>
                         <label className="block text-sm font-medium text-gray-300 mb-2">Password</label>
                         <input 
                             type="password" 
                             className="w-full bg-black/50 border border-white/20 rounded-xl px-5 py-3.5 text-white placeholder-gray-500 focus:outline-none focus:border-white transition-colors"
-                            placeholder="Enter system password"
+                            placeholder="Enter password"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             required 

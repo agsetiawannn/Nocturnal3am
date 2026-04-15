@@ -28,17 +28,22 @@ class TrackingController extends Controller
 
     public function adminLogin(Request $request)
     {
-        $request->validate(['password' => 'required']);
+        $request->validate([
+            'username' => 'required',
+            'password' => 'required',
+        ]);
         
-        // Admin logic mapping from old system (or use hardcoded password if it was)
-        $admin = DB::table('admins')->where('password', md5($request->password))->first();
+        $admin = DB::table('admin')
+            ->where('username', $request->username)
+            ->where('password', md5($request->password))
+            ->first();
         
         if ($admin) {
             session(['admin' => true, 'admin_id' => $admin->id]);
             return response()->json(['success' => true]);
         }
         
-        return response()->json(['success' => false, 'message' => 'Password salah.'], 401);
+        return response()->json(['success' => false, 'message' => 'Username atau password salah.'], 401);
     }
 
     public function checkAuth()

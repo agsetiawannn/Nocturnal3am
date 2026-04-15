@@ -23,15 +23,89 @@ export default function ClientDashboard() {
     if (loading) return <div className="min-h-screen bg-black flex items-center justify-center text-white">Loading...</div>;
     if (!data?.client) return null;
 
-    // Normalization of current phase
-    const rawPhase = (data.progress?.client_view || 'onboard').toLowerCase().replace('_', ' ');
-    
-    // Determine active index
-    const phases = ['onboard', 'pre sprint', 'sprint week'];
-    const activeIndex = phases.findIndex(p => rawPhase.includes(p)) !== -1 
-        ? phases.findIndex(p => rawPhase.includes(p)) 
-        : 0; 
-        
+    // Parse progress data for each phase
+    const parsePhaseItems = (jsonStr) => {
+        try {
+            const parsed = typeof jsonStr === 'string' ? JSON.parse(jsonStr) : jsonStr;
+            return Array.isArray(parsed) ? parsed : [];
+        } catch {
+            return [];
+        }
+    };
+
+    const onboardItems = parsePhaseItems(data.progress?.onboard);
+    const presprintItems = parsePhaseItems(data.progress?.presprint);
+    const sprintItems = parsePhaseItems(data.progress?.sprint);
+
+    // Determine current phase
+    const rawPhase = (data.progress?.client_view || 'onboard').toLowerCase();
+    const sprintWeekFocus = data.progress?.sprint_week_focus || 1;
+
+    // Filter sprint items by current sprint week focus
+    const filteredSprintItems = sprintItems.filter(item => (item.week || 1) === sprintWeekFocus);
+
+    // Build phase sections with their items
+    const phaseSections = [
+        { key: 'onboard', label: 'on_board', items: onboardItems },
+        { key: 'presprint', label: 'pre_sprint', items: presprintItems },
+        { key: 'sprint', label: `sprint_week${sprintWeekFocus}`, items: filteredSprintItems },
+    ];
+
+    // Find active phase
+    const activePhase = phaseSections.find(p => rawPhase.includes(p.key)) || phaseSections[0];
+
+    // Status icon component
+    const StatusIcon = ({ status }) => {
+        if (status === 'done' || status === 'completed') {
+            // Green checkmark
+            return (
+                <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-green-500/20 border border-green-500/50 flex items-center justify-center flex-shrink-0">
+                    <svg className="w-4 h-4 md:w-5 md:h-5 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                    </svg>
+                </div>
+            );
+        }
+        if (status === 'in_progress' || status === 'ongoing') {
+            // Loading spinner
+            return (
+                <div className="w-8 h-8 md:w-10 md:h-10 flex items-center justify-center flex-shrink-0">
+                    <svg className="w-7 h-7 md:w-8 md:h-8 text-white/80 animate-spin-slow" viewBox="0 0 24 24" fill="none">
+                        <path d="M12 2a10 10 0 0 1 10 10" stroke="currentColor" strokeWidth="3" strokeLinecap="round" />
+                    </svg>
+                </div>
+            );
+        }
+        // Not started - red X
+        return (
+            <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-red-500/20 border border-red-500/50 flex items-center justify-center flex-shrink-0">
+                <svg className="w-4 h-4 md:w-5 md:h-5 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </div>
+        );
+    };
+
+    // Format date helper
+    const formatDate = (dateStr) => {
+        if (!dateStr) return '';
+        try {
+            const date = new Date(dateStr);
+            if (isNaN(date)) return dateStr;
+            const day = date.getDate();
+            const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+            const month = months[date.getMonth()];
+            const year = date.getFullYear();
+            return `${day}, ${month} ${year}`;
+        } catch {
+            return dateStr;
+        }
+    };
+
+    const handleLogout = () => {
+        fetch('/api/tracking/logout', { method: 'POST' }).then(() => navigate('/tracking/login'));
+    };
+
     return (
         <div className="relative min-h-screen bg-black overflow-hidden flex flex-col font-sans">
             {/* Background Layer 1 - bg.webp */}
@@ -80,61 +154,97 @@ export default function ClientDashboard() {
             />
 
             {/* Content Container */}
-            <div className="relative z-10 w-full h-full min-h-screen p-8 md:p-12 lg:p-16 flex flex-col justify-between">
+            <div className="relative z-10 w-full h-full min-h-screen p-6 md:p-10 lg:p-14 flex flex-col">
                 
                 {/* Header Navbar */}
-                <div className="flex justify-between items-center w-full max-w-7xl mx-auto">
-                    <img src="/img/tp lg.webp" alt="Tigapagi Logo" className="w-[100px] md:w-[130px] opacity-90 drop-shadow-lg" />
-                    <button 
-                        onClick={() => {
-                            fetch('/api/tracking/logout', { method: 'POST' }).then(() => navigate('/tracking/login'));
-                        }}
-                        className="text-white/60 hover:text-white transition-colors cursor-pointer text-xs md:text-sm font-medium tracking-widest uppercase z-20"
-                    >
-                        Sign Out
-                    </button>
-                </div>
-
-                {/* Main Content */}
-                <div className="flex-1 w-full max-w-7xl mx-auto flex flex-col justify-center my-12">
-                    <h1 className="text-white/80 text-xl md:text-3xl font-light mb-12" style={{ fontFamily: "'Poppins', sans-serif" }}>
-                        Hi, <span className="font-semibold text-white drop-shadow-md">{data.client.name}</span>
-                    </h1>
-
-                    <div className="flex flex-col gap-6 md:gap-8 justify-center">
-                        {phases.map((phase, idx) => {
-                            const isActive = idx === activeIndex;
-
-                            return (
-                                <div key={phase} className="flex items-center gap-6">
-                                    <div 
-                                        className={`tracking-tight uppercase transition-all duration-700 ease-out drop-shadow-2xl
-                                        ${isActive ? 'text-white text-[50px] sm:text-[70px] md:text-[90px] lg:text-[110px] font-black opacity-100' : 'text-white/30 text-[24px] sm:text-[30px] md:text-[40px] font-bold opacity-40'}`}
-                                        style={{ fontFamily: "'Montserrat', sans-serif" }}
-                                    >
-                                        {phase}
-                                    </div>
-                                </div>
-                            );
-                        })}
+                <div className="flex justify-between items-center w-full max-w-7xl mx-auto mb-12 md:mb-16">
+                    <img src="/img/tpfulllg.webp" alt="Tigapagi" className="h-[32px] md:h-[40px] opacity-90 drop-shadow-lg" />
+                    <div className="flex items-center gap-4 md:gap-6">
+                        <span className="text-white/70 text-sm md:text-base font-light">
+                            Hi, <span className="font-semibold text-white">{data.client.name}</span>
+                        </span>
+                        <button 
+                            onClick={handleLogout}
+                            className="text-white/40 hover:text-white transition-colors cursor-pointer text-[10px] md:text-xs font-medium tracking-widest uppercase z-20"
+                        >
+                            Sign Out
+                        </button>
                     </div>
                 </div>
 
-                {/* Optional: Footer or Notes section */}
-                {data.notes?.length > 0 && (
-                     <div className="w-full max-w-7xl mx-auto mt-auto flex flex-col gap-4 z-20">
-                        <p className="text-white/40 text-xs md:text-sm tracking-widest uppercase font-semibold">Latest Updates</p>
-                        <div className="max-h-[150px] overflow-y-auto pr-4 space-y-3 custom-scrollbar">
-                            {data.notes.map(note => (
-                                <div key={note.id} className="p-4 bg-white/5 backdrop-blur-xl rounded-xl border border-white/10 hover:bg-white/10 transition-colors">
-                                    <p className="text-[10px] md:text-xs text-white/50 mb-1 uppercase tracking-wider">{new Date(note.created_at).toLocaleDateString()} - {note.created_by}</p>
-                                    <p className="text-sm text-white/90 font-light leading-relaxed">{note.note_text}</p>
-                                </div>
-                            ))}
+                {/* Main Content */}
+                <div className="flex-1 w-full max-w-7xl mx-auto flex flex-col justify-start pt-8 md:pt-16">
+                    
+                    {/* Phase Label */}
+                    <p className="text-white/40 text-sm md:text-base tracking-wider font-light mb-10 md:mb-14">
+                        [phase] <span className="text-white/60">{activePhase.label}</span>
+                    </p>
+
+                    {/* Phase Items Table */}
+                    {activePhase.items.length > 0 ? (
+                        <div className="flex flex-col gap-5 md:gap-7">
+                            {activePhase.items.map((item, idx) => {
+                                const itemName = item.name || item.label || item.title || `Step ${idx + 1}`;
+                                const itemDate = item.date || item.deadline || '';
+                                const itemStatus = item.status || 'not_started';
+                                const isHighlighted = itemStatus === 'in_progress' || itemStatus === 'ongoing';
+                                
+                                return (
+                                    <div key={idx} className="flex items-center justify-between gap-6 md:gap-12">
+                                        {/* Item Name */}
+                                        <div className="flex-1 min-w-0">
+                                            <h2 
+                                                className={`tracking-tight transition-all duration-500 leading-tight
+                                                ${isHighlighted 
+                                                    ? 'text-white text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black' 
+                                                    : 'text-white/50 text-lg sm:text-xl md:text-2xl lg:text-3xl font-normal'
+                                                }`}
+                                                style={{ fontFamily: "'Montserrat', sans-serif" }}
+                                            >
+                                                {itemName}
+                                            </h2>
+                                        </div>
+
+                                        {/* Date */}
+                                        <div className="flex-shrink-0 text-right">
+                                            <p 
+                                                className={`tracking-tight transition-all duration-500
+                                                ${isHighlighted 
+                                                    ? 'text-white text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black' 
+                                                    : 'text-white/35 text-base sm:text-lg md:text-xl lg:text-2xl font-normal'
+                                                }`}
+                                                style={{ fontFamily: "'Montserrat', sans-serif" }}
+                                            >
+                                                {formatDate(itemDate)}
+                                            </p>
+                                        </div>
+
+                                        {/* Status Icon */}
+                                        <StatusIcon status={itemStatus} />
+                                    </div>
+                                );
+                            })}
                         </div>
-                     </div>
-                )}
+                    ) : (
+                        <div className="text-white/30 text-lg font-light">
+                            No items in this phase yet.
+                        </div>
+                    )}
+                </div>
+
             </div>
+
+
+            {/* Custom animation for spinner */}
+            <style>{`
+                @keyframes spin-slow {
+                    from { transform: rotate(0deg); }
+                    to { transform: rotate(360deg); }
+                }
+                .animate-spin-slow {
+                    animation: spin-slow 1.5s linear infinite;
+                }
+            `}</style>
         </div>
     );
 }

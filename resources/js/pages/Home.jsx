@@ -41,7 +41,7 @@ function Home() {
     // Force Safari to evaluate the favicon by changing the title and injecting the final .ico directly
     useEffect(() => {
         document.title = "Tigapagi - Creative Agency";
-        
+
         const updateIcon = (rel) => {
             let link = document.querySelector(`link[rel='${rel}']`);
             if (!link) {
@@ -49,7 +49,7 @@ function Home() {
                 link.rel = rel;
                 document.head.appendChild(link);
             }
-            link.href = '/img/Exclude.ico?v=' + new Date().getTime();
+            link.href = '/img/tp%20lg.ico?v=' + new Date().getTime();
         };
 
         updateIcon('icon');

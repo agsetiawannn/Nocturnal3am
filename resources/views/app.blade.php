@@ -10,10 +10,10 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta http-equiv="X-Content-Type-Options" content="nosniff">
     <meta name="referrer" content="strict-origin-when-cross-origin">
-    <link rel="icon" type="image/png" href="{{ asset('img/Exclude.png') }}?v=3am_update_4">
-    <link rel="icon" type="image/x-icon" href="{{ asset('img/Exclude.ico') }}?v=update_1">
-    <link rel="apple-touch-icon" href="{{ asset('img/Exclude.png') }}">
-    <link rel="shortcut icon" href="{{ asset('img/Exclude.ico') }}" type="image/x-icon">
+    <link rel="icon" type="image/webp" href="{{ asset('img/tp lg.webp') }}?v=3am_update_5">
+    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}?v=update_5">
+    <link rel="apple-touch-icon" href="{{ asset('img/tp%20lg.webp') }}">
+    <link rel="shortcut icon" href="{{ asset('img/tp%20lg.ico') }}" type="image/x-icon">
 
     @viteReactRefresh
     @vite(['resources/css/app.css', 'resources/js/app.jsx'])
