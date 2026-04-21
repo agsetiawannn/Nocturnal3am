@@ -65,7 +65,7 @@ function Footer() {
             </div>
             <div>
               <h4 className="text-sm font-bold text-white mb-2">Email</h4>
-              <p className="text-white/70 text-sm">produksitigapagi@gmail.com</p>
+              <p className="text-white/70 text-sm">info@studiotigapagi.com</p>
             </div>
           </div>
 

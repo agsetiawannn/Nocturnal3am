@@ -158,6 +158,35 @@ class TrackingController extends Controller
             ]);
         }
 
+        if ($request->notify_client === true) {
+            $client = Client::find($id);
+            if ($client && $client->email) {
+                try {
+                    $dashboardUrl = url('/tracking/login');
+                    $htmlMessage = "
+                        <div style=\"font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #eee; border-radius: 10px;\">
+                            <h2 style=\"color: #16d110; margin-bottom: 20px;\">Project Progress Update</h2>
+                            <p style=\"color: #333; font-size: 16px;\">Hello <strong>{$client->name}</strong>,</p>
+                            <p style=\"color: #555; font-size: 15px; line-height: 1.6;\">There is a new update regarding your project progress, which has just been updated by the Studio Tigapagi team.</p>
+                            <p style=\"color: #555; font-size: 15px; line-height: 1.6;\">Please log in to the Client Dashboard to view the current status, deadlines, and the latest phase of your project:</p>
+                            <div style=\"margin: 35px 0; text-align: center;\">
+                                <a href=\"{$dashboardUrl}\" style=\"background-color: #16d110; color: #000; padding: 14px 28px; text-decoration: none; border-radius: 6px; font-weight: bold; font-size: 16px; display: inline-block;\">Open Client Dashboard</a>
+                            </div>
+                            <hr style=\"border: none; border-top: 1px solid #eee; margin: 30px 0;\">
+                            <p style=\"color: #888; font-size: 14px; line-height: 1.5;\">Warm regards,<br><strong style=\"color: #333;\">Studio Tigapagi</strong><br><em>Passionate Nocturnal Folks</em></p>
+                        </div>
+                    ";
+                    
+                    \Illuminate\Support\Facades\Mail::html($htmlMessage, function ($message) use ($client) {
+                        $message->to($client->email)
+                                ->subject('Your Project Progress Update - Studio Tigapagi');
+                    });
+                } catch (\Exception $e) {
+                    \Illuminate\Support\Facades\Log::error('Email notification failed: ' . $e->getMessage());
+                }
+            }
+        }
+
         return response()->json(['success' => true]);
     }
 
@@ -176,5 +205,69 @@ class TrackingController extends Controller
         ]);
 
         return response()->json(['success' => true, 'note' => $note]);
+    }
+
+    // ====== ADMIN ACCOUNTS MANAGEMENT ======
+
+    public function getAdmins()
+    {
+        if (!session()->has('admin')) return response()->json(['message' => 'Unauthorized'], 401);
+
+        $currentUserId = session('admin_id');
+        $admins = DB::table('admin')->select('id', 'username')->get();
+        return response()->json(['admins' => $admins, 'current_id' => $currentUserId]);
+    }
+
+    public function addAdmin(Request $request)
+    {
+        if (!session()->has('admin')) return response()->json(['message' => 'Unauthorized'], 401);
+
+        $request->validate([
+            'username' => 'required',
+            'password' => 'required|min:6'
+        ]);
+
+        $existing = DB::table('admin')->where('username', $request->username)->first();
+        if ($existing) {
+            return response()->json(['success' => false, 'message' => 'Username already exists.'], 400);
+        }
+
+        DB::table('admin')->insert([
+            'username' => $request->username,
+            'password' => md5($request->password)
+        ]);
+
+        return response()->json(['success' => true]);
+    }
+
+    public function updateAdminPassword(Request $request, $id)
+    {
+        if (!session()->has('admin')) return response()->json(['message' => 'Unauthorized'], 401);
+
+        $request->validate([
+            'password' => 'required|min:6'
+        ]);
+
+        // Optional: you can restrict so that an admin can only alter their own password
+        // Or if there's a master admin, etc. Currently any admin can change any admin password.
+        DB::table('admin')
+            ->where('id', $id)
+            ->update(['password' => md5($request->password)]);
+
+        return response()->json(['success' => true]);
+    }
+
+    public function deleteAdmin($id)
+    {
+        if (!session()->has('admin')) return response()->json(['message' => 'Unauthorized'], 401);
+        
+        $currentUserId = session('admin_id');
+        if ($currentUserId == $id) {
+            return response()->json(['success' => false, 'message' => 'Cannot delete your own account.'], 400);
+        }
+
+        DB::table('admin')->where('id', $id)->delete();
+
+        return response()->json(['success' => true]);
     }
 }

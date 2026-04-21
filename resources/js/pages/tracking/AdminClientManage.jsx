@@ -8,6 +8,7 @@ export default function AdminClientManage() {
     const [progress, setProgress] = useState(null);
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
+    const [notifyClient, setNotifyClient] = useState(false);
 
     // Phase config
     const phaseKeys = ['onboard', 'presprint', 'sprint'];
@@ -75,9 +76,14 @@ export default function AdminClientManage() {
                     sprint: phaseItems.sprint,
                     client_view: currentPhase,
                     sprint_week_focus: sprintWeekFocus,
+                    notify_client: notifyClient,
                 })
             });
             fetchData();
+            if (notifyClient) {
+                alert('Saved successfully! Update notification has been sent correctly to the client.');
+                setNotifyClient(false);
+            }
         } catch (err) {
             alert('Failed to save.');
         } finally {
@@ -138,13 +144,24 @@ export default function AdminClientManage() {
                         <h1 className="text-2xl md:text-3xl font-bold">{client.name}</h1>
                         <p className="text-gray-400 text-sm mt-1">{client.email}</p>
                     </div>
-                    <button 
-                        onClick={handleSave}
-                        disabled={saving}
-                        className="px-6 py-2.5 bg-green-600 hover:bg-green-500 text-white text-sm font-semibold rounded-lg transition-colors disabled:opacity-50"
-                    >
-                        {saving ? 'Saving...' : 'Save All'}
-                    </button>
+                    <div className="flex flex-col items-end gap-3">
+                        <label className="flex items-center gap-2 cursor-pointer text-sm text-white/70 hover:text-white transition-colors select-none">
+                            <input 
+                                type="checkbox" 
+                                checked={notifyClient}
+                                onChange={(e) => setNotifyClient(e.target.checked)}
+                                className="w-4 h-4 rounded border-white/20 bg-black/50 accent-[#16d110] cursor-pointer"
+                            />
+                            Kirim Email Notifikasi & Update Client
+                        </label>
+                        <button 
+                            onClick={handleSave}
+                            disabled={saving}
+                            className="px-6 py-2.5 bg-[#16d110] hover:bg-[#11b00c] text-black text-sm font-semibold rounded-lg transition-colors disabled:opacity-50 cursor-pointer w-full shadow-[0_0_15px_rgba(22,209,16,0.3)]"
+                        >
+                            {saving ? 'Saving...' : 'Save All Updates'}
+                        </button>
+                    </div>
                 </div>
 
                 {/* Client View Phase Selector */}
@@ -224,6 +241,17 @@ export default function AdminClientManage() {
                                         <option value="in_progress">In Progress</option>
                                         <option value="done">Done</option>
                                     </select>
+                                    <button 
+                                        onClick={() => updateItem(phase, idx, 'is_delayed', !item.is_delayed)}
+                                        className={`px-3 py-2 rounded-lg transition-colors flex-shrink-0 text-xs font-semibold border ${
+                                            (item.is_delayed === true || item.is_delayed === 'true')
+                                                ? 'bg-orange-500/20 text-orange-400 border-orange-500/50 hover:bg-orange-500/30' 
+                                                : 'bg-white/5 text-white/50 border-white/10 hover:text-white hover:bg-white/10'
+                                        }`}
+                                        title={item.is_delayed ? 'Remove Delay Status' : 'Mark as Delayed'}
+                                    >
+                                        Delay
+                                    </button>
                                     <button 
                                         onClick={() => removeItem(phase, idx)}
                                         className="p-2 text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded-lg transition-colors flex-shrink-0"
@@ -316,6 +344,17 @@ export default function AdminClientManage() {
                                                 <option value="in_progress">In Progress</option>
                                                 <option value="done">Done</option>
                                             </select>
+                                            <button 
+                                                onClick={() => updateItem('sprint', item.originalIdx, 'is_delayed', !item.is_delayed)}
+                                                className={`px-3 py-2 rounded-lg transition-colors flex-shrink-0 text-xs font-semibold border ${
+                                                    (item.is_delayed === true || item.is_delayed === 'true')
+                                                        ? 'bg-orange-500/20 text-orange-400 border-orange-500/50 hover:bg-orange-500/30' 
+                                                        : 'bg-white/5 text-white/50 border-white/10 hover:text-white hover:bg-white/10'
+                                                }`}
+                                                title={item.is_delayed ? 'Remove Delay Status' : 'Mark as Delayed'}
+                                            >
+                                                Delay
+                                            </button>
                                             <button 
                                                 onClick={() => removeItem('sprint', item.originalIdx)}
                                                 className="p-2 text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded-lg transition-colors flex-shrink-0"

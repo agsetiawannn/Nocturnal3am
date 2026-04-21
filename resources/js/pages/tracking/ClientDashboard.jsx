@@ -54,32 +54,28 @@ export default function ClientDashboard() {
     // Find active phase
     const activePhase = phaseSections.find(p => rawPhase.includes(p.key)) || phaseSections[0];
 
-    // Status icon component
     const StatusIcon = ({ status }) => {
         if (status === 'done' || status === 'completed') {
-            // Green checkmark
             return (
-                <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-green-500/20 border border-green-500/50 flex items-center justify-center flex-shrink-0">
-                    <svg className="w-4 h-4 md:w-5 md:h-5 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-[#16d110] flex items-center justify-center flex-shrink-0">
+                    <svg className="w-4 h-4 md:w-5 md:h-5 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
                         <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                     </svg>
                 </div>
             );
         }
         if (status === 'in_progress' || status === 'ongoing') {
-            // Loading spinner
             return (
                 <div className="w-8 h-8 md:w-10 md:h-10 flex items-center justify-center flex-shrink-0">
-                    <svg className="w-7 h-7 md:w-8 md:h-8 text-white/80 animate-spin-slow" viewBox="0 0 24 24" fill="none">
-                        <path d="M12 2a10 10 0 0 1 10 10" stroke="currentColor" strokeWidth="3" strokeLinecap="round" />
+                    <svg className="w-8 h-8 md:w-10 md:h-10 text-white animate-spin-slow" viewBox="0 0 24 24" fill="none">
+                        <path d="M12 2a10 10 0 0 1 10 10" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
                     </svg>
                 </div>
             );
         }
-        // Not started - red X
         return (
-            <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-red-500/20 border border-red-500/50 flex items-center justify-center flex-shrink-0">
-                <svg className="w-4 h-4 md:w-5 md:h-5 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+            <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-red-500 flex items-center justify-center flex-shrink-0">
+                <svg className="w-4 h-4 md:w-5 md:h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
                 </svg>
             </div>
@@ -96,7 +92,7 @@ export default function ClientDashboard() {
             const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
             const month = months[date.getMonth()];
             const year = date.getFullYear();
-            return `${day}, ${month} ${year}`;
+            return `${day} ${month} ${year}`;
         } catch {
             return dateStr;
         }
@@ -154,18 +150,18 @@ export default function ClientDashboard() {
             />
 
             {/* Content Container */}
-            <div className="relative z-10 w-full h-full min-h-screen p-6 md:p-10 lg:p-14 flex flex-col">
+            <div className="relative z-10 w-full h-full min-h-screen p-6 pb-40 md:p-10 md:pb-48 lg:p-14 lg:pb-48 flex flex-col">
                 
                 {/* Header Navbar */}
                 <div className="flex flex-col md:flex-row md:justify-between items-start md:items-center w-full max-w-7xl mx-auto mb-6 md:mb-16 gap-16 md:gap-0">
                     <img src="/img/tpfulllg.webp" alt="Tigapagi" className="h-[32px] md:h-[40px] opacity-90 drop-shadow-lg" />
-                    <div className="flex flex-col items-start md:items-end gap-1">
+                    <div className="flex flex-row md:flex-col items-center md:items-end justify-between w-full md:w-auto gap-2 md:gap-1">
                         <span className="text-white text-lg md:text-xl font-light">
                             Hi, <span className="font-normal">{data.client.name}</span>
                         </span>
                         <button 
                             onClick={handleLogout}
-                            className="text-white/60 hover:text-white transition-colors cursor-pointer text-[10px] md:text-xs font-medium tracking-widest uppercase z-20 text-left md:text-right mt-1"
+                            className="text-white/60 hover:text-white transition-colors cursor-pointer text-[10px] md:text-xs font-medium tracking-widest uppercase z-20 whitespace-nowrap mt-1 md:mt-0"
                         >
                             Sign Out
                         </button>
@@ -176,50 +172,86 @@ export default function ClientDashboard() {
                 <div className="flex-1 w-full max-w-7xl mx-auto flex flex-col justify-start pt-2 md:pt-16">
                     
                     {/* Phase Label */}
-                    <p className="text-white/40 text-sm md:text-base tracking-wider font-light mb-8 md:mb-14">
-                        [phase] <span className="text-white/60">{activePhase.label}</span>
-                    </p>
+                    <h1 className="-ml-[2px] md:-ml-[4px] text-white text-2xl sm:text-3xl md:text-5xl font-normal mb-10 md:mb-14 tracking-normal" style={{ fontFamily: "'Courier New', Courier, monospace" }}>
+                        [phase] {activePhase.label}
+                    </h1>
 
                     {/* Phase Items Table */}
                     {activePhase.items.length > 0 ? (
                         <div className="flex flex-col gap-5 md:gap-7">
                             {activePhase.items.map((item, idx) => {
+                                const isDelayed = item.is_delayed === true || item.is_delayed === 'true';
                                 const itemName = item.name || item.label || item.title || `Step ${idx + 1}`;
                                 const itemDate = item.date || item.deadline || '';
                                 const itemStatus = item.status || 'not_started';
                                 const isHighlighted = itemStatus === 'in_progress' || itemStatus === 'ongoing';
                                 
                                 return (
-                                    <div key={idx} className="flex items-center justify-between gap-4 md:gap-8">
-                                        {/* Item Info */}
-                                        <div className="flex flex-col gap-1 md:gap-2 flex-1 min-w-0 pr-4">
-                                            <h2 
-                                                className={`tracking-tight transition-all duration-500 leading-snug
-                                                ${isHighlighted 
-                                                    ? 'text-white text-xl sm:text-2xl md:text-3xl font-bold' 
-                                                    : 'text-white/70 text-lg sm:text-xl md:text-2xl font-normal'
-                                                }`}
-                                                style={{ fontFamily: "'Montserrat', sans-serif" }}
-                                            >
-                                                {itemName}
-                                            </h2>
-                                            <p 
-                                                className={`tracking-tight transition-all duration-500
-                                                ${isHighlighted 
-                                                    ? 'text-white font-bold text-base md:text-lg' 
-                                                    : 'text-white/50 text-base md:text-lg font-normal'
-                                                }`}
-                                                style={{ fontFamily: "'Montserrat', sans-serif" }}
-                                            >
-                                                {formatDate(itemDate)}
-                                            </p>
+                                    <React.Fragment key={idx}>
+                                        <div className="flex items-center justify-between w-full md:grid md:grid-cols-[1fr_auto_auto] md:gap-x-12 lg:gap-x-24 gap-4 md:py-2">
+                                            {/* Item Name & Mobile Date */}
+                                            <div className="flex flex-col gap-1 md:gap-0 flex-1 min-w-0 pr-4">
+                                                <h2 
+                                                    className={`tracking-tight transition-all duration-500 leading-snug
+                                                    ${isHighlighted 
+                                                        ? 'text-white text-xl sm:text-2xl md:text-4xl lg:text-[40px] font-bold' 
+                                                        : 'text-white/70 text-lg sm:text-xl md:text-2xl lg:text-[32px] font-normal'
+                                                    }`}
+                                                    style={{ fontFamily: "'Montserrat', sans-serif" }}
+                                                >
+                                                    {itemName}
+                                                </h2>
+                                                {/* Date on Mobile (hidden on desktop) */}
+                                                <div className="md:hidden flex flex-col items-start mt-0.5">
+                                                    <div className={`relative flex flex-col items-center ${isDelayed ? "mb-6" : ""}`}>
+                                                        <p 
+                                                            className={`tracking-tight transition-all duration-500
+                                                            ${isHighlighted 
+                                                                ? 'text-white font-bold text-base md:text-lg' 
+                                                                : 'text-white/50 text-base md:text-lg font-normal'
+                                                            }`}
+                                                            style={{ fontFamily: "'Montserrat', sans-serif" }}
+                                                        >
+                                                            {formatDate(itemDate)}
+                                                        </p>
+                                                        {isDelayed && (
+                                                            <span className="absolute top-full left-1/2 -translate-x-1/2 mt-1 bg-[#f00000] text-white text-[10px] sm:text-[11px] px-1.5 py-0.5 whitespace-nowrap" style={{ fontFamily: "'Montserrat', sans-serif" }}>
+                                                                [delayed due to revision]
+                                                            </span>
+                                                        )}
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            {/* Date on Desktop */}
+                                            <div className="hidden md:flex items-center justify-end">
+                                                <div className={`relative flex flex-col items-center justify-center ${isDelayed ? "mb-6 lg:mb-8" : ""}`}>
+                                                    <p 
+                                                        className={`tracking-tight transition-all duration-500
+                                                        ${isHighlighted 
+                                                            ? 'text-white font-bold md:text-3xl lg:text-[34px]' 
+                                                            : 'text-white/50 md:text-2xl lg:text-[28px] font-normal'
+                                                        }`}
+                                                        style={{ fontFamily: "'Montserrat', sans-serif" }}
+                                                    >
+                                                        {formatDate(itemDate)}
+                                                    </p>
+                                                    {isDelayed && (
+                                                        <span className="absolute top-full left-1/2 -translate-x-1/2 mt-1 lg:mt-2 bg-[#f00000] text-white text-[11px] lg:text-xs px-2 py-0.5 whitespace-nowrap" style={{ fontFamily: "'Montserrat', sans-serif" }}>
+                                                            [delayed due to revision]
+                                                        </span>
+                                                    )}
+                                                </div>
+                                            </div>
+
+                                            {/* Status Icon */}
+                                            <div className="flex-shrink-0">
+                                                <StatusIcon status={itemStatus} />
+                                            </div>
                                         </div>
 
-                                        {/* Status Icon */}
-                                        <div className="flex-shrink-0">
-                                            <StatusIcon status={itemStatus} />
-                                        </div>
-                                    </div>
+
+                                    </React.Fragment>
                                 );
                             })}
                         </div>
@@ -232,6 +264,33 @@ export default function ClientDashboard() {
 
             </div>
 
+            {/* Legend (Mobile & Desktop) */}
+            <div className="fixed bottom-12 right-6 md:bottom-16 md:right-16 lg:bottom-20 lg:right-20 flex flex-col md:flex-row gap-2.5 md:gap-8 items-end md:items-center z-[60]">
+                <div className="flex items-center gap-3">
+                    <span className="text-white text-[11px] md:text-xs font-normal tracking-wide">Done</span>
+                    <div className="w-4 h-4 md:w-5 md:h-5 rounded-full bg-[#16d110] flex flex-shrink-0 items-center justify-center">
+                        <svg className="w-2.5 h-2.5 md:w-3 md:h-3 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                        </svg>
+                    </div>
+                </div>
+                <div className="flex items-center gap-3">
+                    <span className="text-white text-[11px] md:text-xs font-normal tracking-wide">On-Progress</span>
+                    <div className="w-4 h-4 md:w-5 md:h-5 flex flex-shrink-0 items-center justify-center">
+                        <svg className="w-[18px] h-[18px] md:w-[22px] md:h-[22px] text-white animate-spin-slow" viewBox="0 0 24 24" fill="none">
+                            <path d="M12 2a10 10 0 0 1 10 10" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
+                        </svg>
+                    </div>
+                </div>
+                <div className="flex items-center gap-3">
+                    <span className="text-white text-[11px] md:text-xs font-normal tracking-wide">Not Started, yet.</span>
+                    <div className="w-4 h-4 md:w-5 md:h-5 rounded-full bg-red-500 flex flex-shrink-0 items-center justify-center">
+                        <svg className="w-2.5 h-2.5 md:w-3 md:h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </div>
+                </div>
+            </div>
 
             {/* Custom animation for spinner */}
             <style>{`

@@ -87,14 +87,22 @@ export default function AdminDashboard() {
                         <h1 className="text-3xl font-bold">Admin Dashboard</h1>
                         <p className="text-gray-400 mt-2">Manage Client Workspaces</p>
                     </div>
-                    <button 
-                        onClick={() => {
-                            fetch('/api/tracking/logout', { method: 'POST' }).then(() => navigate('/tracking/admin/login'));
-                        }}
-                        className="px-4 py-2 bg-red-600 hover:bg-red-500 rounded-lg text-sm font-semibold transition-colors"
-                    >
-                        Log out
-                    </button>
+                    <div className="flex gap-3 items-center">
+                        <button 
+                            onClick={() => navigate('/tracking/admin/settings')}
+                            className="px-4 py-2 bg-white/10 hover:bg-white/20 rounded-lg text-sm font-semibold transition-colors"
+                        >
+                            Admin Settings
+                        </button>
+                        <button 
+                            onClick={() => {
+                                fetch('/api/tracking/logout', { method: 'POST' }).then(() => navigate('/tracking/admin/login'));
+                            }}
+                            className="px-4 py-2 bg-red-600 hover:bg-red-500 rounded-lg text-sm font-semibold transition-colors"
+                        >
+                            Log out
+                        </button>
+                    </div>
                 </div>
 
                 <div className="bg-white/5 border border-white/10 rounded-2xl p-6 md:p-8" style={{ backdropFilter: 'blur(20px)' }}>

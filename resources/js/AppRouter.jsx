@@ -14,6 +14,7 @@ import ClientDashboard from './pages/tracking/ClientDashboard';
 import AdminLogin from './pages/tracking/AdminLogin';
 import AdminDashboard from './pages/tracking/AdminDashboard';
 import AdminClientManage from './pages/tracking/AdminClientManage';
+import AdminSettings from './pages/tracking/AdminSettings';
 
 function App() {
   const location = useLocation();
@@ -37,6 +38,7 @@ function App() {
         <Route path="tracking/admin/login" element={<AdminLogin />} />
         <Route path="tracking/admin/dashboard" element={<AdminDashboard />} />
         <Route path="tracking/admin/client/:id" element={<AdminClientManage />} />
+        <Route path="tracking/admin/settings" element={<AdminSettings />} />
       </Routes>
     </>
   );

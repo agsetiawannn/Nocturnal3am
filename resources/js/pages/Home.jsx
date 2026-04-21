@@ -20,6 +20,7 @@ function Home() {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [popup, setPopup] = useState({ show: false, success: true, message: '' });
     const [screenSize, setScreenSize] = useState(null);
+    const [showScrollTop, setShowScrollTop] = useState(false);
 
     // Set screen size on client
     useEffect(() => {
@@ -37,6 +38,22 @@ function Home() {
             return () => clearTimeout(timer);
         }
     }, [popup.show]);
+
+    useEffect(() => {
+        const handleScroll = () => {
+            if (window.scrollY > 400) {
+                setShowScrollTop(true);
+            } else {
+                setShowScrollTop(false);
+            }
+        };
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
+
+    const scrollToTop = () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
 
     // Force Safari to evaluate the favicon by changing the title and injecting the final .ico directly
     useEffect(() => {
@@ -316,7 +333,7 @@ function Home() {
                             onClick={() => setShowClientWrap(!showClientWrap)}
                             className="flex items-center gap-2 bg-transparent text-white text-lg font-light cursor-pointer border-none outline-none hover:opacity-70 transition-opacity duration-300"
                         >
-                            {showClientWrap ? 'Show less' : 'View all clients'}
+                            {showClientWrap ? 'And many more' : 'View all clients'}
                             <span
                                 className="inline-flex items-center justify-center w-7 h-7 rounded-full border border-white/60 transition-transform duration-500"
                                 style={{ transform: showClientWrap ? 'rotate(180deg)' : 'rotate(0deg)' }}
@@ -768,6 +785,16 @@ function Home() {
                     </div>
                 </div>
             )}
+
+            {/* Scroll to Top Button */}
+            <button
+                onClick={scrollToTop}
+                className={`fixed bottom-8 left-1/2 -translate-x-1/2 z-[60] w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 flex items-center justify-center text-white transition-all duration-500 backdrop-blur-md cursor-pointer ${showScrollTop ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10 pointer-events-none'}`}
+            >
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <polyline points="18 15 12 9 6 15" />
+                </svg>
+            </button>
 
             {/* Popup Animations */}
             <style>{`

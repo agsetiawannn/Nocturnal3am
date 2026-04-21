@@ -45,6 +45,12 @@ Route::prefix('api/tracking')->group(function () {
     Route::get('/admin/client/{id}', [TrackingController::class, 'getClientDetails']);
     Route::post('/admin/client/{id}/progress', [TrackingController::class, 'saveProgress']);
     Route::post('/client/{id}/note', [TrackingController::class, 'addNote']);
+    
+    // Admin Accounts Management
+    Route::get('/admin/accounts', [TrackingController::class, 'getAdmins']);
+    Route::post('/admin/account', [TrackingController::class, 'addAdmin']);
+    Route::put('/admin/account/{id}/password', [TrackingController::class, 'updateAdminPassword']);
+    Route::delete('/admin/account/{id}', [TrackingController::class, 'deleteAdmin']);
 });
 
 // React SPA - Tracking System Routes
@@ -53,6 +59,7 @@ Route::get('/tracking/dashboard', function () { return view('app'); });
 Route::get('/tracking/admin/login', function () { return view('app'); });
 Route::get('/tracking/admin/dashboard', function () { return view('app'); });
 Route::get('/tracking/admin/client/{id}', function () { return view('app'); });
+Route::get('/tracking/admin/settings', function () { return view('app'); });
 
 // API Routes for React
 Route::post('/api/contact', [ContactController::class, 'store'])->name('contact.store');

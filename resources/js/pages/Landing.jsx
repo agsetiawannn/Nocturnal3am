@@ -21,13 +21,14 @@ function Landing() {
     const [popup, setPopup] = useState({ show: false, success: true, message: '' });
     const [hoveredWork, setHoveredWork] = useState(null);
     const [cursorPos, setCursorPos] = useState({ x: 0, y: 0 });
+    const [showScrollTop, setShowScrollTop] = useState(false);
 
     useEffect(() => {
         // Meta Pixel Code
         !function (f, b, e, v, n, t, s) {
             if (f.fbq) return; n = f.fbq = function () {
                 n.callMethod ?
-                n.callMethod.apply(n, arguments) : n.queue.push(arguments)
+                    n.callMethod.apply(n, arguments) : n.queue.push(arguments)
             };
             if (!f._fbq) f._fbq = n; n.push = n; n.loaded = !0; n.version = '2.0';
             n.queue = []; t = b.createElement(e); t.async = !0;
@@ -45,6 +46,22 @@ function Landing() {
             return () => clearTimeout(timer);
         }
     }, [popup.show]);
+
+    useEffect(() => {
+        const handleScroll = () => {
+            if (window.scrollY > 400) {
+                setShowScrollTop(true);
+            } else {
+                setShowScrollTop(false);
+            }
+        };
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
+
+    const scrollToTop = () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
 
     const handleSubmit = async () => {
         setIsSubmitting(true);
@@ -69,6 +86,7 @@ function Landing() {
             });
             if (response.ok) {
                 setFormStep(7);
+                if (window.fbq) window.fbq('track', 'Lead');
             } else {
                 const errorData = await response.json().catch(() => null);
                 setPopup({ show: true, success: false, message: errorData?.message || 'Failed to send message. Please try again.' });
@@ -144,6 +162,18 @@ function Landing() {
         setAdditionalDetails('');
     };
 
+    const scrollToForm = (e) => {
+        e.preventDefault();
+        const formEl = document.getElementById('contact-form-section');
+        if (formEl) {
+            const isDesktop = window.matchMedia('(min-width: 768px)').matches;
+            formEl.scrollIntoView({
+                behavior: 'smooth',
+                block: isDesktop ? 'center' : 'start'
+            });
+        }
+    };
+
     const runImages = [...Array(1)];
 
     return (
@@ -180,9 +210,29 @@ function Landing() {
             </div>
 
             <div className="fixed top-3 right-3 md:top-6 md:right-[5.5rem] z-50 flex items-center gap-2 md:gap-3 overflow-visible">
+                {/* Get Quote Button */}
+                <button
+                    onClick={(e) => {
+                        scrollToForm(e);
+                        if (window.fbq) window.fbq('track', 'GetQuoteBtn');
+                    }}
+                    className="
+                        hidden md:flex h-9 md:h-12
+                        items-center justify-center
+                        bg-[#16d110] hover:bg-[#11b00c] text-black
+                        px-4 md:px-5
+                        rounded-lg
+                        text-xs md:text-sm font-bold
+                        transition-colors cursor-pointer border-none
+                    "
+                    style={{ backdropFilter: 'blur(40px)', WebkitBackdropFilter: 'blur(40px)' }}
+                >
+                    Get Quote
+                </button>
                 {/* Contact Button */}
                 <a
                     href="https://api.whatsapp.com/send/?phone=6289638893601&text&type=phone_number&app_absent=0"
+                    onClick={() => { if (window.fbq) window.fbq('track', 'Contact'); }}
                     className="
         hidden md:flex h-9 md:h-12
         items-center justify-center gap-2
@@ -267,10 +317,25 @@ function Landing() {
                     </h1>
                 </div>
 
-                {/* Mobile Contact Button in Hero */}
-                <div className="absolute bottom-12 left-6 z-20 md:hidden">
+                {/* Mobile Contact & Quote Buttons in Hero */}
+                <div className="absolute bottom-12 left-6 z-20 md:hidden flex gap-3">
+                    <button
+                        onClick={(e) => {
+                            scrollToForm(e);
+                            if (window.fbq) window.fbq('track', 'GetQuoteBtn');
+                        }}
+                        className="
+                            h-10 flex items-center justify-center
+                            bg-[#16d110] hover:bg-[#11b00c] text-black
+                            px-5 rounded-xl text-xs font-bold transition-colors border-none cursor-pointer
+                        "
+                        style={{ backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)' }}
+                    >
+                        Get Quote
+                    </button>
                     <a
                         href="https://api.whatsapp.com/send/?phone=6289638893601&text&type=phone_number&app_absent=0"
+                        onClick={() => { if (window.fbq) window.fbq('track', 'Contact'); }}
                         className="
                             h-10 flex items-center justify-center gap-2
                             bg-transparent border border-white/30 hover:border-white/50
@@ -426,7 +491,7 @@ function Landing() {
                             <source media="(max-width: 767px)" srcSet="/img/clientm.webp?v=3" />
                             <img
                                 src="/img/full client.webp?v=3"
-                                alt="Our Clients"
+                                alt="And many more"
                                 className="w-full"
                             />
                         </picture>
@@ -444,7 +509,7 @@ function Landing() {
                             onClick={() => setShowClientWrap(!showClientWrap)}
                             className="flex items-center gap-2 bg-transparent text-white text-lg font-light cursor-pointer border-none outline-none hover:opacity-70 transition-opacity duration-300"
                         >
-                            {showClientWrap ? 'Show less' : 'View all clients'}
+                            {showClientWrap ? 'And many more' : 'View all clients'}
                             <span
                                 className="inline-flex items-center justify-center w-7 h-7 rounded-full border border-white/60 transition-transform duration-500"
                                 style={{ transform: showClientWrap ? 'rotate(180deg)' : 'rotate(0deg)' }}
@@ -464,7 +529,7 @@ function Landing() {
             {/* Responsive Wrapper - Form first in DOM, Video second */}
             <div className="flex flex-col">
                 {/* Contact Section - appears first on mobile */}
-                <section className="relative bg-black flex flex-col justify-center lg:min-h-[600px] lg:order-2">
+                <section id="contact-form-section" className="relative bg-black flex flex-col justify-center lg:min-h-[600px] lg:order-2">
                     <div className="absolute inset-0">
                         <img
                             src="/img/inquiries.webp?v=3"
@@ -897,6 +962,16 @@ function Landing() {
                     </div>
                 </div>
             )}
+
+            {/* Scroll to Top Button */}
+            <button
+                onClick={scrollToTop}
+                className={`fixed bottom-8 left-1/2 -translate-x-1/2 z-[60] w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 flex items-center justify-center text-white transition-all duration-500 backdrop-blur-md cursor-pointer ${showScrollTop ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10 pointer-events-none'}`}
+            >
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <polyline points="18 15 12 9 6 15" />
+                </svg>
+            </button>
 
             {/* Popup Animations */}
             <style>{`
