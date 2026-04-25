@@ -51,6 +51,11 @@ Route::prefix('api/tracking')->group(function () {
     Route::post('/admin/account', [TrackingController::class, 'addAdmin']);
     Route::put('/admin/account/{id}/password', [TrackingController::class, 'updateAdminPassword']);
     Route::delete('/admin/account/{id}', [TrackingController::class, 'deleteAdmin']);
+    
+    // Landing Page Settings
+    Route::get('/admin/landing-settings', [TrackingController::class, 'getLandingSettings']);
+    Route::post('/admin/landing-settings', [TrackingController::class, 'saveLandingSettings']);
+    Route::get('/public/landing-settings', [TrackingController::class, 'getPublicLandingSettings']);
 });
 
 // React SPA - Tracking System Routes

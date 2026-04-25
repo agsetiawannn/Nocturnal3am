@@ -11,6 +11,12 @@ export default function AdminDashboard() {
     const [addError, setAddError] = useState('');
     const [addLoading, setAddLoading] = useState(false);
 
+    // Landing settings
+    const [popupTitle, setPopupTitle] = useState('');
+    const [popupSubtitle, setPopupSubtitle] = useState('');
+    const [settingsLoading, setSettingsLoading] = useState(false);
+    const [settingsMessage, setSettingsMessage] = useState('');
+
     const fetchClients = () => {
         fetch('/api/tracking/admin/dashboard')
             .then(res => res.json())
@@ -27,6 +33,14 @@ export default function AdminDashboard() {
 
     useEffect(() => {
         fetchClients();
+        fetch('/api/tracking/admin/landing-settings')
+            .then(res => res.json())
+            .then(data => {
+                if (data.settings) {
+                    setPopupTitle(data.settings.popup_title);
+                    setPopupSubtitle(data.settings.popup_subtitle);
+                }
+            });
     }, [navigate]);
 
     const handleAddClient = async (e) => {
@@ -74,6 +88,36 @@ export default function AdminDashboard() {
             fetchClients();
         } catch (err) {
             alert('Failed to delete client.');
+        }
+    };
+
+    const handleSaveSettings = async (e) => {
+        e.preventDefault();
+        setSettingsLoading(true);
+        setSettingsMessage('');
+        try {
+            const res = await fetch('/api/tracking/admin/landing-settings', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content'),
+                },
+                body: JSON.stringify({
+                    popup_title: popupTitle,
+                    popup_subtitle: popupSubtitle
+                })
+            });
+            if (res.ok) {
+                setSettingsMessage('Settings saved successfully!');
+            } else {
+                setSettingsMessage('Failed to save settings.');
+            }
+        } catch (err) {
+            setSettingsMessage('Error saving settings.');
+        } finally {
+            setSettingsLoading(false);
+            setTimeout(() => setSettingsMessage(''), 3000);
         }
     };
 
@@ -187,6 +231,50 @@ export default function AdminDashboard() {
                         ))}
                         {clients.length === 0 && <p className="text-gray-500">No clients found.</p>}
                     </div>
+                </div>
+
+                <div className="bg-white/5 border border-white/10 rounded-2xl p-6 md:p-8 mt-8" style={{ backdropFilter: 'blur(20px)' }}>
+                    <div className="mb-6">
+                        <h2 className="text-xl font-semibold">Landing Page Settings</h2>
+                        <p className="text-gray-400 text-sm mt-1">Configure the welcome popup that appears after the loader.</p>
+                    </div>
+
+                    <form onSubmit={handleSaveSettings} className="space-y-4">
+                        <div>
+                            <label className="block text-sm text-gray-400 mb-1">Popup Title</label>
+                            <input 
+                                type="text"
+                                value={popupTitle}
+                                onChange={(e) => setPopupTitle(e.target.value)}
+                                className="w-full bg-black/50 border border-white/20 rounded-lg px-4 py-2.5 text-white placeholder-gray-500 focus:outline-none focus:border-white transition-colors text-sm"
+                                required
+                            />
+                        </div>
+                        <div>
+                            <label className="block text-sm text-gray-400 mb-1">Popup Subtitle (Footer Text)</label>
+                            <textarea 
+                                value={popupSubtitle}
+                                onChange={(e) => setPopupSubtitle(e.target.value)}
+                                rows={3}
+                                className="w-full bg-black/50 border border-white/20 rounded-lg px-4 py-2.5 text-white placeholder-gray-500 focus:outline-none focus:border-white transition-colors text-sm"
+                                required
+                            />
+                        </div>
+                        <div className="flex items-center gap-4">
+                            <button 
+                                type="submit" 
+                                disabled={settingsLoading}
+                                className="px-6 py-2.5 bg-[#16d110] hover:bg-[#11b00c] text-black text-sm font-semibold rounded-lg transition-colors disabled:opacity-50"
+                            >
+                                {settingsLoading ? 'Saving...' : 'Save Settings'}
+                            </button>
+                            {settingsMessage && (
+                                <span className={settingsMessage.includes('Error') || settingsMessage.includes('Failed') ? 'text-red-400 text-sm' : 'text-green-400 text-sm'}>
+                                    {settingsMessage}
+                                </span>
+                            )}
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>

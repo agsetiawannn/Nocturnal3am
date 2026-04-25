@@ -22,6 +22,22 @@ function Landing() {
     const [hoveredWork, setHoveredWork] = useState(null);
     const [cursorPos, setCursorPos] = useState({ x: 0, y: 0 });
     const [showScrollTop, setShowScrollTop] = useState(false);
+    
+    // Popup settings
+    const [showContactPopup, setShowContactPopup] = useState(false);
+    const [popupClosing, setPopupClosing] = useState(false);
+    const [landingSettings, setLandingSettings] = useState({
+        popup_title: "Let's Get Started",
+        popup_subtitle: "Fill this up, and tell us about your brand .\nWe will approach you soon"
+    });
+
+    const closePopup = () => {
+        setPopupClosing(true);
+        setTimeout(() => {
+            setShowContactPopup(false);
+            setPopupClosing(false);
+        }, 400);
+    };
 
     useEffect(() => {
         // Meta Pixel Code
@@ -38,6 +54,23 @@ function Landing() {
             'https://connect.facebook.net/en_US/fbevents.js');
         window.fbq('init', '1439408024111143');
         window.fbq('track', 'PageView');
+        
+        // Fetch Settings
+        fetch('/api/tracking/public/landing-settings')
+            .then(res => res.json())
+            .then(data => {
+                if (data.settings) {
+                    setLandingSettings(data.settings);
+                }
+            })
+            .catch(err => console.error(err));
+
+        // Show popup after loader
+        const timer = setTimeout(() => {
+            setShowContactPopup(true);
+        }, 5800);
+
+        return () => clearTimeout(timer);
     }, []);
 
     useEffect(() => {
@@ -144,6 +177,24 @@ function Landing() {
             return;
         }
 
+        if (formStep === 1) {
+            // Send partial data in the background
+            fetch('/api/contact', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content'),
+                },
+                body: JSON.stringify({
+                    name: formData.name,
+                    email: formData.email,
+                    phone: formData.phone,
+                    additional_details: '[Lead Step 1 - Partial Submission]',
+                }),
+            }).catch(e => console.error('Error sending step 1:', e));
+        }
+
         if (formStep === 6) {
             handleSubmit();
         } else {
@@ -198,6 +249,127 @@ function Landing() {
             </div>
 
             <Loader />
+
+            {/* Contact Popup */}
+            {showContactPopup && (
+                <div 
+                    className={`fixed inset-0 z-[150] flex items-center justify-center p-4 ${popupClosing ? 'popup-overlay-out' : 'popup-overlay-in'}`}
+                    onClick={(e) => { if (e.target === e.currentTarget) closePopup(); }}
+                >
+                    <div className={`bg-[#111] border border-white/5 rounded-[20px] p-8 md:p-10 w-full max-w-md relative shadow-2xl ${popupClosing ? 'popup-card-out' : 'popup-card-in'}`}>
+                        <button 
+                            onClick={closePopup}
+                            className="absolute top-5 right-5 text-white/50 hover:text-white transition-colors cursor-pointer"
+                        >
+                            <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
+                        
+                        <h3 className="text-[32px] md:text-3xl font-bold text-white mb-8 leading-tight tracking-tight">
+                            {landingSettings.popup_title}
+                        </h3>
+                        
+                        <div className="space-y-4">
+                            <input
+                                type="text"
+                                placeholder="Name"
+                                value={formData.name}
+                                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                                className="w-full bg-[#3d3d3d] border-none rounded-[10px] px-5 py-4 text-white placeholder-white/80 focus:outline-none focus:ring-1 focus:ring-white/30 transition-colors text-[15px]"
+                            />
+                            <input
+                                type="email"
+                                placeholder="Email"
+                                value={formData.email}
+                                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                                className="w-full bg-[#3d3d3d] border-none rounded-[10px] px-5 py-4 text-white placeholder-white/80 focus:outline-none focus:ring-1 focus:ring-white/30 transition-colors text-[15px]"
+                            />
+                            <input
+                                type="tel"
+                                placeholder="Phone number"
+                                value={formData.phone}
+                                onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                                className="w-full bg-[#3d3d3d] border-none rounded-[10px] px-5 py-4 text-white placeholder-white/80 focus:outline-none focus:ring-1 focus:ring-white/30 transition-colors text-[15px]"
+                            />
+                        </div>
+                        
+                        <div className="mt-8 flex flex-col gap-8">
+                            <button
+                                onClick={() => {
+                                    if (!formData.name.trim() || !formData.email.trim() || !formData.phone.trim()) {
+                                        setPopup({ show: true, success: false, message: 'Please fill in all required fields.' });
+                                        return;
+                                    }
+                                    
+                                    // Submit partial data
+                                    fetch('/api/contact', {
+                                        method: 'POST',
+                                        headers: {
+                                            'Content-Type': 'application/json',
+                                            'Accept': 'application/json',
+                                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content'),
+                                        },
+                                        body: JSON.stringify({
+                                            name: formData.name,
+                                            email: formData.email,
+                                            phone: formData.phone,
+                                            additional_details: '[Lead - Popup Submission]',
+                                        }),
+                                    }).catch(e => console.error('Error sending popup data:', e));
+                                    
+                                    closePopup();
+                                }}
+                                className="bg-[#16d110] hover:bg-[#11b00c] text-black font-bold py-3 px-8 rounded-xl transition-colors cursor-pointer self-start border-none"
+                            >
+                                Submit
+                            </button>
+                            
+                            <p className="text-white/90 text-[15px] font-light leading-relaxed whitespace-pre-wrap">
+                                {landingSettings.popup_subtitle}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            <style>{`
+                @keyframes popupOverlayIn {
+                    from { opacity: 0; }
+                    to { opacity: 1; }
+                }
+                @keyframes popupOverlayOut {
+                    from { opacity: 1; }
+                    to { opacity: 0; }
+                }
+                @keyframes popupCardIn {
+                    from { opacity: 0; transform: scale(0.92) translateY(20px); }
+                    to { opacity: 1; transform: scale(1) translateY(0); }
+                }
+                @keyframes popupCardOut {
+                    from { opacity: 1; transform: scale(1) translateY(0); }
+                    to { opacity: 0; transform: scale(0.92) translateY(20px); }
+                }
+                .popup-overlay-in {
+                    animation: popupOverlayIn 0.4s ease-out forwards;
+                    background: rgba(0,0,0,0.6);
+                    backdrop-filter: blur(4px);
+                    -webkit-backdrop-filter: blur(4px);
+                }
+                .popup-overlay-out {
+                    animation: popupOverlayOut 0.4s ease-in forwards;
+                    background: rgba(0,0,0,0.6);
+                    backdrop-filter: blur(4px);
+                    -webkit-backdrop-filter: blur(4px);
+                }
+                .popup-card-in {
+                    animation: popupCardIn 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+                }
+                .popup-card-out {
+                    animation: popupCardOut 0.35s ease-in forwards;
+                }
+            `}</style>
+
             {/* Header - Logo and Contact Button */}
             <div className="fixed top-3 left-3 md:top-6 md:left-[5.5rem] z-50">
                 <a href="/">

@@ -270,4 +270,53 @@ class TrackingController extends Controller
 
         return response()->json(['success' => true]);
     }
+
+    // ====== LANDING PAGE SETTINGS ======
+
+    private function getSettingsPath()
+    {
+        return storage_path('app/landing_settings.json');
+    }
+
+    private function readLandingSettings()
+    {
+        $path = $this->getSettingsPath();
+        if (file_exists($path)) {
+            return json_decode(file_get_contents($path), true);
+        }
+        return [
+            'popup_title' => "Let's Get Started",
+            'popup_subtitle' => "Fill this up, and tell us about your brand .\nWe will approach you soon"
+        ];
+    }
+
+    public function getLandingSettings()
+    {
+        if (!session()->has('admin')) return response()->json(['message' => 'Unauthorized'], 401);
+        return response()->json(['settings' => $this->readLandingSettings()]);
+    }
+
+    public function getPublicLandingSettings()
+    {
+        return response()->json(['settings' => $this->readLandingSettings()]);
+    }
+
+    public function saveLandingSettings(Request $request)
+    {
+        if (!session()->has('admin')) return response()->json(['message' => 'Unauthorized'], 401);
+        
+        $request->validate([
+            'popup_title' => 'required|string',
+            'popup_subtitle' => 'required|string'
+        ]);
+
+        $settings = [
+            'popup_title' => $request->popup_title,
+            'popup_subtitle' => $request->popup_subtitle
+        ];
+
+        file_put_contents($this->getSettingsPath(), json_encode($settings, JSON_PRETTY_PRINT));
+
+        return response()->json(['success' => true]);
+    }
 }

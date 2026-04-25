@@ -154,6 +154,24 @@ function Home() {
             return;
         }
 
+        if (formStep === 1) {
+            // Send partial data in the background
+            fetch('/api/contact', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content'),
+                },
+                body: JSON.stringify({
+                    name: formData.name,
+                    email: formData.email,
+                    phone: formData.phone,
+                    additional_details: '[Lead Step 1 - Partial Submission]',
+                }),
+            }).catch(e => console.error('Error sending step 1:', e));
+        }
+
         if (formStep === 6) {
             handleSubmit();
         } else {
