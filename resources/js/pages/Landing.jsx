@@ -3,6 +3,54 @@ import Footer from '../components/Footer';
 import Loader from '../components/Loader';
 import FloatingPopups from '../components/FloatingPopups';
 
+function MobileWorkCard({ work }) {
+    const [slideIdx, setSlideIdx] = useState(0);
+    return (
+        <div className="snap-center shrink-0 w-[85vw] md:w-[400px] h-auto relative overflow-hidden group">
+            <div className="relative w-full aspect-[3/4] overflow-hidden">
+                <img
+                    src={work.imgs[slideIdx]}
+                    alt={work.name}
+                    className="w-full h-full object-cover transition-opacity duration-500"
+                />
+                {work.imgs.length > 1 && (
+                    <>
+                        <button
+                            onClick={(e) => { e.stopPropagation(); setSlideIdx(prev => (prev - 1 + work.imgs.length) % work.imgs.length); }}
+                            className="absolute left-3 top-1/2 -translate-y-1/2 w-8 h-8 bg-black/50 rounded-full flex items-center justify-center text-white z-10 border-none cursor-pointer"
+                        >
+                            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" /></svg>
+                        </button>
+                        <button
+                            onClick={(e) => { e.stopPropagation(); setSlideIdx(prev => (prev + 1) % work.imgs.length); }}
+                            className="absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 bg-black/50 rounded-full flex items-center justify-center text-white z-10 border-none cursor-pointer"
+                        >
+                            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>
+                        </button>
+                        <div className="absolute top-4 left-1/2 -translate-x-1/2 flex gap-1.5 z-10">
+                            {work.imgs.map((_, i) => (
+                                <button key={i} onClick={(e) => { e.stopPropagation(); setSlideIdx(i); }} className={`w-1.5 h-1.5 rounded-full border-none cursor-pointer transition-all ${i === slideIdx ? 'bg-white w-4' : 'bg-white/40'}`} />
+                            ))}
+                        </div>
+                    </>
+                )}
+            </div>
+            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent pointer-events-none"></div>
+            <div className="absolute bottom-5 left-5 right-5 flex flex-col gap-3">
+                <div className="flex items-center gap-2">
+                    <span className="text-white/80 text-sm font-light">{work.num}</span>
+                    <span className="text-white font-bold text-lg leading-tight">{work.name}</span>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                    {work.tags.map((tag) => (
+                        <span key={tag} className="px-3 py-1 rounded-full border border-white/50 text-white text-[10px] font-light whitespace-nowrap">{tag}</span>
+                    ))}
+                </div>
+            </div>
+        </div>
+    );
+}
+
 function Landing() {
     const [formData, setFormData] = useState({
         name: '',
@@ -22,7 +70,8 @@ function Landing() {
     const [hoveredWork, setHoveredWork] = useState(null);
     const [cursorPos, setCursorPos] = useState({ x: 0, y: 0 });
     const [showScrollTop, setShowScrollTop] = useState(false);
-    
+
+
     // Popup settings
     const [showContactPopup, setShowContactPopup] = useState(false);
     const [popupClosing, setPopupClosing] = useState(false);
@@ -36,7 +85,14 @@ function Landing() {
         setTimeout(() => {
             setShowContactPopup(false);
             setPopupClosing(false);
+            setShowCloseConfirm(false);
         }, 400);
+    };
+
+    const [showCloseConfirm, setShowCloseConfirm] = useState(false);
+
+    const handleCloseAttempt = () => {
+        setShowCloseConfirm(true);
     };
 
     useEffect(() => {
@@ -54,7 +110,7 @@ function Landing() {
             'https://connect.facebook.net/en_US/fbevents.js');
         window.fbq('init', '1439408024111143');
         window.fbq('track', 'PageView');
-        
+
         // Fetch Settings
         fetch('/api/tracking/public/landing-settings')
             .then(res => res.json())
@@ -252,24 +308,45 @@ function Landing() {
 
             {/* Contact Popup */}
             {showContactPopup && (
-                <div 
+                <div
                     className={`fixed inset-0 z-[150] flex items-center justify-center p-4 ${popupClosing ? 'popup-overlay-out' : 'popup-overlay-in'}`}
-                    onClick={(e) => { if (e.target === e.currentTarget) closePopup(); }}
+                    onClick={(e) => { if (e.target === e.currentTarget) handleCloseAttempt(); }}
                 >
                     <div className={`bg-[#111] border border-white/5 rounded-[20px] p-8 md:p-10 w-full max-w-md relative shadow-2xl ${popupClosing ? 'popup-card-out' : 'popup-card-in'}`}>
-                        <button 
-                            onClick={closePopup}
+                        <button
+                            onClick={handleCloseAttempt}
                             className="absolute top-5 right-5 text-white/50 hover:text-white transition-colors cursor-pointer"
                         >
                             <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                             </svg>
                         </button>
-                        
+
+                        {/* Close Confirmation Overlay */}
+                        {showCloseConfirm && (
+                            <div className="absolute inset-0 z-20 bg-black/80 rounded-[20px] flex flex-col items-center justify-center gap-6 p-8">
+                                <p className="text-white text-lg font-semibold text-center leading-relaxed">Are you sure want to leave this offers?</p>
+                                <div className="flex gap-4">
+                                    <button
+                                        onClick={closePopup}
+                                        className="px-6 py-2.5 bg-white/10 border border-white/20 text-white rounded-xl font-medium hover:bg-white/20 transition-colors cursor-pointer"
+                                    >
+                                        Yes
+                                    </button>
+                                    <button
+                                        onClick={() => setShowCloseConfirm(false)}
+                                        className="px-6 py-2.5 bg-[#16d110] text-black rounded-xl font-bold hover:bg-[#11b00c] transition-colors cursor-pointer border-none"
+                                    >
+                                        No, stay
+                                    </button>
+                                </div>
+                            </div>
+                        )}
+
                         <h3 className="text-[32px] md:text-3xl font-bold text-white mb-8 leading-tight tracking-tight">
                             {landingSettings.popup_title}
                         </h3>
-                        
+
                         <div className="space-y-4">
                             <input
                                 type="text"
@@ -293,7 +370,7 @@ function Landing() {
                                 className="w-full bg-[#3d3d3d] border-none rounded-[10px] px-5 py-4 text-white placeholder-white/80 focus:outline-none focus:ring-1 focus:ring-white/30 transition-colors text-[15px]"
                             />
                         </div>
-                        
+
                         <div className="mt-8 flex flex-col gap-8">
                             <button
                                 onClick={() => {
@@ -301,7 +378,7 @@ function Landing() {
                                         setPopup({ show: true, success: false, message: 'Please fill in all required fields.' });
                                         return;
                                     }
-                                    
+
                                     // Submit partial data
                                     fetch('/api/contact', {
                                         method: 'POST',
@@ -317,14 +394,14 @@ function Landing() {
                                             additional_details: '[Lead - Popup Submission]',
                                         }),
                                     }).catch(e => console.error('Error sending popup data:', e));
-                                    
+
                                     closePopup();
                                 }}
                                 className="bg-[#16d110] hover:bg-[#11b00c] text-black font-bold py-3 px-8 rounded-xl transition-colors cursor-pointer self-start border-none"
                             >
                                 Submit
                             </button>
-                            
+
                             <p className="text-white/90 text-[15px] font-light leading-relaxed whitespace-pre-wrap">
                                 {landingSettings.popup_subtitle}
                             </p>
@@ -557,19 +634,37 @@ function Landing() {
                         </h2>
 
                         {/* Desktop List Layout */}
-                        <div className="space-y-0 hidden md:block" onMouseLeave={() => setHoveredWork(null)}>
+                        <div className="space-y-0 hidden md:block" onMouseLeave={() => { setHoveredWork(null); if (window._workInterval) { clearInterval(window._workInterval); window._workInterval = null; } }}>
                             {[
-                                { num: '01', name: 'BaliSabi Poke Bowl Bar', tags: ['Branding', 'Social Media Management', 'Photo Production'], img: '/img/balisabi.webp?v=3' },
-                                { num: '02', name: 'The Smoke House', tags: ['Social Media Management', 'Photo Production'], img: '/img/smoke%20house.webp?v=3' },
-                                { num: '03', name: 'Blue Marlin Komodo', tags: ['Ads Management', 'Photo Production'], img: '/img/blue%20marlin.webp?v=3' },
-                                { num: '04', name: 'Pertamina Bali', tags: ['Content Creation'], img: '/img/pertamina.webp?v=3' },
-                                { num: '05', name: 'Hot Stone', tags: ['Social Media Management'], img: '/img/hot%20stone.webp?v=3' },
+                                { num: '01', name: 'Tanuki Sushi & Bar', tags: ['Branding', 'Social Media Management', 'Photo Production'], imgs: ['/img/Tanuki1_2x.webp', '/img/Tanuki2_2x.webp', '/img/Tanuki3_2x.webp', '/img/Tanuki4_2x.webp', '/img/Tanuki5_2x.webp'] },
+                                { num: '02', name: 'The Smoke House', tags: ['Social Media Management', 'Photo Production'], imgs: ['/img/TSH1_2x.webp', '/img/TSH2_2x.webp', '/img/TSH3_2x.webp', '/img/TSH4_2x.webp', '/img/TSH5_2x.webp'] },
+                                { num: '03', name: 'Blue Marlin Komodo', tags: ['Ads Management', 'Photo Production'], imgs: ['/img/BMK1_2x.webp', '/img/BMK2_2x.webp', '/img/BMK3_2x.webp', '/img/BMK4_2x.webp', '/img/BMK5_2x.webp'] },
+                                { num: '04', name: 'Surf & Brew Cafe', tags: ['Social Media Management'], imgs: ['/img/SNB1_2x.webp', '/img/SNB2_2x.webp', '/img/SNB3_2x.webp', '/img/SNB4_2x.webp', '/img/SNB5_2x.webp'] },
+                                { num: '05', name: 'Hot Stone', tags: ['Social Media Management'], imgs: ['/img/HS1_2x.webp', '/img/HS2_2x.webp', '/img/HS3_2x.webp', '/img/HS4_2x.webp', '/img/HS5_2x.webp'] },
                             ].map((work) => (
                                 <div
                                     key={work.num}
                                     className="border-t border-white/20 py-6 flex flex-col md:flex-row md:items-center gap-3 md:gap-8 group relative transition-colors duration-300 hover:bg-white/5 cursor-pointer"
-                                    onMouseEnter={() => setHoveredWork(work.img)}
-                                    onMouseMove={(e) => setCursorPos({ x: e.clientX, y: e.clientY })}
+                                    onMouseEnter={() => {
+                                        window._workSlideIdx = 0;
+                                        window._workImgs = work.imgs;
+                                        window._lastMoveX = 0;
+                                        setHoveredWork(work.imgs[0]);
+                                    }}
+                                    onMouseLeave={() => {
+                                        window._workImgs = null;
+                                    }}
+                                    onMouseMove={(e) => {
+                                        setCursorPos({ x: e.clientX, y: e.clientY });
+                                        if (window._workImgs) {
+                                            const diff = Math.abs(e.clientX - (window._lastMoveX || 0));
+                                            if (diff > 80) {
+                                                window._lastMoveX = e.clientX;
+                                                window._workSlideIdx = ((window._workSlideIdx || 0) + 1) % window._workImgs.length;
+                                                setHoveredWork(window._workImgs[window._workSlideIdx]);
+                                            }
+                                        }
+                                    }}
                                 >
                                     <span className="text-white/60 text-base font-light shrink-0 md:w-20">{work.num}</span>
                                     <span className="text-white font-bold text-lg md:text-xl shrink-0 md:w-[520px]">{work.name}</span>
@@ -593,35 +688,13 @@ function Landing() {
                         <div className="block md:hidden -mx-6 mt-6">
                             <div className="flex overflow-x-auto gap-4 px-6 pb-6 snap-x snap-mandatory scrollbar-hide">
                                 {[
-                                    { num: '01', name: 'Balisabi Poke Bowl Bar', img: '/img/balisabi.webp?v=3', tags: ['Branding', 'Social Media Management', 'Photo Production'] },
-                                    { num: '02', name: 'The Smoke House', img: '/img/smoke%20house.webp?v=3', tags: ['Photo Production', 'Social Media Management'] },
-                                    { num: '03', name: 'Blue Marlin Komodo', img: '/img/blue%20marlin.webp?v=3', tags: ['Photo Production', 'Ads Management'] },
-                                    { num: '04', name: 'Pertamina Bali', img: '/img/pertamina.webp?v=3', tags: ['Social Media Management'] },
-                                    { num: '05', name: 'Hot Stone', img: '/img/hot%20stone.webp?v=3', tags: ['Social Media Management'] },
+                                    { id: 'tanuki', num: '01', name: 'Tanuki Sushi & Bar', tags: ['Branding', 'Social Media Management', 'Photo Production'], imgs: ['/img/Tanuki1_2x.webp', '/img/Tanuki2_2x.webp', '/img/Tanuki3_2x.webp', '/img/Tanuki4_2x.webp', '/img/Tanuki5_2x.webp'] },
+                                    { id: 'tsh', num: '02', name: 'The Smoke House', tags: ['Photo Production', 'Social Media Management'], imgs: ['/img/TSH1_2x.webp', '/img/TSH2_2x.webp', '/img/TSH3_2x.webp', '/img/TSH4_2x.webp', '/img/TSH5_2x.webp'] },
+                                    { id: 'bmk', num: '03', name: 'Blue Marlin Komodo', tags: ['Photo Production', 'Ads Management'], imgs: ['/img/BMK1_2x.webp', '/img/BMK2_2x.webp', '/img/BMK3_2x.webp', '/img/BMK4_2x.webp', '/img/BMK5_2x.webp'] },
+                                    { id: 'snb', num: '04', name: 'Surf & Brew Cafe', tags: ['Social Media Management'], imgs: ['/img/SNB1_2x.webp', '/img/SNB2_2x.webp', '/img/SNB3_2x.webp', '/img/SNB4_2x.webp', '/img/SNB5_2x.webp'] },
+                                    { id: 'hs', num: '05', name: 'Hot Stone', tags: ['Social Media Management'], imgs: ['/img/HS1_2x.webp', '/img/HS2_2x.webp', '/img/HS3_2x.webp', '/img/HS4_2x.webp', '/img/HS5_2x.webp'] },
                                 ].map((work) => (
-                                    <div key={work.num} className="snap-center shrink-0 w-[85vw] md:w-[400px] h-auto relative overflow-hidden group">
-                                        <img src={work.img} alt={work.name} className="w-full aspect-[3/4] object-cover" />
-                                        {/* Gradient Overlay */}
-                                        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
-
-                                        {/* Content container at the bottom */}
-                                        <div className="absolute bottom-5 left-5 right-5 flex flex-col gap-3">
-                                            <div className="flex items-center gap-2">
-                                                <span className="text-white/80 text-sm font-light">{work.num}</span>
-                                                <span className="text-white font-bold text-lg leading-tight">{work.name}</span>
-                                            </div>
-                                            <div className="flex flex-wrap gap-2">
-                                                {work.tags.map((tag) => (
-                                                    <span
-                                                        key={tag}
-                                                        className="px-3 py-1 rounded-full border border-white/50 text-white text-[10px] font-light whitespace-nowrap"
-                                                    >
-                                                        {tag}
-                                                    </span>
-                                                ))}
-                                            </div>
-                                        </div>
-                                    </div>
+                                    <MobileWorkCard key={work.num} work={work} />
                                 ))}
                             </div>
                         </div>

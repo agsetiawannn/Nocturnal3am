@@ -44,6 +44,7 @@ Route::prefix('api/tracking')->group(function () {
     Route::delete('/admin/client/{id}', [TrackingController::class, 'deleteClient']);
     Route::get('/admin/client/{id}', [TrackingController::class, 'getClientDetails']);
     Route::post('/admin/client/{id}/progress', [TrackingController::class, 'saveProgress']);
+    Route::put('/admin/client/{id}/status', [TrackingController::class, 'updateClientStatus']);
     Route::post('/client/{id}/note', [TrackingController::class, 'addNote']);
     
     // Admin Accounts Management
@@ -56,6 +57,9 @@ Route::prefix('api/tracking')->group(function () {
     Route::get('/admin/landing-settings', [TrackingController::class, 'getLandingSettings']);
     Route::post('/admin/landing-settings', [TrackingController::class, 'saveLandingSettings']);
     Route::get('/public/landing-settings', [TrackingController::class, 'getPublicLandingSettings']);
+    
+    // Manual Expiry Reminders
+    Route::post('/admin/send-expiry-reminders', [TrackingController::class, 'sendExpiryReminders']);
 });
 
 // React SPA - Tracking System Routes

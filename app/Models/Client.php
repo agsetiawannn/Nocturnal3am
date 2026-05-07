@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Client extends Model
 {
     public $timestamps = false;
-    protected $fillable = ['name', 'email', 'status'];
+    protected $fillable = ['name', 'email', 'status', 'active_until', 'last_expiry_reminder'];
 
     public function progress()
     {

@@ -14,8 +14,10 @@ class ClientProgress extends Model
         'onboard',
         'presprint',
         'sprint',
+        'alacarte',
         'client_view',
         'sprint_week_focus',
+        'alacarte_focus',
         'updated_at'
     ];
 

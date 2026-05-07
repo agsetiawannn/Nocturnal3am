@@ -3,70 +3,75 @@ export const works = [
     number: '01',
     title: 'Pertamina',
     slug: 'pertamina',
-    description:
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+    description: 'An Indonesian State-Owned Enterprise (BUMN) operating in the energy sector.',
+    tags: ['Social Media Management'],
   },
   {
     number: '02',
     title: 'Yamaha Bali',
     slug: 'yamaha-bali',
-    description:
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+    description: 'Yamaha Bali is an official dealer network and Yamaha motorcycle repair shop in the Bali region',
+    tags: ['Content Creation'],
   },
   {
     number: '03',
-    title: 'Elementis',
-    slug: 'elementis',
-    description:
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+    title: 'Hot Stone',
+    slug: 'hot-stone',
+    description: 'A specialized, science-based wellness center and retreat in Ubud, Bali, focusing on \'Air, Water, and Frequency\' for deep cellular rejuvenation.',
+    tags: ['Social Media Management'],
+    imgs: ['/img/HS1_2x.webp', '/img/HS2_2x.webp', '/img/HS3_2x.webp', '/img/HS4_2x.webp', '/img/HS5_2x.webp'],
   },
   {
     number: '04',
-    title: 'The Smoke House',
+    title: 'The Smoke House Komodo',
     slug: 'the-smoke-house',
-    description:
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+    description: "Labuan Bajo's only dedicated low-and-slow BBQ. It offers a menu of brisket, ribs, and pulled meats, alongside a live fire grill for local produce, craft beers, and sunset views.",
+    tags: ['Social Media Management'],
+    imgs: ['/img/TSH1_2x.webp', '/img/TSH2_2x.webp', '/img/TSH3_2x.webp', '/img/TSH4_2x.webp', '/img/TSH5_2x.webp'],
   },
   {
     number: '05',
-    title: 'Balisabi',
-    slug: 'balisabi',
-    description:
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+    title: 'Tanuki Sushi & Bar',
+    slug: 'tanuki-sushi-bar',
+    description: 'A modern, stylish Japanese restaurant located in Seminyak, specializing in high-quality sushi, sashimi, and inventive, freshly prepared rolls.',
+    tags: ['Branding', 'Social Media Management', 'Photo Production'],
+    imgs: ['/img/Tanuki1_2x.webp', '/img/Tanuki2_2x.webp', '/img/Tanuki3_2x.webp', '/img/Tanuki4_2x.webp', '/img/Tanuki5_2x.webp'],
   },
   {
     number: '06',
     title: 'Mallali',
     slug: 'mallali',
-    description:
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+    description: 'Mallali is a local Indonesian lifestyle and fragrance brand that specializes in creating "mood-enhancing" scents and personal care products.',
+    tags: ['Social Media Management'],
   },
   {
     number: '07',
     title: 'Summerhouse',
     slug: 'summerhouse',
-    description:
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+    description: 'Summerhouse Bali is a villa management brand that creates calm, well cared spaces designed for living, not just staying.',
+    tags: ['Social Media Management'],
   },
   {
     number: '08',
     title: 'Samaya',
     slug: 'samaya',
-    description:
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+    description: 'The Samaya Bali is a riverside sanctuary focused on nature and spiritual tranquility, specializing in high-end private pool villa accommodations.',
+    tags: ['Social Media Management'],
   },
   {
     number: '09',
-    title: 'Roku Grill',
-    slug: 'roku-grill',
-    description:
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+    title: 'Surf & Brew',
+    slug: 'surf-and-brew',
+    description: 'Surf & Brew is a laid back beachside cafe in Kedungu, Bali serving Indonesian comfort food, coffee, and cocktails',
+    tags: ['Social Media Management'],
+    imgs: ['/img/SNB1_2x.webp', '/img/SNB2_2x.webp', '/img/SNB3_2x.webp', '/img/SNB4_2x.webp', '/img/SNB5_2x.webp'],
   },
   {
     number: '10',
-    title: 'Sera Face',
-    slug: 'sera-face',
-    description:
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+    title: 'Blue Marlin Komodo',
+    slug: 'blue-marlin-komodo',
+    description: 'Blue Marlin Komodo is a premier PADI 5-Star Dive Resort and hospitality hub located in Labuan Bajo, Indonesia.',
+    tags: ['Ads Management', 'Photo Production'],
+    imgs: ['/img/BMK1_2x.webp', '/img/BMK2_2x.webp', '/img/BMK3_2x.webp', '/img/BMK4_2x.webp', '/img/BMK5_2x.webp'],
   },
 ];

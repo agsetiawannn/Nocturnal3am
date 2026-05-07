@@ -137,6 +137,24 @@ class TrackingController extends Controller
         ]);
     }
 
+    public function updateClientStatus(Request $request, $id)
+    {
+        if (!session()->has('admin')) return response()->json(['message' => 'Unauthorized'], 401);
+
+        $client = Client::find($id);
+        if (!$client) return response()->json(['success' => false, 'message' => 'Client not found.'], 404);
+
+        if ($request->has('status')) {
+            $client->status = $request->status;
+        }
+        if ($request->has('active_until')) {
+            $client->active_until = $request->active_until ?: null;
+        }
+        $client->save();
+
+        return response()->json(['success' => true, 'client' => $client]);
+    }
+
     public function saveProgress(Request $request, $id)
     {
         if (!session()->has('admin')) return response()->json(['message' => 'Unauthorized'], 401);
@@ -145,8 +163,10 @@ class TrackingController extends Controller
         $progress->onboard = json_encode($request->onboard ?? []);
         $progress->presprint = json_encode($request->presprint ?? []);
         $progress->sprint = json_encode($request->sprint ?? []);
+        $progress->alacarte = json_encode($request->alacarte ?? []);
         $progress->client_view = $request->client_view ?? 'onboard';
         $progress->sprint_week_focus = $request->sprint_week_focus ?? 1;
+        $progress->alacarte_focus = $request->alacarte_focus ?? 1;
         $progress->updated_at = now();
         $progress->save();
 
@@ -315,8 +335,29 @@ class TrackingController extends Controller
             'popup_subtitle' => $request->popup_subtitle
         ];
 
-        file_put_contents($this->getSettingsPath(), json_encode($settings, JSON_PRETTY_PRINT));
+        try {
+            $path = $this->getSettingsPath();
+            $dir = dirname($path);
+            if (!is_dir($dir)) {
+                mkdir($dir, 0775, true);
+            }
+            file_put_contents($path, json_encode($settings, JSON_PRETTY_PRINT));
+            return response()->json(['success' => true]);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
+        }
+    }
 
-        return response()->json(['success' => true]);
+    public function sendExpiryReminders()
+    {
+        if (!session()->has('admin')) return response()->json(['message' => 'Unauthorized'], 401);
+
+        try {
+            \Illuminate\Support\Facades\Artisan::call('clients:send-expiry-reminders');
+            $output = \Illuminate\Support\Facades\Artisan::output();
+            return response()->json(['success' => true, 'output' => trim($output)]);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
+        }
     }
 }

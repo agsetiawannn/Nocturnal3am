@@ -6,9 +6,11 @@ export default function ClientDashboard() {
     const navigate = useNavigate();
     const [data, setData] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [showScrollTop, setShowScrollTop] = useState(false);
     
     const footerRef = useRef(null);
     const [isFooterVisible, setIsFooterVisible] = useState(false);
+    const onProgressRef = useRef(null);
 
     useEffect(() => {
         fetch('/api/tracking/client/dashboard')
@@ -23,6 +25,15 @@ export default function ClientDashboard() {
             })
             .catch(() => navigate('/tracking/login'));
     }, [navigate]);
+
+    // Auto-scroll to on-progress item after data loads
+    useEffect(() => {
+        if (!loading && data && onProgressRef.current) {
+            setTimeout(() => {
+                onProgressRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }, 600);
+        }
+    }, [loading, data]);
 
     useEffect(() => {
         const observer = new IntersectionObserver(
@@ -46,6 +57,19 @@ export default function ClientDashboard() {
         };
     }, [data, loading]); // Attach observer after loading is done
 
+    // Scroll to top button visibility
+    useEffect(() => {
+        const handleScroll = () => {
+            setShowScrollTop(window.scrollY > 400);
+        };
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
+
+    const scrollToTop = () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
     if (loading) return <div className="min-h-screen bg-black flex items-center justify-center text-white">Loading...</div>;
     if (!data?.client) return null;
 
@@ -62,19 +86,23 @@ export default function ClientDashboard() {
     const onboardItems = parsePhaseItems(data.progress?.onboard);
     const presprintItems = parsePhaseItems(data.progress?.presprint);
     const sprintItems = parsePhaseItems(data.progress?.sprint);
+    const alacarteItems = parsePhaseItems(data.progress?.alacarte);
 
     // Determine current phase
     const rawPhase = (data.progress?.client_view || 'onboard').toLowerCase();
     const sprintWeekFocus = data.progress?.sprint_week_focus || 1;
+    const alacarteFocus = data.progress?.alacarte_focus || 1;
 
     // Filter sprint items by current sprint week focus
     const filteredSprintItems = sprintItems.filter(item => (item.week || 1) === sprintWeekFocus);
+    const filteredAlacarteItems = alacarteItems.filter(item => (item.week || 1) === alacarteFocus);
 
     // Build phase sections with their items
     const phaseSections = [
         { key: 'onboard', label: 'on_board', items: onboardItems },
         { key: 'presprint', label: 'pre_sprint', items: presprintItems },
         { key: 'sprint', label: `sprint_week${sprintWeekFocus}`, items: filteredSprintItems },
+        { key: 'alacarte', label: 'a_la_carte', items: filteredAlacarteItems },
     ];
 
     // Find active phase
@@ -142,9 +170,34 @@ export default function ClientDashboard() {
         }
     };
 
+    // Active until info
+    const getActiveUntilInfo = () => {
+        const activeUntil = data.client.active_until;
+        if (!activeUntil) return null;
+        
+        const now = new Date();
+        now.setHours(0, 0, 0, 0);
+        const untilDate = new Date(activeUntil);
+        untilDate.setHours(0, 0, 0, 0);
+        const daysLeft = Math.ceil((untilDate - now) / (1000 * 60 * 60 * 24));
+
+        if (daysLeft < 0) {
+            return { label: 'Service Expired', color: 'text-red-400', bg: 'bg-red-500/10', border: 'border-red-500/30', date: formatDate(activeUntil) };
+        }
+        if (daysLeft <= 7) {
+            return { label: `${daysLeft} day${daysLeft !== 1 ? 's' : ''} remaining`, color: 'text-orange-400', bg: 'bg-orange-500/10', border: 'border-orange-500/30', date: formatDate(activeUntil) };
+        }
+        return { label: `Active until ${formatDate(activeUntil)}`, color: 'text-white/60', bg: 'bg-white/5', border: 'border-white/10', date: formatDate(activeUntil) };
+    };
+
+    const activeUntilInfo = getActiveUntilInfo();
+
     const handleLogout = () => {
         fetch('/api/tracking/logout', { method: 'POST' }).then(() => navigate('/tracking/login'));
     };
+
+    // Track if we found the first on-progress item (for auto-scroll ref)
+    let onProgressRefAssigned = false;
 
     return (
         <div className="relative min-h-screen bg-black flex flex-col font-sans">
@@ -210,6 +263,20 @@ export default function ClientDashboard() {
                         </div>
                     </div>
 
+                    {/* Active Until Banner */}
+                    {activeUntilInfo && (
+                        <div className={`w-full max-w-7xl mx-auto mb-6 md:mb-10 px-4 py-3 md:px-6 md:py-4 rounded-xl border ${activeUntilInfo.bg} ${activeUntilInfo.border} flex items-center gap-3`}>
+                            <div className="flex items-center gap-2 flex-1">
+                                <svg className={`w-4 h-4 md:w-5 md:h-5 flex-shrink-0 ${activeUntilInfo.color}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                                <span className={`text-sm md:text-base font-medium ${activeUntilInfo.color}`} style={{ fontFamily: "'Montserrat', sans-serif" }}>
+                                    {activeUntilInfo.label}
+                                </span>
+                            </div>
+                        </div>
+                    )}
+
                     {/* Main Content */}
                     <div className="flex-1 w-full max-w-7xl mx-auto flex flex-col justify-start pt-2 md:pt-16">
                         {/* Phase Label */}
@@ -227,11 +294,26 @@ export default function ClientDashboard() {
                                     const itemStatus = item.status || 'not_started';
                                     const isHighlighted = itemStatus === 'in_progress' || itemStatus === 'ongoing';
 
+                                    // Assign ref to the FIRST on-progress item for auto-scroll
+                                    let refProp = null;
+                                    if (isHighlighted && !onProgressRefAssigned) {
+                                        refProp = onProgressRef;
+                                        onProgressRefAssigned = true;
+                                    }
+
                                     return (
                                         <React.Fragment key={idx}>
-                                            <div className={`flex items-center justify-between w-full md:grid md:grid-cols-[1fr_auto_auto] md:gap-x-12 lg:gap-x-24 gap-4 md:py-2 ${isDelayed ? 'pb-7 md:pb-8 lg:pb-10' : ''}`}>
+                                            <div 
+                                                ref={refProp}
+                                                className={`flex items-center justify-between w-full md:grid md:grid-cols-[1fr_auto_auto] md:gap-x-12 lg:gap-x-24 gap-4 md:py-2 ${isDelayed ? 'pb-7 md:pb-8 lg:pb-10' : ''} ${isHighlighted ? 'relative' : ''}`}
+                                            >
+                                                {/* Highlight glow behind on-progress items */}
+                                                {isHighlighted && (
+                                                    <div className="absolute -inset-x-4 -inset-y-2 rounded-xl bg-white/[0.03] border border-white/[0.08] pointer-events-none" />
+                                                )}
+
                                                 {/* Item Name & Mobile Date */}
-                                                <div className="flex flex-col gap-1 md:gap-0 flex-1 min-w-0 pr-4">
+                                                <div className="flex flex-col gap-1 md:gap-0 flex-1 min-w-0 pr-4 relative z-[1]">
                                                     <h2
                                                         className={`tracking-tight transition-all duration-500 leading-snug
                                                         ${isHighlighted
@@ -265,7 +347,7 @@ export default function ClientDashboard() {
                                                 </div>
 
                                                 {/* Date on Desktop */}
-                                                <div className="hidden md:flex items-center justify-center">
+                                                <div className="hidden md:flex items-center justify-center relative z-[1]">
                                                     <div className="relative flex flex-col items-center justify-center w-[180px] lg:w-[220px]">
                                                         <p
                                                             className={`tracking-tight transition-all duration-500 text-center
@@ -286,7 +368,7 @@ export default function ClientDashboard() {
                                                 </div>
 
                                                 {/* Status Icon */}
-                                                <div className="flex-shrink-0">
+                                                <div className="flex-shrink-0 relative z-[1]">
                                                     <StatusIcon status={itemStatus} />
                                                 </div>
                                             </div>
@@ -336,6 +418,19 @@ export default function ClientDashboard() {
                 <Footer />
             </div>
 
+            {/* Scroll to Top Button */}
+            <button
+                onClick={scrollToTop}
+                className={`fixed bottom-6 left-6 md:bottom-10 md:left-10 z-[70] w-10 h-10 md:w-12 md:h-12 rounded-full bg-white/10 border border-white/20 flex items-center justify-center text-white hover:bg-white/20 transition-all duration-300 cursor-pointer ${
+                    showScrollTop ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none'
+                }`}
+                style={{ backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)' }}
+            >
+                <svg className="w-5 h-5 md:w-6 md:h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 15l7-7 7 7" />
+                </svg>
+            </button>
+
             {/* Custom animation for spinner and background zoom */}
             <style>{`
                 @keyframes spin-slow {
@@ -352,7 +447,8 @@ export default function ClientDashboard() {
                 .animate-bg-zoom {
                     animation: bg-zoom 20s alternate infinite ease-in-out;
                 }
-            `}</style>
+            `}
+            </style>
         </div>
     );
 }

@@ -33,12 +33,13 @@ function WorkDetail() {
           <p className="mt-6 text-white/70 leading-relaxed">{work.description}</p>
         </div>
 
-        <div className="mt-10 grid grid-cols-2 lg:grid-cols-4 gap-4">
-          <img src="/img/work/cbt1.svg" alt={`${work.title} Detail 1`} className="object-cover rounded-xl bg-white/5 w-full h-48 md:h-64" />
-          <img src="/img/work/cbt1.svg" alt={`${work.title} Detail 2`} className="object-cover rounded-xl bg-white/5 w-full h-48 md:h-64" />
-          <img src="/img/work/cbt2.svg" alt={`${work.title} Detail 3`} className="object-cover rounded-xl bg-white/5 w-full h-48 md:h-64" />
-          <img src="/img/work/cbt2.svg" alt={`${work.title} Detail 4`} className="object-cover rounded-xl bg-white/5 w-full h-48 md:h-64" />
-        </div>
+        {work.imgs && work.imgs.length > 0 && (
+          <div className="mt-10 grid grid-cols-2 lg:grid-cols-4 gap-4">
+            {work.imgs.map((imgSrc, index) => (
+              <img key={index} src={imgSrc} alt={`${work.title} Detail ${index + 1}`} className="object-cover rounded-xl bg-white/5 w-full h-48 md:h-64" />
+            ))}
+          </div>
+        )}
       </div>
     </section>
   );
