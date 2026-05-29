@@ -15,9 +15,12 @@ class ClientProgress extends Model
         'presprint',
         'sprint',
         'alacarte',
+        'alacarte_titles',
         'client_view',
         'sprint_week_focus',
+        'sprint_week_to',
         'alacarte_focus',
+        'alacarte_to',
         'updated_at'
     ];
 

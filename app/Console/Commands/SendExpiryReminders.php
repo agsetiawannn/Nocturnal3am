@@ -23,6 +23,7 @@ class SendExpiryReminders extends Command
 
         $sentCount = 0;
 
+        /** @var Client $client */
         foreach ($clients as $client) {
             $activeUntil = \Carbon\Carbon::parse($client->active_until)->startOfDay();
             $daysLeft = $today->diffInDays($activeUntil, false);
@@ -50,7 +51,11 @@ class SendExpiryReminders extends Command
         return 0;
     }
 
-    private function sendReminderEmail(Client $client, int $daysLeft)
+    /**
+     * @param Client $client
+     * @param int $daysLeft
+     */
+    private function sendReminderEmail($client, int $daysLeft)
     {
         $loginUrl = url('/tracking/login');
         

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 export default function ClientLogin() {
@@ -6,6 +6,16 @@ export default function ClientLogin() {
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
+
+    // Automatically log out any existing session when visiting the login page
+    useEffect(() => {
+        fetch('/api/tracking/logout', {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content'),
+            }
+        });
+    }, []);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -39,7 +49,10 @@ export default function ClientLogin() {
     return (
         <div className="min-h-screen bg-black flex items-center justify-center p-6 text-white font-sans">
             <div className="w-full max-w-md p-8 md:p-12 rounded-[24px] border border-white/10" style={{ background: 'rgba(255, 255, 255, 0.03)', backdropFilter: 'blur(20px)' }}>
-                <h2 className="text-3xl font-bold mb-2">Client Login</h2>
+                <div className="flex justify-between items-center mb-2">
+                    <h2 className="text-3xl font-bold">Client Login</h2>
+                    <a href="/" className="text-xs text-gray-400 hover:text-white transition-colors">← Back to Home</a>
+                </div>
                 <p className="text-gray-400 font-light mb-8 text-sm">Studio Tigapagi Tracking System</p>
                 
                 {error && (

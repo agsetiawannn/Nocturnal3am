@@ -8,21 +8,24 @@ export default function AdminClientManage() {
     const [progress, setProgress] = useState(null);
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
-    const [notifyClient, setNotifyClient] = useState(false);
+    const [notifyClient, setNotifyClient] = useState(true);
 
     // Phase config
     const phaseKeys = ['onboard', 'presprint', 'sprint', 'alacarte'];
     const phaseLabels = { onboard: 'On Board', presprint: 'Pre Sprint', sprint: 'Sprint Week', alacarte: 'A La Carte' };
 
-    const [currentPhase, setCurrentPhase] = useState('onboard');
-    const [sprintWeekFocus, setSprintWeekFocus] = useState(1);
+    const [visiblePhases, setVisiblePhases] = useState(['onboard']);
+    const [sprintWeekFrom, setSprintWeekFrom] = useState(1);
+    const [sprintWeekTo, setSprintWeekTo] = useState(1);
     const [alacarteFocus, setAlacarteFocus] = useState(1);
+    const [alacarteTo, setAlacarteTo] = useState(1);
     const [phaseItems, setPhaseItems] = useState({
         onboard: [],
         presprint: [],
         sprint: [],
         alacarte: [],
     });
+    const [alacarteTitles, setAlacarteTitles] = useState({});
 
     const parseItems = (jsonStr) => {
         try {
@@ -45,15 +48,32 @@ export default function AdminClientManage() {
                 setProgress(data.progress);
 
                 if (data.progress) {
-                    setCurrentPhase(data.progress.client_view || 'onboard');
-                    setSprintWeekFocus(data.progress.sprint_week_focus || 1);
+                    // Parse client_view as array (backward compat with old single string)
+                    let cv = data.progress.client_view || 'onboard';
+                    try {
+                        const parsed = JSON.parse(cv);
+                        cv = Array.isArray(parsed) ? parsed : [cv];
+                    } catch {
+                        cv = [cv];
+                    }
+                    setVisiblePhases(cv);
+                    setSprintWeekFrom(data.progress.sprint_week_focus || 1);
+                    setSprintWeekTo(data.progress.sprint_week_to || data.progress.sprint_week_focus || 1);
                     setAlacarteFocus(data.progress.alacarte_focus || 1);
+                    setAlacarteTo(data.progress.alacarte_to || data.progress.alacarte_focus || 1);
                     setPhaseItems({
                         onboard: parseItems(data.progress.onboard),
                         presprint: parseItems(data.progress.presprint),
                         sprint: parseItems(data.progress.sprint),
                         alacarte: parseItems(data.progress.alacarte),
                     });
+                    
+                    try {
+                        const titles = typeof data.progress.alacarte_titles === 'string' ? JSON.parse(data.progress.alacarte_titles) : (data.progress.alacarte_titles || {});
+                        setAlacarteTitles(titles);
+                    } catch {
+                        setAlacarteTitles({});
+                    }
                 }
                 setLoading(false);
             })
@@ -67,7 +87,7 @@ export default function AdminClientManage() {
     const handleSave = async () => {
         setSaving(true);
         try {
-            await fetch(`/api/tracking/admin/client/${id}/progress`, {
+            const response = await fetch(`/api/tracking/admin/client/${id}/progress`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -79,16 +99,26 @@ export default function AdminClientManage() {
                     presprint: phaseItems.presprint,
                     sprint: phaseItems.sprint,
                     alacarte: phaseItems.alacarte,
-                    client_view: currentPhase,
-                    sprint_week_focus: sprintWeekFocus,
+                    alacarte_titles: alacarteTitles,
+                    client_view: JSON.stringify(visiblePhases),
+                    sprint_week_focus: sprintWeekFrom,
+                    sprint_week_to: sprintWeekTo,
                     alacarte_focus: alacarteFocus,
+                    alacarte_to: alacarteTo,
                     notify_client: notifyClient,
                 })
             });
+            
+            if (!response.ok) {
+                throw new Error('Server returned an error.');
+            }
+
             fetchData();
             if (notifyClient) {
                 alert('Saved successfully! Update notification has been sent correctly to the client.');
                 setNotifyClient(false);
+            } else {
+                alert('Saved successfully!');
             }
         } catch (err) {
             alert('Failed to save.');
@@ -99,7 +129,7 @@ export default function AdminClientManage() {
 
     const addItem = (phase, week) => {
         const newItem = { name: '', date: '', status: 'not_started' };
-        if (phase === 'sprint') newItem.week = week || sprintWeekFocus;
+        if (phase === 'sprint') newItem.week = week || sprintWeekFrom;
         if (phase === 'alacarte') newItem.week = week || 1;
         setPhaseItems(prev => ({
             ...prev,
@@ -132,10 +162,11 @@ export default function AdminClientManage() {
     };
 
     // Renders the grouped-by-week editor (used for both Sprint and A La Carte)
-    const renderWeekGroupedEditor = (phase, focusWeek) => {
+    const renderWeekGroupedEditor = (phase, focusWeekFrom, focusWeekTo) => {
         const items = phaseItems[phase];
         const weeks = [...new Set(items.map(item => item.week || 1))].sort((a, b) => a - b);
-        if (!weeks.includes(focusWeek)) weeks.push(focusWeek);
+        if (!weeks.includes(focusWeekFrom)) weeks.push(focusWeekFrom);
+        if (!weeks.includes(focusWeekTo)) weeks.push(focusWeekTo);
         weeks.sort((a, b) => a - b);
 
         return (
@@ -144,13 +175,22 @@ export default function AdminClientManage() {
                     const weekItems = items
                         .map((item, idx) => ({ ...item, originalIdx: idx }))
                         .filter(item => (item.week || 1) === weekNum);
-                    const isFocusWeek = weekNum === focusWeek;
+                    const isFocusWeek = weekNum >= focusWeekFrom && weekNum <= focusWeekTo;
 
                     return (
                         <div key={`${phase}-week-${weekNum}`} className={`mb-8 bg-white/5 border rounded-xl p-5 ${isFocusWeek ? 'border-white/30' : 'border-white/10'}`}>
                             <div className="flex justify-between items-center mb-4">
                                 <div className="flex items-center gap-3">
-                                    <h3 className="text-lg font-semibold">{phase === 'alacarte' ? 'A La Carte' : `Sprint Week ${weekNum}`}</h3>
+                                    {phase === 'alacarte' ? (
+                                        <input 
+                                            type="text" 
+                                            value={alacarteTitles[weekNum] || 'A La Carte'}
+                                            onChange={(e) => setAlacarteTitles({...alacarteTitles, [weekNum]: e.target.value})}
+                                            className="text-lg font-semibold bg-transparent border-b border-white/20 focus:outline-none focus:border-white transition-colors"
+                                        />
+                                    ) : (
+                                        <h3 className="text-lg font-semibold">Sprint Week {weekNum}</h3>
+                                    )}
                                     {isFocusWeek && (
                                         <span className="px-2 py-0.5 bg-green-500/20 text-green-400 text-[10px] font-semibold rounded-full uppercase tracking-wider border border-green-500/30">
                                             Active Focus
@@ -293,46 +333,89 @@ export default function AdminClientManage() {
                     </div>
                 </div>
 
-                {/* Client View Phase Selector */}
+                {/* Client View Phase Selector - Multi Select */}
                 <div className="mb-8 bg-white/5 border border-white/10 rounded-xl p-5">
-                    <label className="block text-sm text-gray-400 mb-3">Client Visible Phase</label>
+                    <label className="block text-sm text-gray-400 mb-3">Client Visible Phases <span className="text-white/30">(select multiple)</span></label>
                     <div className="flex flex-wrap gap-2">
-                        {phaseKeys.map(key => (
-                            <button
-                                key={key}
-                                onClick={() => setCurrentPhase(key)}
-                                className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                                    currentPhase === key 
-                                        ? 'bg-white text-black' 
-                                        : 'bg-white/10 text-white/60 hover:bg-white/20'
-                                }`}
-                            >
-                                {phaseLabels[key]}
-                            </button>
-                        ))}
+                        {phaseKeys.map(key => {
+                            const isSelected = visiblePhases.includes(key);
+                            return (
+                                <button
+                                    key={key}
+                                    onClick={() => {
+                                        setVisiblePhases(prev => 
+                                            isSelected 
+                                                ? prev.filter(p => p !== key) 
+                                                : [...prev, key]
+                                        );
+                                    }}
+                                    className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                                        isSelected 
+                                            ? 'bg-white text-black' 
+                                            : 'bg-white/10 text-white/60 hover:bg-white/20'
+                                    }`}
+                                >
+                                    {phaseLabels[key]}
+                                </button>
+                            );
+                        })}
                     </div>
-                    {currentPhase === 'sprint' && (
-                        <div className="mt-4">
-                            <label className="block text-sm text-gray-400 mb-1">Sprint Week Focus</label>
-                            <input 
-                                type="number" 
-                                min="1"
-                                value={sprintWeekFocus}
-                                onChange={(e) => setSprintWeekFocus(parseInt(e.target.value) || 1)}
-                                className="w-24 bg-black/50 border border-white/20 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-white transition-colors"
-                            />
+                    {visiblePhases.includes('sprint') && (
+                        <div className="mt-4 flex items-center gap-3">
+                            <div>
+                                <label className="block text-sm text-gray-400 mb-1">Sprint Week From</label>
+                                <input 
+                                    type="number" 
+                                    min="1"
+                                    value={sprintWeekFrom}
+                                    onChange={(e) => {
+                                        const v = parseInt(e.target.value) || 1;
+                                        setSprintWeekFrom(v);
+                                        if (v > sprintWeekTo) setSprintWeekTo(v);
+                                    }}
+                                    className="w-20 bg-black/50 border border-white/20 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-white transition-colors"
+                                />
+                            </div>
+                            <span className="text-white/40 mt-5">→</span>
+                            <div>
+                                <label className="block text-sm text-gray-400 mb-1">Sprint Week To</label>
+                                <input 
+                                    type="number" 
+                                    min={sprintWeekFrom}
+                                    value={sprintWeekTo}
+                                    onChange={(e) => setSprintWeekTo(Math.max(parseInt(e.target.value) || 1, sprintWeekFrom))}
+                                    className="w-20 bg-black/50 border border-white/20 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-white transition-colors"
+                                />
+                            </div>
                         </div>
                     )}
-                    {currentPhase === 'alacarte' && (
-                        <div className="mt-4">
-                            <label className="block text-sm text-gray-400 mb-1">A La Carte Focus</label>
-                            <input 
-                                type="number" 
-                                min="1"
-                                value={alacarteFocus}
-                                onChange={(e) => setAlacarteFocus(parseInt(e.target.value) || 1)}
-                                className="w-24 bg-black/50 border border-white/20 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-white transition-colors"
-                            />
+                    {visiblePhases.includes('alacarte') && (
+                        <div className="flex gap-6 mt-4">
+                            <div>
+                                <label className="block text-sm text-gray-400 mb-1">A La Carte From</label>
+                                <input 
+                                    type="number" 
+                                    min="1"
+                                    value={alacarteFocus}
+                                    onChange={(e) => setAlacarteFocus(parseInt(e.target.value) || 1)}
+                                    className="w-24 bg-black/50 border border-white/20 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-white transition-colors"
+                                />
+                            </div>
+                            <div className="flex items-center mt-6 text-gray-500">
+                                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                                </svg>
+                            </div>
+                            <div>
+                                <label className="block text-sm text-gray-400 mb-1">A La Carte To</label>
+                                <input 
+                                    type="number" 
+                                    min="1"
+                                    value={alacarteTo}
+                                    onChange={(e) => setAlacarteTo(parseInt(e.target.value) || 1)}
+                                    className="w-24 bg-black/50 border border-white/20 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-white transition-colors"
+                                />
+                            </div>
                         </div>
                     )}
                 </div>
@@ -408,10 +491,8 @@ export default function AdminClientManage() {
                 ))}
 
                 {/* Sprint Week Items Editor - grouped by week */}
-                {renderWeekGroupedEditor('sprint', sprintWeekFocus)}
-
-                {/* A La Carte Items Editor - grouped like sprint */}
-                {renderWeekGroupedEditor('alacarte', alacarteFocus)}
+                {visiblePhases.includes('sprint') && renderWeekGroupedEditor('sprint', sprintWeekFrom, sprintWeekTo)}
+                {visiblePhases.includes('alacarte') && renderWeekGroupedEditor('alacarte', alacarteFocus, alacarteTo)}
 
             </div>
         </div>

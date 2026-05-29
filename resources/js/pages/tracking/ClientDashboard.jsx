@@ -1,36 +1,48 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import Footer from '../../components/Footer';
 
 export default function ClientDashboard() {
+    const { id } = useParams();
     const navigate = useNavigate();
     const [data, setData] = useState(null);
     const [loading, setLoading] = useState(true);
     const [showScrollTop, setShowScrollTop] = useState(false);
-    
+
     const footerRef = useRef(null);
     const [isFooterVisible, setIsFooterVisible] = useState(false);
     const onProgressRef = useRef(null);
+    const itemsContainerRef = useRef(null);
 
     useEffect(() => {
-        fetch('/api/tracking/client/dashboard')
+        const endpoint = id ? `/api/tracking/public/client/${id}` : '/api/tracking/client/dashboard';
+        fetch(endpoint)
             .then(res => res.json())
             .then(data => {
-                if (data.message === 'Unauthorized') {
-                    navigate('/tracking/login');
+                if (data.message === 'Unauthorized' || data.message === 'Not Found') {
+                    navigate(id ? '/overview' : '/tracking/login');
                 } else {
                     setData(data);
                 }
                 setLoading(false);
             })
-            .catch(() => navigate('/tracking/login'));
-    }, [navigate]);
+            .catch(() => navigate(id ? '/overview' : '/tracking/login'));
+    }, [navigate, id]);
 
-    // Auto-scroll to on-progress item after data loads
+    // Auto-scroll to on-progress item within the items container (not the whole page)
     useEffect(() => {
-        if (!loading && data && onProgressRef.current) {
+        if (!loading && data && onProgressRef.current && itemsContainerRef.current) {
             setTimeout(() => {
-                onProgressRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                const container = itemsContainerRef.current;
+                const target = onProgressRef.current;
+                const containerRect = container.getBoundingClientRect();
+                const targetRect = target.getBoundingClientRect();
+                const offsetTop = targetRect.top - containerRect.top + container.scrollTop;
+                // Scroll so the item is centered in the container
+                container.scrollTo({
+                    top: offsetTop - (containerRect.height / 2) + (targetRect.height / 2),
+                    behavior: 'smooth'
+                });
             }, 600);
         }
     }, [loading, data]);
@@ -88,42 +100,78 @@ export default function ClientDashboard() {
     const sprintItems = parsePhaseItems(data.progress?.sprint);
     const alacarteItems = parsePhaseItems(data.progress?.alacarte);
 
-    // Determine current phase
-    const rawPhase = (data.progress?.client_view || 'onboard').toLowerCase();
-    const sprintWeekFocus = data.progress?.sprint_week_focus || 1;
+    // Parse visible phases (backward compat with old single string)
+    let visiblePhases = [];
+    const rawCV = data.progress?.client_view || 'onboard';
+    try {
+        const parsed = JSON.parse(rawCV);
+        visiblePhases = Array.isArray(parsed) ? parsed : [rawCV];
+    } catch {
+        visiblePhases = [rawCV];
+    }
+
+    const sprintWeekFrom = data.progress?.sprint_week_focus || 1;
+    const sprintWeekTo = data.progress?.sprint_week_to || sprintWeekFrom;
     const alacarteFocus = data.progress?.alacarte_focus || 1;
+    const alacarteTo = data.progress?.alacarte_to || alacarteFocus;
+    
+    let alacarteTitles = {};
+    try {
+        alacarteTitles = typeof data.progress?.alacarte_titles === 'string' ? JSON.parse(data.progress?.alacarte_titles) : (data.progress?.alacarte_titles || {});
+    } catch {
+        alacarteTitles = {};
+    }
 
-    // Filter sprint items by current sprint week focus
-    const filteredSprintItems = sprintItems.filter(item => (item.week || 1) === sprintWeekFocus);
-    const filteredAlacarteItems = alacarteItems.filter(item => (item.week || 1) === alacarteFocus);
-
-    // Build phase sections with their items
-    const phaseSections = [
-        { key: 'onboard', label: 'on_board', items: onboardItems },
-        { key: 'presprint', label: 'pre_sprint', items: presprintItems },
-        { key: 'sprint', label: `sprint_week${sprintWeekFocus}`, items: filteredSprintItems },
-        { key: 'alacarte', label: 'a_la_carte', items: filteredAlacarteItems },
-    ];
-
-    // Find active phase
-    const activePhase = phaseSections.find(p => rawPhase.includes(p.key)) || phaseSections[0];
-
-    // Calculate dynamic dates: only delayed items get an additional day
-    const displayItems = activePhase.items.map(item => {
-        const isDelayed = item.is_delayed === true || item.is_delayed === 'true';
-        let itemDate = item.date || item.deadline || '';
-
-        if (isDelayed && itemDate) {
-            try {
-                const dateObj = new Date(itemDate);
-                if (!isNaN(dateObj)) {
-                    dateObj.setDate(dateObj.getDate() + 1);
-                    itemDate = dateObj.toISOString();
-                }
-            } catch (e) { }
+    // Build visible phase sections
+    const allPhaseSections = [];
+    
+    if (visiblePhases.includes('onboard')) {
+        allPhaseSections.push({ key: 'onboard', label: 'on_board', items: onboardItems });
+    }
+    if (visiblePhases.includes('presprint')) {
+        allPhaseSections.push({ key: 'presprint', label: 'pre_sprint', items: presprintItems });
+    }
+    
+    if (visiblePhases.includes('sprint')) {
+        for (let w = sprintWeekFrom; w <= sprintWeekTo; w++) {
+            const weekItems = sprintItems.filter(item => (item.week || 1) === w);
+            allPhaseSections.push({ key: `sprint_${w}`, label: `sprint_week${w}`, items: weekItems });
         }
+    }
+    
+    if (visiblePhases.includes('alacarte')) {
+        for (let w = alacarteFocus; w <= alacarteTo; w++) {
+            const weekItems = alacarteItems.filter(item => (item.week || 1) === w);
+            let weekLabel = alacarteTitles[w] || `week${w}`;
+            if (alacarteFocus === alacarteTo && !alacarteTitles[w]) {
+                weekLabel = 'a_la_carte';
+            }
+            weekLabel = weekLabel.replace(/\s+/g, '_').toLowerCase();
+            allPhaseSections.push({ key: `alacarte_${w}`, label: weekLabel, items: weekItems });
+        }
+    }
 
-        return { ...item, displayDate: itemDate };
+    const activeSections = allPhaseSections.length > 0 ? allPhaseSections : [{ key: 'onboard', label: 'on_board', items: onboardItems }];
+
+    // Combine all display items across visible phases with section headers
+    const displaySections = activeSections.map(section => {
+        const items = section.items.map(item => {
+            const isDelayed = item.is_delayed === true || item.is_delayed === 'true';
+            let itemDate = item.date || item.deadline || '';
+
+            if (isDelayed && itemDate) {
+                try {
+                    const dateObj = new Date(itemDate);
+                    if (!isNaN(dateObj)) {
+                        dateObj.setDate(dateObj.getDate() + 1);
+                        itemDate = dateObj.toISOString();
+                    }
+                } catch (e) { }
+            }
+
+            return { ...item, displayDate: itemDate };
+        });
+        return { ...section, displayItems: items };
     });
 
     const StatusIcon = ({ status }) => {
@@ -174,7 +222,7 @@ export default function ClientDashboard() {
     const getActiveUntilInfo = () => {
         const activeUntil = data.client.active_until;
         if (!activeUntil) return null;
-        
+
         const now = new Date();
         now.setHours(0, 0, 0, 0);
         const untilDate = new Date(activeUntil);
@@ -193,7 +241,11 @@ export default function ClientDashboard() {
     const activeUntilInfo = getActiveUntilInfo();
 
     const handleLogout = () => {
-        fetch('/api/tracking/logout', { method: 'POST' }).then(() => navigate('/tracking/login'));
+        if (id) {
+            navigate('/overview');
+        } else {
+            fetch('/api/tracking/logout', { method: 'POST' }).then(() => navigate('/tracking/login'));
+        }
     };
 
     // Track if we found the first on-progress item (for auto-scroll ref)
@@ -245,20 +297,20 @@ export default function ClientDashboard() {
                 />
 
                 {/* Content Container */}
-            <div className="relative z-10 w-full h-full min-h-screen p-6 pb-32 md:p-10 md:pb-40 lg:p-14 lg:pb-48 flex flex-col flex-1">
+                <div className="relative z-10 w-full h-full min-h-screen p-6 pb-32 md:p-10 md:pb-40 lg:p-14 lg:pb-48 flex flex-col flex-1">
 
-                {/* Header Navbar */}
+                    {/* Header Navbar */}
                     <div className="flex flex-col md:flex-row md:justify-between items-start md:items-center w-full max-w-7xl mx-auto mb-6 md:mb-16 gap-16 md:gap-0">
                         <img src="/img/tpfulllg.webp" alt="Tigapagi" className="h-[32px] md:h-[40px] opacity-90 drop-shadow-lg" />
                         <div className="flex flex-row md:flex-col items-center md:items-end justify-between w-full md:w-auto gap-2 md:gap-1">
                             <span className="text-white text-lg md:text-xl font-light">
                                 Hi, <span className="font-normal">{data.client.name}</span>
                             </span>
-                            <button
+                            <button 
                                 onClick={handleLogout}
                                 className="text-white/60 hover:text-white transition-colors cursor-pointer text-[10px] md:text-xs font-medium tracking-widest uppercase z-20 whitespace-nowrap mt-1 md:mt-0"
                             >
-                                Sign Out
+                                {id ? 'Back to Overview' : 'Sign Out'}
                             </button>
                         </div>
                     </div>
@@ -277,110 +329,108 @@ export default function ClientDashboard() {
                         </div>
                     )}
 
-                    {/* Main Content */}
-                    <div className="flex-1 w-full max-w-7xl mx-auto flex flex-col justify-start pt-2 md:pt-16">
-                        {/* Phase Label */}
-                        <h1 className="-ml-[2px] md:-ml-[4px] text-white text-2xl sm:text-3xl md:text-5xl font-normal mb-10 md:mb-14 tracking-normal" style={{ fontFamily: "'Courier New', Courier, monospace" }}>
-                            [phase] {activePhase.label}
-                        </h1>
+                    {/* Scrollable items area */}
+                    <div ref={itemsContainerRef} className="flex-1 w-full max-w-7xl mx-auto flex flex-col justify-start mt-2 md:mt-16 overflow-y-auto overflow-x-hidden scrollbar-hide pb-[40vh]" style={{ maxHeight: '460px' }}>
+                        {displaySections.map((section, sIdx) => (
+                            <div key={section.key} className={sIdx > 0 ? 'mt-14 md:mt-20' : ''}>
+                                {/* Phase Label */}
+                                <h1 className="-ml-[2px] md:-ml-[4px] text-white text-2xl sm:text-3xl md:text-5xl font-normal mb-10 md:mb-14 tracking-normal" style={{ fontFamily: "'Courier New', Courier, monospace" }}>
+                                    {section.key.startsWith('alacarte_') ? '' : '[phase] '}{section.label}
+                                </h1>
 
-                        {/* Phase Items Table */}
-                        {displayItems.length > 0 ? (
-                            <div className="flex flex-col gap-5 md:gap-7">
-                                {displayItems.map((item, idx) => {
-                                    const isDelayed = item.is_delayed === true || item.is_delayed === 'true';
-                                    const itemName = item.name || item.label || item.title || `Step ${idx + 1}`;
-                                    const itemDate = item.displayDate || '';
-                                    const itemStatus = item.status || 'not_started';
-                                    const isHighlighted = itemStatus === 'in_progress' || itemStatus === 'ongoing';
+                                {/* Phase Items */}
+                                {section.displayItems.length > 0 ? (
+                                    <div className="flex flex-col gap-5 md:gap-7">
+                                        {section.displayItems.map((item, idx) => {
+                                            const isDelayed = item.is_delayed === true || item.is_delayed === 'true';
+                                            const itemName = item.name || item.label || item.title || `Step ${idx + 1}`;
+                                            const itemDate = item.displayDate || '';
+                                            const itemStatus = item.status || 'not_started';
+                                            const isHighlighted = itemStatus === 'in_progress' || itemStatus === 'ongoing';
 
-                                    // Assign ref to the FIRST on-progress item for auto-scroll
-                                    let refProp = null;
-                                    if (isHighlighted && !onProgressRefAssigned) {
-                                        refProp = onProgressRef;
-                                        onProgressRefAssigned = true;
-                                    }
+                                            let refProp = null;
+                                            if (isHighlighted && !onProgressRefAssigned) {
+                                                refProp = onProgressRef;
+                                                onProgressRefAssigned = true;
+                                            }
 
-                                    return (
-                                        <React.Fragment key={idx}>
-                                            <div 
-                                                ref={refProp}
-                                                className={`flex items-center justify-between w-full md:grid md:grid-cols-[1fr_auto_auto] md:gap-x-12 lg:gap-x-24 gap-4 md:py-2 ${isDelayed ? 'pb-7 md:pb-8 lg:pb-10' : ''} ${isHighlighted ? 'relative' : ''}`}
-                                            >
-                                                {/* Highlight glow behind on-progress items */}
-                                                {isHighlighted && (
-                                                    <div className="absolute -inset-x-4 -inset-y-2 rounded-xl bg-white/[0.03] border border-white/[0.08] pointer-events-none" />
-                                                )}
-
-                                                {/* Item Name & Mobile Date */}
-                                                <div className="flex flex-col gap-1 md:gap-0 flex-1 min-w-0 pr-4 relative z-[1]">
-                                                    <h2
-                                                        className={`tracking-tight transition-all duration-500 leading-snug
-                                                        ${isHighlighted
-                                                                ? 'text-white text-xl sm:text-2xl md:text-4xl lg:text-[40px] font-bold'
-                                                                : 'text-white/70 text-lg sm:text-xl md:text-2xl lg:text-[32px] font-normal'
-                                                            }`}
-                                                        style={{ fontFamily: "'Montserrat', sans-serif" }}
+                                            return (
+                                                <React.Fragment key={`${section.key}-${idx}`}>
+                                                    <div
+                                                        ref={refProp}
+                                                        className={`flex items-center justify-between w-full md:grid md:grid-cols-[1fr_auto_auto] md:gap-x-12 lg:gap-x-24 gap-4 md:py-2 ${isDelayed ? 'pb-7 md:pb-8 lg:pb-10' : ''} ${isHighlighted ? 'relative' : ''}`}
                                                     >
-                                                        {itemName}
-                                                    </h2>
-                                                    {/* Date on Mobile */}
-                                                    <div className="md:hidden flex flex-col items-start mt-0.5">
-                                                        <div className="relative flex flex-col items-start">
-                                                            <p
-                                                                className={`tracking-tight transition-all duration-500
+                                                        {isHighlighted && (
+                                                            <div className="absolute -inset-x-4 -inset-y-2 rounded-xl bg-white/[0.03] border border-white/[0.08] pointer-events-none" />
+                                                        )}
+
+                                                        <div className="flex flex-col gap-1 md:gap-0 flex-1 min-w-0 pr-4 relative z-[1]">
+                                                            <h2
+                                                                className={`tracking-tight transition-all duration-500 leading-snug
                                                                 ${isHighlighted
-                                                                        ? 'text-white font-bold text-[13px] sm:text-sm md:text-lg'
-                                                                        : 'text-white/50 text-[13px] sm:text-sm md:text-lg font-normal'
+                                                                        ? 'text-white text-xl sm:text-2xl md:text-4xl lg:text-[40px] font-bold'
+                                                                        : 'text-white/70 text-lg sm:text-xl md:text-2xl lg:text-[32px] font-normal'
                                                                     }`}
                                                                 style={{ fontFamily: "'Montserrat', sans-serif" }}
                                                             >
-                                                                {formatDate(itemDate)}
-                                                            </p>
-                                                            {isDelayed && (
-                                                                <span className="absolute top-full left-0 mt-1 bg-[#f00000] text-white text-[10px] sm:text-[11px] px-1.5 py-0.5 whitespace-nowrap" style={{ fontFamily: "'Montserrat', sans-serif" }}>
-                                                                    [delayed due to revision +1 day]
-                                                                </span>
-                                                            )}
+                                                                {itemName}
+                                                            </h2>
+                                                            <div className="md:hidden flex flex-col items-start mt-0.5">
+                                                                <div className="relative flex flex-col items-start">
+                                                                    <p
+                                                                        className={`tracking-tight transition-all duration-500
+                                                                        ${isHighlighted
+                                                                                ? 'text-white font-bold text-[13px] sm:text-sm md:text-lg'
+                                                                                : 'text-white/50 text-[13px] sm:text-sm md:text-lg font-normal'
+                                                                            }`}
+                                                                        style={{ fontFamily: "'Montserrat', sans-serif" }}
+                                                                    >
+                                                                        {formatDate(itemDate)}
+                                                                    </p>
+                                                                    {isDelayed && (
+                                                                        <span className="absolute top-full left-0 mt-1 bg-[#f00000] text-white text-[10px] sm:text-[11px] px-1.5 py-0.5 whitespace-nowrap" style={{ fontFamily: "'Montserrat', sans-serif" }}>
+                                                                            [delayed due to revision +1 day]
+                                                                        </span>
+                                                                    )}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div className="hidden md:flex items-center justify-center relative z-[1]">
+                                                            <div className="relative flex flex-col items-center justify-center w-[180px] lg:w-[220px]">
+                                                                <p
+                                                                    className={`tracking-tight transition-all duration-500 text-center
+                                                                    ${isHighlighted
+                                                                            ? 'text-white font-bold md:text-3xl lg:text-[34px]'
+                                                                            : 'text-white/50 md:text-2xl lg:text-[28px] font-normal'
+                                                                        }`}
+                                                                    style={{ fontFamily: "'Montserrat', sans-serif" }}
+                                                                >
+                                                                    {formatDate(itemDate)}
+                                                                </p>
+                                                                {isDelayed && (
+                                                                    <span className="absolute top-full left-1/2 -translate-x-1/2 mt-1 lg:mt-2 bg-[#f00000] text-white text-[11px] lg:text-xs px-2 py-0.5 whitespace-nowrap" style={{ fontFamily: "'Montserrat', sans-serif" }}>
+                                                                        [delayed due to revision +1 day]
+                                                                    </span>
+                                                                )}
+                                                            </div>
+                                                        </div>
+
+                                                        <div className="flex-shrink-0 relative z-[1]">
+                                                            <StatusIcon status={itemStatus} />
                                                         </div>
                                                     </div>
-                                                </div>
-
-                                                {/* Date on Desktop */}
-                                                <div className="hidden md:flex items-center justify-center relative z-[1]">
-                                                    <div className="relative flex flex-col items-center justify-center w-[180px] lg:w-[220px]">
-                                                        <p
-                                                            className={`tracking-tight transition-all duration-500 text-center
-                                                            ${isHighlighted
-                                                                    ? 'text-white font-bold md:text-3xl lg:text-[34px]'
-                                                                    : 'text-white/50 md:text-2xl lg:text-[28px] font-normal'
-                                                                }`}
-                                                            style={{ fontFamily: "'Montserrat', sans-serif" }}
-                                                        >
-                                                            {formatDate(itemDate)}
-                                                        </p>
-                                                        {isDelayed && (
-                                                            <span className="absolute top-full left-1/2 -translate-x-1/2 mt-1 lg:mt-2 bg-[#f00000] text-white text-[11px] lg:text-xs px-2 py-0.5 whitespace-nowrap" style={{ fontFamily: "'Montserrat', sans-serif" }}>
-                                                                [delayed due to revision +1 day]
-                                                            </span>
-                                                        )}
-                                                    </div>
-                                                </div>
-
-                                                {/* Status Icon */}
-                                                <div className="flex-shrink-0 relative z-[1]">
-                                                    <StatusIcon status={itemStatus} />
-                                                </div>
-                                            </div>
-                                        </React.Fragment>
-                                    );
-                                })}
+                                                </React.Fragment>
+                                            );
+                                        })}
+                                    </div>
+                                ) : (
+                                    <div className="text-white/30 text-lg font-light">
+                                        No items in this phase yet.
+                                    </div>
+                                )}
                             </div>
-                        ) : (
-                            <div className="text-white/30 text-lg font-light">
-                                No items in this phase yet.
-                            </div>
-                        )}
+                        ))}
                     </div>
 
                     {/* Legend (Fixed or Absolute when footer is visible) */}
@@ -421,9 +471,8 @@ export default function ClientDashboard() {
             {/* Scroll to Top Button */}
             <button
                 onClick={scrollToTop}
-                className={`fixed bottom-6 left-6 md:bottom-10 md:left-10 z-[70] w-10 h-10 md:w-12 md:h-12 rounded-full bg-white/10 border border-white/20 flex items-center justify-center text-white hover:bg-white/20 transition-all duration-300 cursor-pointer ${
-                    showScrollTop ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none'
-                }`}
+                className={`fixed bottom-6 left-6 md:bottom-10 md:left-10 z-[70] w-10 h-10 md:w-12 md:h-12 rounded-full bg-white/10 border border-white/20 flex items-center justify-center text-white hover:bg-white/20 transition-all duration-300 cursor-pointer ${showScrollTop ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none'
+                    }`}
                 style={{ backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)' }}
             >
                 <svg className="w-5 h-5 md:w-6 md:h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>

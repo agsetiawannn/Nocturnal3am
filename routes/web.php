@@ -24,6 +24,14 @@ Route::get('/clients', function () {
     return view('app');
 })->name('client');
 
+Route::get('/overview', function () {
+    return view('app');
+})->name('overview');
+
+Route::get('/overview/client/{id}', function () {
+    return view('app');
+})->name('overview.client');
+
 Route::get('/landing', function () {
     return view('app');
 })->name('landing');
@@ -36,6 +44,9 @@ Route::prefix('api/tracking')->group(function () {
     Route::post('/admin/login', [TrackingController::class, 'adminLogin']);
     Route::get('/auth/check', [TrackingController::class, 'checkAuth']);
     Route::post('/logout', [TrackingController::class, 'logout']);
+    
+    Route::get('/public', [TrackingController::class, 'getPublicTracking']);
+    Route::get('/public/client/{id}', [TrackingController::class, 'getPublicClientDashboard']);
     
     Route::get('/client/dashboard', [TrackingController::class, 'getClientDashboard']);
     

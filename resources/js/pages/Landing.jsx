@@ -729,8 +729,8 @@ function Landing() {
 
                     {/* Client Image Container */}
                     <div
-                        className="relative overflow-hidden transition-all duration-700 ease-in-out"
-                        style={{ maxHeight: showClientWrap ? '2000px' : '80px' }}
+                        className="relative overflow-hidden transition-[max-height] duration-700 ease-in-out"
+                        style={{ maxHeight: showClientWrap ? '2500px' : '80px' }}
                     >
                         <picture>
                             <source media="(max-width: 767px)" srcSet="/img/clientm.webp?v=3" />
@@ -752,11 +752,11 @@ function Landing() {
                     <div className="mt-8 flex items-center gap-3">
                         <button
                             onClick={() => setShowClientWrap(!showClientWrap)}
-                            className="flex items-center gap-2 bg-transparent text-white text-lg font-light cursor-pointer border-none outline-none hover:opacity-70 transition-opacity duration-300"
+                            className="flex items-center gap-2 bg-transparent text-white text-lg font-light cursor-pointer border-none outline-none active:opacity-70 md:hover:opacity-70 transition-opacity duration-300 whitespace-nowrap"
                         >
                             {showClientWrap ? 'And many more' : 'View all clients'}
                             <span
-                                className="inline-flex items-center justify-center w-7 h-7 rounded-full border border-white/60 transition-transform duration-500"
+                                className="inline-flex flex-shrink-0 items-center justify-center w-7 h-7 rounded-full border border-white/60 transition-transform duration-500"
                                 style={{ transform: showClientWrap ? 'rotate(180deg)' : 'rotate(0deg)' }}
                             >
                                 <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">

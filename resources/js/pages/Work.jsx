@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { works } from '../data/works';
 
 function Work() {
+    const navigate = useNavigate();
     const [formData, setFormData] = useState({ name: '', email: '', phone: '' });
     const [formStep, setFormStep] = useState(1);
     const [businessGoals, setBusinessGoals] = useState([]);
@@ -13,6 +14,7 @@ function Work() {
     const [additionalDetails, setAdditionalDetails] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [popup, setPopup] = useState({ show: false, success: true, message: '' });
+
 
     const stats = [
         { number: '345+', label: 'Project Finished' },
@@ -151,11 +153,10 @@ function Work() {
                             opacity: 0.95,
                         }}
                     />
-                    {/* Safari-safe GPU blur overlay */}
                     <div className="absolute inset-0 pointer-events-none" style={{ backdropFilter: 'blur(100px)', WebkitBackdropFilter: 'blur(100px)' }} />
                 </div>
 
-                {/* Background Layer 2 - glass_mirror.webp?v=3 (static overlay) */}
+                {/* Background Layer 2 */}
                 <div
                     className="absolute inset-0 bg-cover bg-center pointer-events-none"
                     style={{
@@ -211,7 +212,8 @@ function Work() {
             {/* Works List */}
             <section className="relative z-10 pb-12 bg-black">
                 <div className="max-w-6xl mx-auto px-6">
-                    <div>
+                    {/* Desktop List Layout - original style */}
+                    <div className="hidden md:block">
                         {works.map((work) => (
                             <Link
                                 to={`/work/${work.slug}`}
@@ -253,6 +255,45 @@ function Work() {
                         ))}
                         {/* Bottom border */}
                         <div className="border-t border-white/40" />
+                    </div>
+
+                    {/* Mobile Horizontal Slide Layout */}
+                    <div className="block md:hidden -mx-6 mt-6">
+                        <div className="flex overflow-x-auto gap-4 px-6 pb-6 snap-x snap-mandatory scrollbar-hide">
+                            {works.map((work) => (
+                                <div
+                                    key={work.slug}
+                                    className="snap-center shrink-0 w-[85vw] h-auto relative overflow-hidden group cursor-pointer"
+                                    onClick={() => navigate(`/work/${work.slug}`)}
+                                >
+                                    <div className="relative w-full aspect-[3/4] overflow-hidden rounded-2xl bg-white/5">
+                                        {work.imgs && work.imgs.length > 0 ? (
+                                            <img
+                                                src={work.imgs[0]}
+                                                alt={work.title}
+                                                className="w-full h-full object-cover"
+                                            />
+                                        ) : (
+                                            <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-white/10 to-white/5">
+                                                <span className="text-white/30 text-6xl font-bold">{work.number}</span>
+                                            </div>
+                                        )}
+                                    </div>
+                                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent pointer-events-none rounded-2xl"></div>
+                                    <div className="absolute bottom-5 left-5 right-5 flex flex-col gap-3">
+                                        <div className="flex items-center gap-2">
+                                            <span className="text-white/80 text-sm font-light">{work.number}</span>
+                                            <span className="text-white font-bold text-lg leading-tight">{work.title}</span>
+                                        </div>
+                                        <div className="flex flex-wrap gap-2">
+                                            {work.tags.map((tag) => (
+                                                <span key={tag} className="px-3 py-1 rounded-full border border-white/50 text-white text-[10px] font-light whitespace-nowrap">{tag}</span>
+                                            ))}
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
                     </div>
 
                     {/* And Many More */}

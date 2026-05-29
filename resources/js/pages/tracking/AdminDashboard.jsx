@@ -21,6 +21,7 @@ export default function AdminDashboard() {
     const [editingStatus, setEditingStatus] = useState(null); // client id
     const [editStatusValue, setEditStatusValue] = useState('active');
     const [editActiveUntil, setEditActiveUntil] = useState('');
+    const [editEmailValue, setEditEmailValue] = useState('');
     const [statusSaving, setStatusSaving] = useState(false);
 
     // Expiry reminder
@@ -137,6 +138,7 @@ export default function AdminDashboard() {
         setEditingStatus(client.id);
         setEditStatusValue(client.status || 'active');
         setEditActiveUntil(client.active_until || '');
+        setEditEmailValue(client.email || '');
     };
 
     const handleSaveStatus = async (clientId) => {
@@ -152,6 +154,7 @@ export default function AdminDashboard() {
                 body: JSON.stringify({
                     status: editStatusValue,
                     active_until: editActiveUntil || null,
+                    email: editEmailValue
                 })
             });
             const data = await res.json();
@@ -369,7 +372,7 @@ export default function AdminDashboard() {
                                             </span>
                                             {client.active_until && (
                                                 <span className="text-[11px] text-gray-500">
-                                                    until {formatDate(client.active_until)}
+                                                    {statusInfo.expired ? 'since' : 'until'} {formatDate(client.active_until)}
                                                 </span>
                                             )}
                                             <button
@@ -391,6 +394,15 @@ export default function AdminDashboard() {
                                                     <option value="active">Active</option>
                                                     <option value="inactive">Inactive (Cut Off)</option>
                                                 </select>
+                                            </div>
+                                            <div className="flex items-center gap-3">
+                                                <label className="text-xs text-gray-400 w-16">Email</label>
+                                                <input
+                                                    type="email"
+                                                    value={editEmailValue}
+                                                    onChange={(e) => setEditEmailValue(e.target.value)}
+                                                    className="bg-black border border-white/20 rounded-lg px-3 py-1.5 text-white text-sm focus:outline-none focus:border-white/40 transition-colors flex-1"
+                                                />
                                             </div>
                                             <div className="flex items-center gap-3">
                                                 <label className="text-xs text-gray-400 w-16">Until</label>

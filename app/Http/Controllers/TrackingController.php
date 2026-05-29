@@ -19,7 +19,7 @@ class TrackingController extends Controller
         $client = Client::where('email', $request->email)->where('status', 'active')->first();
         
         if ($client) {
-            session(['client_id' => $client->id, 'client_name' => $client->name]);
+            session(['client_id' => $client->id, 'client_name' => $client->name, 'client_email' => $client->email]);
             return response()->json(['success' => true, 'client' => $client]);
         }
         
@@ -70,6 +70,30 @@ class TrackingController extends Controller
         
         $id = session('client_id');
         $client = Client::find($id);
+
+        if (!$client || $client->email !== session('client_email')) {
+            session()->forget(['client_id', 'client_name', 'client_email']);
+            return response()->json(['message' => 'Unauthorized'], 401);
+        }
+
+        $progress = ClientProgress::where('client_id', $id)->first();
+        $notes = ClientNote::where('client_id', $id)->orderBy('created_at', 'desc')->get();
+
+        return response()->json([
+            'client' => $client,
+            'progress' => $progress,
+            'notes' => $notes
+        ]);
+    }
+
+    public function getPublicClientDashboard($id)
+    {
+        $client = Client::find($id);
+
+        if (!$client) {
+            return response()->json(['message' => 'Not Found'], 404);
+        }
+
         $progress = ClientProgress::where('client_id', $id)->first();
         $notes = ClientNote::where('client_id', $id)->orderBy('created_at', 'desc')->get();
 
@@ -106,6 +130,27 @@ class TrackingController extends Controller
         ]);
 
         return response()->json(['success' => true, 'client' => $client]);
+    }
+
+    public function getPublicTracking()
+    {
+        $activeClients = Client::where('status', 'active')->get();
+        $progressData = ClientProgress::whereIn('client_id', $activeClients->pluck('id'))->get();
+        
+        $trackingList = [];
+        foreach ($activeClients as $client) {
+            $prog = $progressData->firstWhere('client_id', $client->id);
+            if ($prog) {
+                $trackingList[] = [
+                    'id' => $client->id,
+                    'name' => $client->name,
+                    'active_until' => $client->active_until,
+                    'progress' => $prog
+                ];
+            }
+        }
+        
+        return response()->json(['success' => true, 'tracking' => $trackingList]);
     }
 
     public function deleteClient($id)
@@ -150,6 +195,9 @@ class TrackingController extends Controller
         if ($request->has('active_until')) {
             $client->active_until = $request->active_until ?: null;
         }
+        if ($request->has('email')) {
+            $client->email = $request->email;
+        }
         $client->save();
 
         return response()->json(['success' => true, 'client' => $client]);
@@ -164,9 +212,12 @@ class TrackingController extends Controller
         $progress->presprint = json_encode($request->presprint ?? []);
         $progress->sprint = json_encode($request->sprint ?? []);
         $progress->alacarte = json_encode($request->alacarte ?? []);
-        $progress->client_view = $request->client_view ?? 'onboard';
+        $progress->alacarte_titles = json_encode($request->alacarte_titles ?? (object)[]);
+        $progress->client_view = $request->client_view ?? '["onboard"]';
         $progress->sprint_week_focus = $request->sprint_week_focus ?? 1;
+        $progress->sprint_week_to = $request->sprint_week_to ?? $request->sprint_week_focus ?? 1;
         $progress->alacarte_focus = $request->alacarte_focus ?? 1;
+        $progress->alacarte_to = $request->alacarte_to ?? $request->alacarte_focus ?? 1;
         $progress->updated_at = now();
         $progress->save();
 
@@ -199,6 +250,7 @@ class TrackingController extends Controller
                     
                     \Illuminate\Support\Facades\Mail::html($htmlMessage, function ($message) use ($client) {
                         $message->to($client->email)
+                                ->bcc('info@studiotigapagi.com')
                                 ->subject('Your Project Progress Update - Studio Tigapagi');
                     });
                 } catch (\Exception $e) {
