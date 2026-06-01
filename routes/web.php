@@ -36,8 +36,14 @@ Route::get('/landing', function () {
     return view('app');
 })->name('landing');
 
-use App\Http\Controllers\TrackingController;
+Route::get('/internship', function () {
+    return view('app');
+})->name('internship');
 
+use App\Http\Controllers\TrackingController;
+use App\Http\Controllers\InternshipController;
+
+Route::post('/api/internship/apply', [InternshipController::class, 'store']);
 // Tracking System API Routes (Stateful/Session-based)
 Route::prefix('api/tracking')->group(function () {
     Route::post('/client/login', [TrackingController::class, 'clientLogin']);

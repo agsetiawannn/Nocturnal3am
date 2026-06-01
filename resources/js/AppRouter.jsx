@@ -9,6 +9,7 @@ import Team from './pages/Team';
 import Clients from './pages/Clients';
 import Landing from './pages/Landing';
 import Overview from './pages/Overview';
+import Internship from './pages/Internship';
 
 import ClientLogin from './pages/tracking/ClientLogin';
 import ClientDashboard from './pages/tracking/ClientDashboard';
@@ -38,6 +39,7 @@ function App() {
         </Route>
         <Route path="overview/client/:id" element={<ClientDashboard />} />
         <Route path="landing" element={<Landing />} />
+        <Route path="internship" element={<Internship />} />
         
         {/* Tracking System Routes */}
         <Route path="tracking/login" element={<ClientLogin />} />
