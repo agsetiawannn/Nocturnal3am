@@ -198,6 +198,9 @@ class TrackingController extends Controller
         if ($request->has('email')) {
             $client->email = $request->email;
         }
+        if ($request->has('name') && !empty($request->name)) {
+            $client->name = $request->name;
+        }
         $client->save();
 
         return response()->json(['success' => true, 'client' => $client]);

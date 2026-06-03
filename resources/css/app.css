@@ -232,3 +232,17 @@ header button:active {
     animation: footerPan 20s linear infinite;
     -webkit-animation: footerPan 20s linear infinite;
 }
+
+/* Breathing animation for the disc */
+@keyframes breathe {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.07);
+    }
+}
+
+.animate-breathe {
+    animation: breathe 2.5s ease-in-out infinite;
+}

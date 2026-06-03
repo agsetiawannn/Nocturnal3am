@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 
 const Internship = () => {
     const [animate, setAnimate] = useState(false);
+    const [visibleGroup, setVisibleGroup] = useState(0);
     const [step, setStep] = useState(1);
 
     // Form states
@@ -25,7 +26,7 @@ const Internship = () => {
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     const isValid = (s) => {
-        switch(s) {
+        switch (s) {
             case 2: return formData.name && formData.dob && formData.email;
             case 3: return formData.whatsapp && formData.instagram;
             case 4: return formData.domicile && (formData.domicile === 'Bali' ? true : formData.domicileDetail);
@@ -44,30 +45,45 @@ const Internship = () => {
         setIsSubmitting(true);
         try {
             const formDataToSend = new FormData();
-            Object.keys(formData).forEach(key => {
-                if (formData[key] !== null && formData[key] !== undefined) {
-                    formDataToSend.append(key, formData[key]);
-                }
-            });
+
+            // Append all text fields explicitly
+            formDataToSend.append('name', formData.name || '');
+            formDataToSend.append('dob', formData.dob || '');
+            formDataToSend.append('email', formData.email || '');
+            formDataToSend.append('whatsapp', formData.whatsapp || '');
+            formDataToSend.append('instagram', formData.instagram || '');
+            formDataToSend.append('domicile', formData.domicile || '');
+            formDataToSend.append('domicileDetail', formData.domicileDetail || '');
+            formDataToSend.append('semester', formData.semester || '');
+            formDataToSend.append('role', formData.role || '');
+            formDataToSend.append('wfo', formData.wfo || '');
+            formDataToSend.append('reason', formData.reason || '');
+
+            // Append files explicitly
+            if (formData.cv) formDataToSend.append('cv', formData.cv);
+            if (formData.portfolio) formDataToSend.append('portfolio', formData.portfolio);
 
             const response = await fetch('/api/internship/apply', {
                 method: 'POST',
-                headers: {
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content'),
-                },
                 body: formDataToSend,
             });
 
             if (response.ok) {
-                setStep(11);
+                changeStep(11);
             } else {
                 const text = await response.text();
-                console.error("Submission failed:", response.status, text);
-                alert("Failed to submit form: " + (text.substring(0, 50) || "Unknown error"));
+                console.error('Submission failed:', response.status, text);
+                let msg = 'Submission failed (' + response.status + ')';
+                try {
+                    const json = JSON.parse(text);
+                    if (json.message) msg = json.message;
+                    if (json.errors) msg += ': ' + Object.values(json.errors).flat().join(', ');
+                } catch(e) { msg += ': ' + text.substring(0, 100); }
+                alert(msg);
             }
         } catch (error) {
-            console.error(error);
-            alert("Error submitting form. Please try again.");
+            console.error('Network error:', error);
+            alert('Network error. Please check your connection and try again.');
         } finally {
             setIsSubmitting(false);
         }
@@ -93,18 +109,78 @@ const Internship = () => {
 
     useEffect(() => {
         // Trigger initial animation shortly after mount
-        const timer = setTimeout(() => {
+        const timer1 = setTimeout(() => {
             setAnimate(true);
         }, 500);
-        return () => clearTimeout(timer);
+
+        // Trigger texts to appear after disc is fully shown
+        const timer2 = setTimeout(() => {
+            setVisibleGroup(1);
+        }, 1500);
+
+        return () => {
+            clearTimeout(timer1);
+            clearTimeout(timer2);
+        };
     }, []);
 
+    const getTextGroup = (s) => {
+        if (s === 1) return 1;
+        if (s === 2 || s === 3) return 2;
+        if (s === 4) return 3;
+        if (s === 5) return 4;
+        if (s === 6 || s === 7) return 5;
+        if (s >= 8 && s <= 10) return 6;
+        if (s === 11) return 7;
+        return 0;
+    };
+
+    const getDiscPosition = (s) => {
+        if (s === 1) return 1;
+        if (s === 2 || s === 3) return 2;
+        if (s === 4 || s === 5) return 3;
+        if (s === 6 || s === 7) return 4;
+        if (s >= 8 && s <= 10) return 5;
+        if (s === 11) return 6;
+        return 0;
+    };
+
+    const changeStep = (newStep, isBack = false) => {
+        const currentTextGroup = getTextGroup(step);
+        const newTextGroup = getTextGroup(newStep);
+        const currentDiscPos = getDiscPosition(step);
+        const newDiscPos = getDiscPosition(newStep);
+
+        if (currentTextGroup !== newTextGroup) {
+            if (currentDiscPos !== newDiscPos) {
+                // Disc is moving: wait for text to fade out completely, then move disc
+                setVisibleGroup(0);
+                setTimeout(() => {
+                    setStep(newStep);
+                    setTimeout(() => {
+                        setVisibleGroup(newTextGroup);
+                    }, 2000); // Wait for disc to arrive
+                }, 1000); // Wait for text to fade out completely (no overlap)
+            } else {
+                // Disc is NOT moving, just changing text wrapper (e.g. step 4 to 5)
+                setVisibleGroup(0);
+                setTimeout(() => {
+                    setStep(newStep);
+                    setVisibleGroup(newTextGroup);
+                }, 1000); // Wait for text to fade out, then fade in new text immediately
+            }
+        } else {
+            // Internal transition inside the SAME wrapper (e.g. step 2 to 3)
+            setStep(newStep);
+        }
+    };
+
     const handleNextStep = () => {
-        setStep(2);
+        changeStep(2);
     };
 
     const handleBackStep = () => {
-        setStep(1);
+        changeStep(1, true);
     };
 
     return (
@@ -124,7 +200,8 @@ const Internship = () => {
 
                 {/* Center/Left/Right Spinning Disc */}
                 <div
-                    className={`absolute z-10 flex items-center justify-center transition-all duration-[1200ms] ease-in-out
+                    onClick={() => { if (step === 1 && visibleGroup === 1) handleNextStep(); }}
+                    className={`absolute z-10 flex items-center justify-center transition-all duration-[2000ms] ease-in-out ${visibleGroup === 1 ? 'cursor-pointer pointer-events-auto' : 'pointer-events-none'}
                         ${!animate ? 'scale-125 opacity-0 left-[50%] -translate-x-[50%] top-[50%] -translate-y-[40%] w-[300px] h-[300px] sm:w-[400px] sm:h-[400px] lg:w-[500px] lg:h-[500px]'
                             : step === 1
                                 ? 'scale-100 opacity-100 left-[50%] -translate-x-[50%] top-[50%] -translate-y-[50%] w-[300px] h-[300px] sm:w-[400px] sm:h-[400px] lg:w-[500px] lg:h-[500px]'
@@ -139,44 +216,55 @@ const Internship = () => {
                                                 : 'scale-100 opacity-100 left-0 -translate-x-[50%] md:-translate-x-[40%] md:-translate-x-[45%] top-[-10%] md:top-[50%] -translate-y-[10%] md:-translate-y-[50%] w-[450px] h-[450px] md:w-[600px] md:h-[600px] sm:w-[800px] sm:h-[800px] lg:w-[1000px] lg:h-[1000px] xl:w-[1200px] xl:h-[1200px]'
                         }`}
                 >
-                    <img
-                        src="/img/disc.png"
-                        alt="Internship Disc"
-                        className="w-full h-full object-contain animate-spin"
-                        style={{ animationDuration: '10s', animationTimingFunction: 'linear' }}
-                    />
+                    <div className={`w-full h-full ${step === 1 ? 'animate-breathe' : ''}`}>
+                        <img
+                            src="/img/disc.png"
+                            alt="Internship Disc"
+                            className="w-full h-full object-contain animate-spin"
+                            style={{ animationDuration: '10s', animationTimingFunction: 'linear' }}
+                        />
+                    </div>
                 </div>
 
                 {/* STEP 1: Texts */}
                 <div
-                    className={`absolute inset-0 w-full h-full max-w-7xl mx-auto px-6 flex items-center justify-center transition-opacity duration-700 ${step === 1 && animate ? 'opacity-100 z-20 pointer-events-auto cursor-pointer md:cursor-auto' : 'opacity-0 z-0 pointer-events-none'}`}
+                    className={`absolute inset-0 w-full h-full max-w-7xl mx-auto px-6 flex items-center justify-center transition-opacity duration-1000 ${visibleGroup === 1 ? 'opacity-100 z-20 pointer-events-auto md:pointer-events-none cursor-pointer md:cursor-auto' : 'opacity-0 z-0 pointer-events-none'}`}
                     onClick={(e) => { if (window.innerWidth < 768) handleNextStep(); }}
                 >
 
-                    {/* Left Text (Mobile Top Right-ish) */}
-                    <div className="absolute top-[25%] md:top-auto right-4 md:right-auto md:left-12 lg:left-24 text-left w-auto pointer-events-none md:pointer-events-auto">
-                        <p className="text-white text-[1rem] sm:text-[1.15rem] md:text-lg lg:text-xl font-light leading-snug tracking-wide" style={{ fontFamily: "'Inter', sans-serif" }}>
+                    {/* Desktop Left Text */}
+                    <div className="hidden md:block absolute top-[50%] -translate-y-[50%] right-[calc(50%+224px)] lg:right-[calc(50%+298px)] text-left w-max pointer-events-none md:pointer-events-auto">
+                        <p className="text-white text-lg lg:text-xl font-light leading-snug tracking-wide" style={{ fontFamily: "'Inter', sans-serif" }}>
                             Welcome to <span className="font-bold">Studio Tigapagi</span><br />
                             Internship Program Batch 8.0
                         </p>
                     </div>
 
-                    {/* Right Text & Next Button (Mobile Bottom Center) */}
-                    <div className="absolute top-[72%] md:top-auto left-[50%] md:left-auto -translate-x-[50%] md:translate-x-0 md:right-12 lg:right-24 text-center md:text-right w-full md:w-auto flex flex-col items-center md:items-end pointer-events-none md:pointer-events-auto">
-                        <p className="text-white/80 text-[0.95rem] md:text-base font-mono tracking-widest lowercase mb-3">
+                    {/* Desktop Right Text */}
+                    <div className="hidden md:block absolute top-[50%] -translate-y-[50%] left-[calc(50%+224px)] lg:left-[calc(50%+298px)] text-right w-max pointer-events-none md:pointer-events-auto">
+                        <p className="text-white/80 text-base font-mono tracking-widest lowercase">
                             [your journey will begin here]
                         </p>
-                        <button
-                            onClick={(e) => { e.stopPropagation(); handleNextStep(); }}
-                            className="hidden md:block text-white font-mono tracking-widest text-sm md:text-base hover:text-white/70 transition-colors duration-300 cursor-pointer"
-                        >
-                            next &gt;&gt;
-                        </button>
+                    </div>
+
+                    {/* Mobile Left Text (Top Right-ish) */}
+                    <div className="md:hidden absolute top-[25%] right-4 text-left w-auto pointer-events-none">
+                        <p className="text-white text-[1rem] sm:text-[1.15rem] font-light leading-snug tracking-wide" style={{ fontFamily: "'Inter', sans-serif" }}>
+                            Welcome to <span className="font-bold">Studio Tigapagi</span><br />
+                            Internship Program Batch 8.0
+                        </p>
+                    </div>
+
+                    {/* Mobile Right Text (Bottom Center) */}
+                    <div className="md:hidden absolute top-[72%] left-[50%] -translate-x-[50%] text-center w-full flex flex-col items-center pointer-events-none">
+                        <p className="text-white/80 text-[0.95rem] font-mono tracking-widest lowercase">
+                            [your journey will begin here]
+                        </p>
                     </div>
                 </div>
 
                 {/* STEP 2 & 3: Form */}
-                <div className={`absolute inset-0 w-full h-full max-w-7xl mx-auto px-6 flex items-end md:items-center justify-center md:justify-end pb-24 md:pb-0 transition-opacity duration-700 delay-300 ${(step === 2 || step === 3) ? 'opacity-100 z-20 pointer-events-auto' : 'opacity-0 z-0 pointer-events-none'}`}>
+                <div className={`absolute inset-0 w-full h-full max-w-7xl mx-auto px-6 flex items-end md:items-center justify-center md:justify-end pb-24 md:pb-0 transition-opacity duration-1000 ${visibleGroup === 2 ? 'opacity-100 z-20 pointer-events-auto' : 'opacity-0 z-0 pointer-events-none'}`}>
                     <div className="w-full max-w-xl md:mr-12 lg:mr-24 z-30 relative">
                         <h2 className="text-white text-xl md:text-3xl lg:text-[2.25rem] font-normal mb-6 md:mb-8 leading-tight tracking-wide" style={{ fontFamily: "'Inter', sans-serif" }}>
                             Before we get started,<br />
@@ -185,7 +273,7 @@ const Internship = () => {
 
                         <div className="relative">
                             {/* Step 2 Fields */}
-                            <div className={`transition-opacity duration-500 ${step === 2 ? 'opacity-100 z-10 relative' : 'opacity-0 z-0 absolute inset-0 pointer-events-none'}`}>
+                            <div className={`transition-opacity duration-700 ${step === 2 ? 'opacity-100 z-10 relative' : 'opacity-0 z-0 absolute inset-0 pointer-events-none'}`}>
                                 <div className="flex flex-col gap-4">
                                     <input
                                         type="text"
@@ -212,14 +300,14 @@ const Internship = () => {
 
                                 <div className="flex items-center justify-between mt-8 px-2">
                                     <button
-                                        onClick={() => setStep(1)}
+                                        onClick={() => changeStep(1, true)}
                                         className="text-white/80 hover:text-white font-sans text-sm md:text-base transition-colors cursor-pointer"
                                     >
                                         &lt;&lt;back
                                     </button>
 
                                     <button
-                                        onClick={() => setStep(3)}
+                                        onClick={() => changeStep(3)}
                                         className={`bg-white/10 md:bg-white/[0.07] hover:bg-white/20 text-white/90 rounded-full px-8 py-3 font-sans text-sm md:text-base transition-all duration-300 flex items-center justify-center cursor-pointer ${isValid(2) ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
                                     >
                                         &gt;&gt;next
@@ -228,10 +316,10 @@ const Internship = () => {
                             </div>
 
                             {/* Step 3 Fields */}
-                            <div className={`transition-opacity duration-500 ${step === 3 ? 'opacity-100 z-10 relative' : 'opacity-0 z-0 absolute inset-0 pointer-events-none'}`}>
+                            <div className={`transition-opacity duration-700 ${step === 3 ? 'opacity-100 z-10 relative' : 'opacity-0 z-0 absolute inset-0 pointer-events-none'}`}>
                                 <div className="flex flex-col gap-4">
                                     <input
-                                        type="text"
+                                        type="tel"
                                         placeholder="your WhatsApp number"
                                         value={formData.whatsapp}
                                         onChange={(e) => setFormData({ ...formData, whatsapp: e.target.value })}
@@ -248,14 +336,14 @@ const Internship = () => {
 
                                 <div className="flex items-center justify-between mt-8 px-2">
                                     <button
-                                        onClick={() => setStep(2)}
+                                        onClick={() => changeStep(2, true)}
                                         className="text-white/80 hover:text-white font-sans text-sm md:text-base transition-colors cursor-pointer"
                                     >
                                         &lt;&lt;back
                                     </button>
 
                                     <button
-                                        onClick={() => setStep(4)}
+                                        onClick={() => changeStep(4)}
                                         className={`bg-white/10 md:bg-white/[0.07] hover:bg-white/20 text-white/90 rounded-full px-8 py-3 font-sans text-sm md:text-base transition-all duration-300 flex items-center justify-center cursor-pointer ${isValid(3) ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
                                     >
                                         &gt;&gt;next
@@ -267,7 +355,7 @@ const Internship = () => {
                 </div>
 
                 {/* STEP 4: Domicile */}
-                <div className={`absolute inset-0 w-full h-full max-w-[120rem] mx-auto px-4 md:px-10 lg:px-16 xl:px-24 flex items-end md:items-center justify-center md:justify-start pb-24 md:pb-0 transition-opacity duration-700 delay-300 ${step === 4 ? 'opacity-100 z-20 pointer-events-auto' : 'opacity-0 z-0 pointer-events-none'}`}>
+                <div className={`absolute inset-0 w-full h-full max-w-[120rem] mx-auto px-4 md:px-10 lg:px-16 xl:px-24 flex items-end md:items-center justify-center md:justify-start pb-24 md:pb-0 transition-opacity duration-1000 ${visibleGroup === 3 ? 'opacity-100 z-20 pointer-events-auto' : 'opacity-0 z-0 pointer-events-none'}`}>
                     <div className="w-full max-w-[35rem] lg:max-w-[42rem] z-30 relative px-2 md:px-0">
                         <h2 className="text-white text-xl md:text-3xl lg:text-[2.25rem] font-normal mb-8 md:mb-12 leading-tight tracking-wide" style={{ fontFamily: "'Inter', sans-serif" }}>
                             Alright. We need to make sure one more thing.<br />
@@ -294,7 +382,7 @@ const Internship = () => {
                                     Outside Bali
                                 </button>
 
-                                <div className={`transition-all duration-500 overflow-hidden ${formData.domicile === 'Outside Bali' ? 'max-h-20 opacity-100' : 'max-h-0 opacity-0'}`}>
+                                <div className={`transition-all duration-700 overflow-hidden ${formData.domicile === 'Outside Bali' ? 'max-h-20 opacity-100' : 'max-h-0 opacity-0'}`}>
                                     <input
                                         type="text"
                                         placeholder="where?"
@@ -306,14 +394,14 @@ const Internship = () => {
 
                                 <div className="flex items-center justify-between mt-4 px-2">
                                     <button
-                                        onClick={() => setStep(3)}
+                                        onClick={() => changeStep(3, true)}
                                         className="text-white/80 hover:text-white font-sans text-sm md:text-base transition-colors cursor-pointer"
                                     >
                                         &lt;&lt;back
                                     </button>
 
                                     <button
-                                        onClick={() => setStep(5)}
+                                        onClick={() => changeStep(5)}
                                         className={`bg-white/10 md:bg-white/[0.07] hover:bg-white/20 text-white/90 rounded-full px-8 py-3 font-sans text-sm md:text-base transition-all duration-300 flex items-center justify-center cursor-pointer ${isValid(4) ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
                                     >
                                         &gt;&gt;next
@@ -325,7 +413,7 @@ const Internship = () => {
                 </div>
 
                 {/* STEP 5: Semester */}
-                <div className={`absolute inset-0 w-full h-full max-w-[120rem] mx-auto px-4 md:px-10 lg:px-16 xl:px-24 flex items-end md:items-center justify-center md:justify-start pb-24 md:pb-0 transition-opacity duration-700 delay-300 ${step === 5 ? 'opacity-100 z-20 pointer-events-auto' : 'opacity-0 z-0 pointer-events-none'}`}>
+                <div className={`absolute inset-0 w-full h-full max-w-[120rem] mx-auto px-4 md:px-10 lg:px-16 xl:px-24 flex items-end md:items-center justify-center md:justify-start pb-24 md:pb-0 transition-opacity duration-1000 ${visibleGroup === 4 ? 'opacity-100 z-20 pointer-events-auto' : 'opacity-0 z-0 pointer-events-none'}`}>
                     <div className="w-full max-w-[35rem] lg:max-w-[42rem] z-30 relative px-2 md:px-0">
                         <h2 className="text-white text-xl md:text-3xl lg:text-[2.25rem] font-normal mb-2 leading-tight tracking-wide" style={{ fontFamily: "'Inter', sans-serif" }}>
                             What semester are you in now?
@@ -348,14 +436,14 @@ const Internship = () => {
 
                         <div className="flex items-center justify-between mt-8 ml-4 md:ml-12 lg:ml-20 px-2">
                             <button
-                                onClick={() => setStep(4)}
+                                onClick={() => changeStep(4, true)}
                                 className="text-white/80 hover:text-white font-sans text-sm md:text-base transition-colors cursor-pointer"
                             >
                                 &lt;&lt;back
                             </button>
 
                             <button
-                                onClick={() => setStep(6)}
+                                onClick={() => changeStep(6)}
                                 className="bg-white/10 md:bg-white/[0.07] hover:bg-white/20 text-white/90 rounded-full px-8 py-3 font-sans text-sm md:text-base transition-colors flex items-center justify-center cursor-pointer"
                             >
                                 &gt;&gt;next
@@ -365,12 +453,12 @@ const Internship = () => {
                 </div>
 
                 {/* STEP 6 & 7: Role and WFO */}
-                <div className={`absolute inset-0 w-full h-full px-6 flex items-end md:items-center justify-center md:justify-end pb-24 md:pb-0 transition-opacity duration-700 delay-300 ${(step === 6 || step === 7) ? 'opacity-100 z-20 pointer-events-auto' : 'opacity-0 z-0 pointer-events-none'}`}>
+                <div className={`absolute inset-0 w-full h-full px-6 flex items-end md:items-center justify-center md:justify-end pb-24 md:pb-0 transition-opacity duration-1000 ${visibleGroup === 5 ? 'opacity-100 z-20 pointer-events-auto' : 'opacity-0 z-0 pointer-events-none'}`}>
                     <div className="w-full max-w-2xl lg:max-w-[45rem] md:pr-12 lg:pr-24 z-30 relative md:ml-auto">
 
                         <div className="relative">
                             {/* Step 6: Role */}
-                            <div className={`transition-opacity duration-500 ${step === 6 ? 'opacity-100 z-10 relative' : 'opacity-0 z-0 absolute inset-0 pointer-events-none'}`}>
+                            <div className={`transition-opacity duration-700 ${step === 6 ? 'opacity-100 z-10 relative' : 'opacity-0 z-0 absolute inset-0 pointer-events-none'}`}>
                                 <h2 className="text-white text-xl md:text-3xl lg:text-[2.25rem] font-normal mb-6 md:mb-10 leading-tight tracking-wide" style={{ fontFamily: "'Inter', sans-serif" }}>
                                     Select your role
                                 </h2>
@@ -405,14 +493,14 @@ const Internship = () => {
 
                                 <div className="flex items-center justify-between mt-8 px-2">
                                     <button
-                                        onClick={() => setStep(5)}
+                                        onClick={() => changeStep(5, true)}
                                         className="text-white/80 hover:text-white font-sans text-sm md:text-base transition-colors cursor-pointer"
                                     >
                                         &lt;&lt;back
                                     </button>
 
                                     <button
-                                        onClick={() => setStep(7)}
+                                        onClick={() => changeStep(7)}
                                         className={`bg-white/10 md:bg-white/[0.07] hover:bg-white/20 text-white/90 rounded-full px-8 py-3 font-sans text-sm md:text-base transition-all duration-300 flex items-center justify-center cursor-pointer ${isValid(6) ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
                                     >
                                         &gt;&gt;next
@@ -421,7 +509,7 @@ const Internship = () => {
                             </div>
 
                             {/* Step 7: WFO */}
-                            <div className={`transition-opacity duration-500 ${step === 7 ? 'opacity-100 z-10 relative' : 'opacity-0 z-0 absolute inset-0 pointer-events-none'}`}>
+                            <div className={`transition-opacity duration-700 ${step === 7 ? 'opacity-100 z-10 relative' : 'opacity-0 z-0 absolute inset-0 pointer-events-none'}`}>
                                 <h2 className="text-white text-xl md:text-3xl lg:text-[2.25rem] font-normal mb-6 md:mb-10 leading-tight tracking-wide" style={{ fontFamily: "'Inter', sans-serif" }}>
                                     Are you willing to work from office?
                                 </h2>
@@ -443,14 +531,14 @@ const Internship = () => {
 
                                 <div className="flex items-center justify-between mt-8 px-2">
                                     <button
-                                        onClick={() => setStep(6)}
+                                        onClick={() => changeStep(6, true)}
                                         className="text-white/80 hover:text-white font-sans text-sm md:text-base transition-colors cursor-pointer"
                                     >
                                         &lt;&lt;back
                                     </button>
 
                                     <button
-                                        onClick={() => setStep(8)}
+                                        onClick={() => changeStep(8)}
                                         className={`bg-white/10 md:bg-white/[0.07] hover:bg-white/20 text-white/90 rounded-full px-8 py-3 font-sans text-sm md:text-base transition-all duration-300 flex items-center justify-center cursor-pointer ${isValid(7) ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}
                                     >
                                         &gt;&gt;next
@@ -462,14 +550,14 @@ const Internship = () => {
                 </div>
 
                 {/* STEP 8, 9, 10: CV, Portfolio, Reason */}
-                <div className={`absolute inset-0 w-full h-full max-w-5xl mx-auto px-6 flex items-end md:items-center justify-center pb-24 md:pb-0 transition-opacity duration-700 delay-300 ${(step >= 8 && step <= 10) ? 'opacity-100 z-20 pointer-events-auto' : 'opacity-0 z-0 pointer-events-none'}`}>
+                <div className={`absolute inset-0 w-full h-full max-w-5xl mx-auto px-6 flex items-end md:items-center justify-center pb-24 md:pb-0 transition-opacity duration-1000 ${visibleGroup === 6 ? 'opacity-100 z-20 pointer-events-auto' : 'opacity-0 z-0 pointer-events-none'}`}>
                     <div className="w-full md:mt-40 z-30 relative">
                         <div className="relative">
 
                             {/* Step 8: CV */}
-                            <div className={`transition-all duration-500 w-full ${step === 8 ? 'opacity-100 z-10 relative translate-x-0' : 'opacity-0 z-0 absolute top-0 left-0 -translate-x-10 pointer-events-none'}`}>
+                            <div className={`transition-all duration-700 w-full ${step === 8 ? 'opacity-100 z-10 relative translate-x-0' : 'opacity-0 z-0 absolute top-0 left-0 -translate-x-10 pointer-events-none'}`}>
 
-                                <label 
+                                <label
                                     className="block w-full"
                                     onDragOver={handleDragOver}
                                     onDrop={(e) => handleDrop(e, 'cv')}
@@ -484,23 +572,23 @@ const Internship = () => {
                                             {formData.cv ? (
                                                 <span className="text-[#A1F694]">{formData.cv.name}</span>
                                             ) : (
-                                                <>upload your <span className="font-bold text-white">CV</span> here [PDF]</>
+                                                <>upload your <span className="font-bold text-white">Curriculum Vitae</span> here [PDF]</>
                                             )}
                                         </p>
                                     </div>
-                                    <input type="file" className="hidden" accept=".pdf" onChange={(e) => { if(e.target.files[0]) setFormData({ ...formData, cv: e.target.files[0] }) }} />
+                                    <input type="file" className="hidden" accept=".pdf" onChange={(e) => { if (e.target.files[0]) setFormData({ ...formData, cv: e.target.files[0] }) }} />
                                 </label>
 
                                 <div className="flex items-center justify-between mt-8 px-2">
-                                    <button onClick={() => setStep(7)} className="text-white/80 hover:text-white font-sans text-sm md:text-base transition-colors cursor-pointer">&lt;&lt;back</button>
-                                    <button onClick={() => setStep(9)} className={`bg-white/10 md:bg-white/[0.07] hover:bg-white/20 text-white/90 rounded-full px-8 py-3 font-sans text-sm md:text-base transition-all duration-300 flex items-center justify-center cursor-pointer ${isValid(8) ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}>&gt;&gt;next</button>
+                                    <button onClick={() => changeStep(7, true)} className="text-white/80 hover:text-white font-sans text-sm md:text-base transition-colors cursor-pointer">&lt;&lt;back</button>
+                                    <button onClick={() => changeStep(9)} className={`bg-white/10 md:bg-white/[0.07] hover:bg-white/20 text-white/90 rounded-full px-8 py-3 font-sans text-sm md:text-base transition-all duration-300 flex items-center justify-center cursor-pointer ${isValid(8) ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}>&gt;&gt;next</button>
                                 </div>
                             </div>
 
                             {/* Step 9: Portfolio */}
-                            <div className={`transition-all duration-500 w-full ${step === 9 ? 'opacity-100 z-10 relative translate-x-0' : 'opacity-0 z-0 absolute top-0 left-0 translate-x-10 pointer-events-none'}`}>
+                            <div className={`transition-all duration-700 w-full ${step === 9 ? 'opacity-100 z-10 relative translate-x-0' : 'opacity-0 z-0 absolute top-0 left-0 translate-x-10 pointer-events-none'}`}>
 
-                                <label 
+                                <label
                                     className="block w-full"
                                     onDragOver={handleDragOver}
                                     onDrop={(e) => handleDrop(e, 'portfolio')}
@@ -519,17 +607,17 @@ const Internship = () => {
                                             )}
                                         </p>
                                     </div>
-                                    <input type="file" className="hidden" accept=".pdf" onChange={(e) => { if(e.target.files[0]) setFormData({ ...formData, portfolio: e.target.files[0] }) }} />
+                                    <input type="file" className="hidden" accept=".pdf" onChange={(e) => { if (e.target.files[0]) setFormData({ ...formData, portfolio: e.target.files[0] }) }} />
                                 </label>
 
                                 <div className="flex items-center justify-between mt-8 px-2">
-                                    <button onClick={() => setStep(8)} className="text-white/80 hover:text-white font-sans text-sm md:text-base transition-colors cursor-pointer">&lt;&lt;back</button>
-                                    <button onClick={() => setStep(10)} className={`bg-white/10 md:bg-white/[0.07] hover:bg-white/20 text-white/90 rounded-full px-8 py-3 font-sans text-sm md:text-base transition-all duration-300 flex items-center justify-center cursor-pointer ${isValid(9) ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}>&gt;&gt;next</button>
+                                    <button onClick={() => changeStep(8, true)} className="text-white/80 hover:text-white font-sans text-sm md:text-base transition-colors cursor-pointer">&lt;&lt;back</button>
+                                    <button onClick={() => changeStep(10)} className={`bg-white/10 md:bg-white/[0.07] hover:bg-white/20 text-white/90 rounded-full px-8 py-3 font-sans text-sm md:text-base transition-all duration-300 flex items-center justify-center cursor-pointer ${isValid(9) ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}>&gt;&gt;next</button>
                                 </div>
                             </div>
 
                             {/* Step 10: Reason */}
-                            <div className={`transition-all duration-500 w-full ${step === 10 ? 'opacity-100 z-10 relative translate-x-0' : 'opacity-0 z-0 absolute top-0 left-0 translate-x-10 pointer-events-none'}`}>
+                            <div className={`transition-all duration-700 w-full ${step === 10 ? 'opacity-100 z-10 relative translate-x-0' : 'opacity-0 z-0 absolute top-0 left-0 translate-x-10 pointer-events-none'}`}>
                                 <textarea
                                     placeholder="give us the reasons why would you join our internship program...."
                                     value={formData.reason}
@@ -538,9 +626,9 @@ const Internship = () => {
                                 />
 
                                 <div className="flex items-center justify-between mt-8 px-2">
-                                    <button onClick={() => setStep(9)} className="text-white/80 hover:text-white font-sans text-sm md:text-base transition-colors cursor-pointer">&lt;&lt;back</button>
-                                    <button onClick={handleSubmit} disabled={isSubmitting} className={`bg-white/10 md:bg-white/[0.07] hover:bg-white/20 text-white/90 rounded-full px-8 py-3 font-sans text-sm md:text-base transition-all duration-300 flex items-center justify-center cursor-pointer ${isValid(10) && !isSubmitting ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}>
-                                        {isSubmitting ? 'submitting...' : 'submit'}
+                                    <button onClick={() => changeStep(9, true)} className="text-white/80 hover:text-white font-sans text-sm md:text-base transition-colors cursor-pointer">&lt;&lt;back</button>
+                                    <button onClick={handleSubmit} disabled={isSubmitting} className={`bg-white text-black hover:bg-white/80 rounded-full px-8 py-3 font-sans text-sm md:text-base transition-all duration-300 flex items-center justify-center cursor-pointer ${isValid(10) && !isSubmitting ? 'opacity-100 pointer-events-auto' : 'opacity-50 pointer-events-none'}`}>
+                                        {isSubmitting ? 'Submitting...' : 'Submit'}
                                     </button>
                                 </div>
                             </div>
@@ -550,8 +638,8 @@ const Internship = () => {
                 </div>
 
                 {/* STEP 11: End */}
-                <div className={`absolute inset-0 w-full h-full max-w-7xl mx-auto px-10 md:px-6 pointer-events-none flex items-center justify-start md:justify-center transition-opacity duration-700 delay-300 ${step === 11 ? 'opacity-100 z-20' : 'opacity-0 z-0'}`}>
-                    <div className="w-full text-left md:text-center mt-[-100px] md:mt-0 md:pl-24 lg:pl-64 z-30 relative">
+                <div className={`absolute inset-0 w-full h-full max-w-7xl mx-auto px-10 md:px-6 pointer-events-none flex items-center justify-start md:justify-center transition-opacity duration-1000 ${visibleGroup === 7 ? 'opacity-100 z-20' : 'opacity-0 z-0'}`}>
+                    <div className="w-full text-left md:text-left mt-[-100px] md:mt-0 md:absolute md:top-[50%] md:-translate-y-[50%] md:left-[calc(50%+224px)] lg:left-[calc(50%+298px)] z-30 pointer-events-none md:pointer-events-auto">
                         <p className="text-white text-3xl md:text-4xl font-normal leading-tight tracking-wide" style={{ fontFamily: "'Inter', sans-serif" }}>
                             good luck,<br />
                             <span className="font-bold">#makeitworth.</span>
@@ -562,8 +650,8 @@ const Internship = () => {
             </div>
 
             {/* Bottom Footer Text */}
-            <div className={`absolute bottom-6 md:bottom-8 right-6 md:right-12 z-20 transition-opacity duration-1000 delay-[1200ms] ${animate ? 'opacity-100' : 'opacity-0'}`}>
-                <p className="text-white/60 text-xs md:text-sm font-light tracking-wider font-sans text-right">
+            <div className={`absolute bottom-6 md:bottom-8 right-6 md:left-[50%] md:-translate-x-[50%] md:right-auto z-20 transition-opacity duration-1000 ${visibleGroup === 1 ? 'opacity-100' : 'opacity-0'}`}>
+                <p className="text-white/60 text-xs md:text-sm font-light tracking-wider font-sans text-right md:text-center w-max max-w-[90vw]">
                     a creative makerspace that consists of<br className="md:hidden" />
                     <span className="hidden md:inline"> </span>
                     passionate nocturnal folks.

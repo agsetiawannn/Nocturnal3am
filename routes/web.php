@@ -42,6 +42,29 @@ Route::get('/internship', function () {
 
 use App\Http\Controllers\TrackingController;
 use App\Http\Controllers\InternshipController;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
+
+Route::get('/internship/download/{type}/{filename}', function ($type, $filename) {
+    $path = 'internship_' . $type . '/' . $filename;
+    if (!Storage::disk('public')->exists($path)) return abort(404);
+    
+    // Find the applicant this file belongs to
+    $column = $type === 'cvs' ? 'cv_path' : 'portfolio_path';
+    $applicant = \App\Models\InternshipApplicant::where($column, $path)->first();
+    
+    $downloadName = $filename;
+    if ($applicant) {
+        $typeName = $type === 'cvs' ? 'CV' : 'Portfolio';
+        // Create a safe, clean filename based on the applicant's name
+        $safeName = Str::slug($applicant->name, '_');
+        $downloadName = $safeName . '_' . $typeName . '.pdf';
+    }
+    
+    /** @var \Illuminate\Filesystem\FilesystemAdapter $disk */
+    $disk = Storage::disk('public');
+    return $disk->download($path, $downloadName);
+})->name('internship.download');
 
 Route::post('/api/internship/apply', [InternshipController::class, 'store']);
 // Tracking System API Routes (Stateful/Session-based)
