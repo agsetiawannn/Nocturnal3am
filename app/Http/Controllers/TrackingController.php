@@ -10,7 +10,6 @@ use Illuminate\Support\Facades\DB;
 
 class TrackingController extends Controller
 {
-    // ====== AUTHENTICATION ======
     
     public function clientLogin(Request $request)
     {

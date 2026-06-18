@@ -63,20 +63,20 @@ class InternshipController extends Controller
             $client = new Google_Client();
             $client->setApplicationName('Studio Tigapagi Internship');
             $client->setScopes([\Google\Service\Sheets::SPREADSHEETS]);
-            $client->setAuthConfig(base_path('storied-landing-498207-r7-de803fdae278.json'));
+            $client->setAuthConfig(base_path('bot-tigapagi-067ddc692b59.json'));
             $client->setAccessType('offline');
 
             // Generate direct download URLs using the explicit download route
             $cvFilename = basename($cvPath);
             $portfolioFilename = basename($portfolioPath);
-            
+
             $cvUrl = url('/internship/download/cvs/' . $cvFilename);
             $portfolioUrl = url('/internship/download/portfolios/' . $portfolioFilename);
 
-            // Append Data to Google Sheets
+
             $sheetsService = new Google_Service_Sheets($client);
             $spreadsheetId = '1Hd1BCGpgczXyc6YkyFgv3yc46W7MAsysZdKENUUsyRg';
-            $range = 'Sheet1!A:A';
+            $range = 'DATABASE!A:A';
 
             $values = [
                 [

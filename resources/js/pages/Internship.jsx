@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 const Internship = () => {
     const [animate, setAnimate] = useState(false);
     const [visibleGroup, setVisibleGroup] = useState(0);
-    const [step, setStep] = useState(1);
+    const [step, setStep] = useState(11);
 
     // Form states
     const [formData, setFormData] = useState({
@@ -115,7 +115,7 @@ const Internship = () => {
 
         // Trigger texts to appear after disc is fully shown
         const timer2 = setTimeout(() => {
-            setVisibleGroup(1);
+            setVisibleGroup(7);
         }, 1500);
 
         return () => {
