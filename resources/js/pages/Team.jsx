@@ -201,7 +201,8 @@ function Team() {
             {/* Grid Section */}
             <section className="relative z-10 bg-black w-full pb-32 pt-10 px-6 md:px-10">
                 <div className="max-w-7xl mx-auto w-full">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 md:gap-x-12 md:gap-y-16 max-w-5xl mx-auto text-left">
+                    {/* Desktop Layout */}
+                    <div className="hidden md:grid md:grid-cols-3 gap-8 md:gap-x-12 md:gap-y-16 max-w-5xl mx-auto text-left">
                         {/* Row 1 */}
                         <div className="flex flex-col">
                             <img src="/img/ananda.png" alt="Ananda Sartana" className="w-full aspect-[3/4] object-cover mb-4" />
@@ -248,6 +249,33 @@ function Team() {
                                 <h3 className="text-white text-xl font-bold font-sans tracking-tight">Dhais Alfa Rysy</h3>
                                 <p className="text-white/70 text-sm font-light mt-1">Graphic Designer</p>
                             </div>
+                        </div>
+                    </div>
+
+                    {/* Mobile Horizontal Slide Layout */}
+                    <div className="block md:hidden -mx-6">
+                        <div className="flex overflow-x-auto gap-4 px-6 pb-6 snap-x snap-mandatory scrollbar-hide">
+                            {[
+                                { name: 'Ananda Sartana', role: 'CEO', img: '/img/ananda.png' },
+                                { name: 'Felix Marbun', role: 'Operational Manager', img: '/img/felix.png' },
+                                { name: 'Aurelia Pramesty', role: 'Project Manager', img: '/img/aurel.png' },
+                                { name: 'Nayaka Darmika', role: 'Production Crew', img: '/img/nayaka.png' },
+                                { name: 'Nandiya Zhou', role: 'Social Media Specialist', img: '/img/nandiya.png' },
+                                { name: 'Mourent', role: 'Social Media Specialist', img: '/img/mourent.png' },
+                                { name: 'Setiawan', role: 'Fullstack Developer', img: '/img/setiawan.png' },
+                                { name: 'Dhais Alfa Rysy', role: 'Graphic Designer', img: '/img/dhais.png' },
+                            ].map((member, index) => (
+                                <div key={index} className="snap-center shrink-0 w-[85vw] h-auto relative overflow-hidden group">
+                                    <div className="relative w-full aspect-[3/4] overflow-hidden rounded-2xl bg-white/5">
+                                        <img src={member.img} alt={member.name} className="w-full h-full object-cover" />
+                                    </div>
+                                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent pointer-events-none rounded-2xl"></div>
+                                    <div className="absolute bottom-5 left-5 right-5 flex flex-col gap-1">
+                                        <h3 className="text-white text-2xl font-bold font-sans tracking-tight">{member.name}</h3>
+                                        <p className="text-white/80 text-sm font-light">{member.role}</p>
+                                    </div>
+                                </div>
+                            ))}
                         </div>
                     </div>
                 </div>
