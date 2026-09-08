@@ -22,7 +22,7 @@ export default function HotStone() {
         </div>
         {/* Full-width Hero Image */}
         <div className="mt-6 md:mt-24 w-full h-[160px] md:h-[600px] overflow-hidden rounded-md md:rounded-lg group">
-          <img alt="Pertamina Bali Station" className="w-full h-full object-cover grayscale-[0.2] hover:grayscale-0 transition-all duration-700 scale-100 group-hover:scale-105" src="/img/work client/hot stone/HOT STONE-6.jpg" onError={(e) => { e.target.src = '/img/pertamina.webp' }} />
+          <img alt="Pertamina Bali Station" className="w-full h-full object-cover grayscale-[0.2] hover:grayscale-0 transition-all duration-700 scale-100 group-hover:scale-105" src="/img/work-client/hot-stone/HOT-STONE-6.jpg" onError={(e) => { e.target.src = '/img/pertamina.webp' }} />
         </div>
       </section>
 
@@ -62,7 +62,7 @@ export default function HotStone() {
           </div>
           <div className="col-span-5 md:col-span-5 md:col-start-8 mt-0">
             <div className="aspect-[4/5] rounded-lg overflow-hidden border border-white/10">
-              <img alt="Pertamina Staff" className="w-full h-full object-cover transition-transform duration-1000 hover:scale-110" src="/img/work client/hot stone/13-4 feed1.jpg" />
+              <img alt="Pertamina Staff" className="w-full h-full object-cover transition-transform duration-1000 hover:scale-110" src="/img/work-client/hot-stone/13-4-feed1.jpg" />
             </div>
           </div>
         </div>
@@ -77,42 +77,42 @@ export default function HotStone() {
           <div className="grid grid-cols-2 md:grid-cols-3 gap-1 md:gap-6">
             {/* Post 1 */}
             <div className="aspect-square bg-white/5 rounded-lg overflow-hidden group relative border border-white/10">
-              <img alt="Healing Experience" className="w-full h-full object-cover grayscale-[0.5] group-hover:grayscale-0 transition-all duration-500" src="/img/work client/hot stone/26-2 feed1.png" />
+              <img alt="Healing Experience" className="w-full h-full object-cover grayscale-[0.5] group-hover:grayscale-0 transition-all duration-500" src="/img/work-client/hot-stone/26-2-feed1.png" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
                 <p className="text-[12px] leading-[16px] tracking-[0.1em] font-[600] text-white uppercase">DEEP REJUVENATION</p>
               </div>
             </div>
             {/* Post 2 */}
             <div className="aspect-square bg-white/5 rounded-lg overflow-hidden group relative border border-white/10">
-              <img alt="Mindful Living" className="w-full h-full object-cover grayscale-[0.5] group-hover:grayscale-0 transition-all duration-500" src="/img/work client/hot stone/9-3 feed2.jpg" />
+              <img alt="Mindful Living" className="w-full h-full object-cover grayscale-[0.5] group-hover:grayscale-0 transition-all duration-500" src="/img/work-client/hot-stone/9-3-feed2.jpg" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
                 <p className="text-[12px] leading-[16px] tracking-[0.1em] font-[600] text-white uppercase">YOGA & MEDITATION</p>
               </div>
             </div>
             {/* Post 3 */}
             <div className="aspect-square bg-white/5 rounded-lg overflow-hidden group relative border border-white/10">
-              <img alt="Water & Frequency" className="w-full h-full object-cover grayscale-[0.5] group-hover:grayscale-0 transition-all duration-500" src="/img/work client/hot stone/Special promo code - feed.png" />
+              <img alt="Water & Frequency" className="w-full h-full object-cover grayscale-[0.5] group-hover:grayscale-0 transition-all duration-500" src="/img/work-client/hot-stone/special-promo-code-feed.png" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
                 <p className="text-[12px] leading-[16px] tracking-[0.1em] font-[600] text-white uppercase">SOUND HEALING</p>
               </div>
             </div>
             {/* Post 4 */}
             <div className="aspect-square bg-white/5 rounded-lg overflow-hidden group relative border border-white/10">
-              <img alt="Wellness Programs" className="w-full h-full object-cover grayscale-[0.5] group-hover:grayscale-0 transition-all duration-500" src="/img/work client/hot stone/1-5 feed1.png" />
+              <img alt="Wellness Programs" className="w-full h-full object-cover grayscale-[0.5] group-hover:grayscale-0 transition-all duration-500" src="/img/work-client/hot-stone/1-5-feed1.png" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
                 <p className="text-[12px] leading-[16px] tracking-[0.1em] font-[600] text-white uppercase">CELLULAR RENEWAL</p>
               </div>
             </div>
             {/* Post 5 */}
             <div className="aspect-square bg-white/5 rounded-lg overflow-hidden group relative border border-white/10">
-              <img alt="Retreat Space" className="w-full h-full object-cover grayscale-[0.5] group-hover:grayscale-0 transition-all duration-500" src="/img/work client/hot stone/HOT STONE-1.jpg" />
+              <img alt="Retreat Space" className="w-full h-full object-cover grayscale-[0.5] group-hover:grayscale-0 transition-all duration-500" src="/img/work-client/hot-stone/HOT-STONE-1.jpg" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
                 <p className="text-[12px] leading-[16px] tracking-[0.1em] font-[600] text-white uppercase">UBUD SANCTUARY</p>
               </div>
             </div>
             {/* Post 6 */}
             <div className="aspect-square bg-white/5 rounded-lg overflow-hidden group relative border border-white/10">
-              <img alt="Holistic Therapy" className="w-full h-full object-cover grayscale-[0.5] group-hover:grayscale-0 transition-all duration-500" src="/img/work client/hot stone/JGT-39.jpg" />
+              <img alt="Holistic Therapy" className="w-full h-full object-cover grayscale-[0.5] group-hover:grayscale-0 transition-all duration-500" src="/img/work-client/hot-stone/JGT-39.jpg" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
                 <p className="text-[12px] leading-[16px] tracking-[0.1em] font-[600] text-white uppercase">NATURAL REMEDIES</p>
               </div>

@@ -22,7 +22,7 @@ export default function YamahaBali() {
         </div>
         {/* Full-width Hero Image */}
         <div className="mt-6 md:mt-24 w-full h-[160px] md:h-[600px] overflow-hidden rounded-md md:rounded-lg group">
-          <img alt="Pertamina Bali Station" className="w-full h-full object-cover grayscale-[0.2] hover:grayscale-0 transition-all duration-700 scale-100 group-hover:scale-105" src="/img/work client/IMG_3285.jpg" onError={(e) => { e.target.src = '/img/pertamina.webp' }} />
+          <img alt="Pertamina Bali Station" className="w-full h-full object-cover grayscale-[0.2] hover:grayscale-0 transition-all duration-700 scale-100 group-hover:scale-105" src="/img/work-client/IMG_3285.jpg" onError={(e) => { e.target.src = '/img/pertamina.webp' }} />
         </div>
       </section>
 
@@ -66,7 +66,7 @@ export default function YamahaBali() {
           </div>
           <div className="col-span-5 md:col-span-5 md:col-start-8 mt-0">
             <div className="aspect-[4/5] rounded-lg overflow-hidden border border-white/10">
-              <img alt="Pertamina Staff" className="w-full h-full object-cover transition-transform duration-1000 hover:scale-110" src="/img/work client/IMG_3286.jpg" />
+              <img alt="Pertamina Staff" className="w-full h-full object-cover transition-transform duration-1000 hover:scale-110" src="/img/work-client/IMG_3286.jpg" />
             </div>
           </div>
         </div>
@@ -81,42 +81,42 @@ export default function YamahaBali() {
           <div className="grid grid-cols-2 md:grid-cols-3 gap-1 md:gap-6">
             {/* Post 1 */}
             <div className="aspect-square bg-white/5 rounded-lg overflow-hidden group relative border border-white/10">
-              <img alt="Motorcycle Lineup" className="w-full h-full object-cover grayscale-[0.5] group-hover:grayscale-0 transition-all duration-500" src="/img/work client/IMG_3287.jpg" />
+              <img alt="Motorcycle Lineup" className="w-full h-full object-cover grayscale-[0.5] group-hover:grayscale-0 transition-all duration-500" src="/img/work-client/IMG_3287.jpg" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
                 <p className="text-[12px] leading-[16px] tracking-[0.1em] font-[600] text-white uppercase">NEW RELEASES</p>
               </div>
             </div>
             {/* Post 2 */}
             <div className="aspect-square bg-white/5 rounded-lg overflow-hidden group relative border border-white/10">
-              <img alt="Yamaha Maxi" className="w-full h-full object-cover grayscale-[0.5] group-hover:grayscale-0 transition-all duration-500" src="/img/work client/IMG_3288.jpg" />
+              <img alt="Yamaha Maxi" className="w-full h-full object-cover grayscale-[0.5] group-hover:grayscale-0 transition-all duration-500" src="/img/work-client/IMG_3288.jpg" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
                 <p className="text-[12px] leading-[16px] tracking-[0.1em] font-[600] text-white uppercase">MAXI SERIES</p>
               </div>
             </div>
             {/* Post 3 */}
             <div className="aspect-square bg-white/5 rounded-lg overflow-hidden group relative border border-white/10">
-              <img alt="Riding Lifestyle" className="w-full h-full object-cover grayscale-[0.5] group-hover:grayscale-0 transition-all duration-500" src="/img/work client/IMG_3289.jpg" />
+              <img alt="Riding Lifestyle" className="w-full h-full object-cover grayscale-[0.5] group-hover:grayscale-0 transition-all duration-500" src="/img/work-client/IMG_3289.jpg" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
                 <p className="text-[12px] leading-[16px] tracking-[0.1em] font-[600] text-white uppercase">LIFESTYLE RIDING</p>
               </div>
             </div>
             {/* Post 4 */}
             <div className="aspect-square bg-white/5 rounded-lg overflow-hidden group relative border border-white/10">
-              <img alt="Yamaha Community" className="w-full h-full object-cover grayscale-[0.5] group-hover:grayscale-0 transition-all duration-500" src="/img/work client/IMG_3290.jpg" />
+              <img alt="Yamaha Community" className="w-full h-full object-cover grayscale-[0.5] group-hover:grayscale-0 transition-all duration-500" src="/img/work-client/IMG_3290.jpg" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
                 <p className="text-[12px] leading-[16px] tracking-[0.1em] font-[600] text-white uppercase">COMMUNITY EVENTS</p>
               </div>
             </div>
             {/* Post 5 */}
             <div className="aspect-square bg-white/5 rounded-lg overflow-hidden group relative border border-white/10">
-              <img alt="Tech Features" className="w-full h-full object-cover grayscale-[0.5] group-hover:grayscale-0 transition-all duration-500" src="/img/work client/IMG_3291.jpg" />
+              <img alt="Tech Features" className="w-full h-full object-cover grayscale-[0.5] group-hover:grayscale-0 transition-all duration-500" src="/img/work-client/IMG_3291.jpg" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
                 <p className="text-[12px] leading-[16px] tracking-[0.1em] font-[600] text-white uppercase">PRODUCT FEATURES</p>
               </div>
             </div>
             {/* Post 6 */}
             <div className="aspect-square bg-white/5 rounded-lg overflow-hidden group relative border border-white/10">
-              <img alt="Test Ride" className="w-full h-full object-cover grayscale-[0.5] group-hover:grayscale-0 transition-all duration-500" src="/img/work client/IMG_3292.jpg" />
+              <img alt="Test Ride" className="w-full h-full object-cover grayscale-[0.5] group-hover:grayscale-0 transition-all duration-500" src="/img/work-client/IMG_3292.jpg" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
                 <p className="text-[12px] leading-[16px] tracking-[0.1em] font-[600] text-white uppercase">TEST RIDE EXPERIENCE</p>
               </div>

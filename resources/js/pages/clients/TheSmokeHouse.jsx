@@ -22,7 +22,7 @@ export default function TheSmokeHouse() {
         </div>
         {/* Full-width Hero Image */}
         <div className="mt-6 md:mt-24 w-full h-[160px] md:h-[600px] overflow-hidden rounded-md md:rounded-lg group">
-          <img alt="Pertamina Bali Station" className="w-full h-full object-cover grayscale-[0.2] hover:grayscale-0 transition-all duration-700 scale-100 group-hover:scale-105" src="/img/work client/SMOKE HOUSE/TSH 11-10-2.jpg" onError={(e) => { e.target.src = "/img/work client/SMOKE HOUSE/TSH 11-10-2.jpg" }} />
+          <img alt="Pertamina Bali Station" className="w-full h-full object-cover grayscale-[0.2] hover:grayscale-0 transition-all duration-700 scale-100 group-hover:scale-105" src="/img/work-client/smoke-house/TSH-11-10-2.jpg" onError={(e) => { e.target.src = "/img/work-client/smoke-house/TSH-11-10-2.jpg" }} />
         </div>
       </section>
 
@@ -70,7 +70,7 @@ export default function TheSmokeHouse() {
           </div>
           <div className="col-span-5 md:col-span-5 md:col-start-8 mt-0">
             <div className="aspect-[4/5] rounded-lg overflow-hidden border border-white/10">
-              <img alt="Pertamina Staff" className="w-full h-full object-cover transition-transform duration-1000 hover:scale-110" src="/img/work client/SMOKE HOUSE/TSH 11-10-2-21.jpg" />
+              <img alt="Pertamina Staff" className="w-full h-full object-cover transition-transform duration-1000 hover:scale-110" src="/img/work-client/smoke-house/TSH-11-10-2-21.jpg" />
             </div>
           </div>
         </div>
@@ -85,42 +85,42 @@ export default function TheSmokeHouse() {
           <div className="grid grid-cols-2 md:grid-cols-3 gap-1 md:gap-6">
             {/* Post 1 */}
             <div className="aspect-square bg-white/5 rounded-lg overflow-hidden group relative border border-white/10">
-              <img alt="Smoked Brisket" className="w-full h-full object-cover grayscale-[0.5] group-hover:grayscale-0 transition-all duration-500" src="/img/work client/SMOKE HOUSE/13-12 feed1.png" />
+              <img alt="Smoked Brisket" className="w-full h-full object-cover grayscale-[0.5] group-hover:grayscale-0 transition-all duration-500" src="/img/work-client/smoke-house/13-12-feed1.png" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
                 <p className="text-[12px] leading-[16px] tracking-[0.1em] font-[600] text-white uppercase">LOW AND SLOW BBQ</p>
               </div>
             </div>
             {/* Post 2 */}
             <div className="aspect-square bg-white/5 rounded-lg overflow-hidden group relative border border-white/10">
-              <img alt="Live Fire Grill" className="w-full h-full object-cover grayscale-[0.5] group-hover:grayscale-0 transition-all duration-500" src="/img/work client/SMOKE HOUSE/6-2 feed1.png" />
+              <img alt="Live Fire Grill" className="w-full h-full object-cover grayscale-[0.5] group-hover:grayscale-0 transition-all duration-500" src="/img/work-client/smoke-house/6-2-feed1.png" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
                 <p className="text-[12px] leading-[16px] tracking-[0.1em] font-[600] text-white uppercase">RIBS & MEATS</p>
               </div>
             </div>
             {/* Post 3 */}
             <div className="aspect-square bg-white/5 rounded-lg overflow-hidden group relative border border-white/10">
-              <img alt="Sunset Views" className="w-full h-full object-cover grayscale-[0.5] group-hover:grayscale-0 transition-all duration-500" src="/img/work client/SMOKE HOUSE/Grand Opening - Feed.png" />
+              <img alt="Sunset Views" className="w-full h-full object-cover grayscale-[0.5] group-hover:grayscale-0 transition-all duration-500" src="/img/work-client/smoke-house/grand-opening-feed.png" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
                 <p className="text-[12px] leading-[16px] tracking-[0.1em] font-[600] text-white uppercase">DINING EXPERIENCE</p>
               </div>
             </div>
             {/* Post 4 */}
             <div className="aspect-square bg-white/5 rounded-lg overflow-hidden group relative border border-white/10">
-              <img alt="Craft Beers" className="w-full h-full object-cover grayscale-[0.5] group-hover:grayscale-0 transition-all duration-500" src="/img/work client/SMOKE HOUSE/1-12 feed1.png" />
+              <img alt="Craft Beers" className="w-full h-full object-cover grayscale-[0.5] group-hover:grayscale-0 transition-all duration-500" src="/img/work-client/smoke-house/1-12-feed1.png" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
                 <p className="text-[12px] leading-[16px] tracking-[0.1em] font-[600] text-white uppercase">BEVERAGE PAIRING</p>
               </div>
             </div>
             {/* Post 5 */}
             <div className="aspect-square bg-white/5 rounded-lg overflow-hidden group relative border border-white/10">
-              <img alt="Local Produce" className="w-full h-full object-cover grayscale-[0.5] group-hover:grayscale-0 transition-all duration-500" src="/img/work client/SMOKE HOUSE/12-1 feed1-2.png" />
+              <img alt="Local Produce" className="w-full h-full object-cover grayscale-[0.5] group-hover:grayscale-0 transition-all duration-500" src="/img/work-client/smoke-house/12-1-feed1-2.png" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
                 <p className="text-[12px] leading-[16px] tracking-[0.1em] font-[600] text-white uppercase">FRESH INGREDIENTS</p>
               </div>
             </div>
             {/* Post 6 */}
             <div className="aspect-square bg-white/5 rounded-lg overflow-hidden group relative border border-white/10">
-              <img alt="Special Menu" className="w-full h-full object-cover grayscale-[0.5] group-hover:grayscale-0 transition-all duration-500" src="/img/work client/SMOKE HOUSE/13-12 feed1.png" />
+              <img alt="Special Menu" className="w-full h-full object-cover grayscale-[0.5] group-hover:grayscale-0 transition-all duration-500" src="/img/work-client/smoke-house/13-12-feed1.png" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
                 <p className="text-[12px] leading-[16px] tracking-[0.1em] font-[600] text-white uppercase">CHEFS RECOMMENDATION</p>
               </div>

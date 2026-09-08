@@ -22,7 +22,7 @@ export default function BlueMarlinKomodo() {
         </div>
         {/* Full-width Hero Image */}
         <div className="mt-6 md:mt-24 w-full h-[160px] md:h-[600px] overflow-hidden rounded-md md:rounded-lg group">
-          <img alt="Pertamina Bali Station" className="w-full h-full object-cover grayscale-[0.2] hover:grayscale-0 transition-all duration-700 scale-100 group-hover:scale-105" src="/img/work client/BMK-6043.jpg" onError={(e) => { e.target.src = '/img/pertamina.webp' }} />
+          <img alt="Pertamina Bali Station" className="w-full h-full object-cover grayscale-[0.2] hover:grayscale-0 transition-all duration-700 scale-100 group-hover:scale-105" src="/img/work-client/BMK-6043.jpg" onError={(e) => { e.target.src = '/img/pertamina.webp' }} />
         </div>
       </section>
 
@@ -70,7 +70,7 @@ export default function BlueMarlinKomodo() {
           </div>
           <div className="col-span-5 md:col-span-5 md:col-start-8 mt-0">
             <div className="aspect-[4/5] rounded-lg overflow-hidden border border-white/10">
-              <img alt="Pertamina Staff" className="w-full h-full object-cover transition-transform duration-1000 hover:scale-110" src="/img/work client/BMK1_2x.webp" />
+              <img alt="Pertamina Staff" className="w-full h-full object-cover transition-transform duration-1000 hover:scale-110" src="/img/work-client/BMK1_2x.webp" />
             </div>
           </div>
         </div>
@@ -85,42 +85,42 @@ export default function BlueMarlinKomodo() {
           <div className="grid grid-cols-2 md:grid-cols-3 gap-1 md:gap-6">
             {/* Post 1 */}
             <div className="aspect-square bg-white/5 rounded-lg overflow-hidden group relative border border-white/10">
-              <img alt="PADI 5-Star Resort" className="w-full h-full object-cover grayscale-[0.5] group-hover:grayscale-0 transition-all duration-500" src="/img/work client/BMK3_2x.webp" />
+              <img alt="PADI 5-Star Resort" className="w-full h-full object-cover grayscale-[0.5] group-hover:grayscale-0 transition-all duration-500" src="/img/work-client/BMK3_2x.webp" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
                 <p className="text-[12px] leading-[16px] tracking-[0.1em] font-[600] text-white uppercase">DIVE COURSES</p>
               </div>
             </div>
             {/* Post 2 */}
             <div className="aspect-square bg-white/5 rounded-lg overflow-hidden group relative border border-white/10">
-              <img alt="Liveaboard Trips" className="w-full h-full object-cover grayscale-[0.5] group-hover:grayscale-0 transition-all duration-500" src="/img/work client/BMK4_2x.webp" />
+              <img alt="Liveaboard Trips" className="w-full h-full object-cover grayscale-[0.5] group-hover:grayscale-0 transition-all duration-500" src="/img/work-client/BMK4_2x.webp" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
                 <p className="text-[12px] leading-[16px] tracking-[0.1em] font-[600] text-white uppercase">KOMODO ARCHIPELAGO</p>
               </div>
             </div>
             {/* Post 3 */}
             <div className="aspect-square bg-white/5 rounded-lg overflow-hidden group relative border border-white/10">
-              <img alt="Marine Life" className="w-full h-full object-cover grayscale-[0.5] group-hover:grayscale-0 transition-all duration-500" src="/img/work client/BMK5_2x.webp" />
+              <img alt="Marine Life" className="w-full h-full object-cover grayscale-[0.5] group-hover:grayscale-0 transition-all duration-500" src="/img/work-client/BMK5_2x.webp" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
                 <p className="text-[12px] leading-[16px] tracking-[0.1em] font-[600] text-white uppercase">UNDERWATER WORLD</p>
               </div>
             </div>
             {/* Post 4 */}
             <div className="aspect-square bg-white/5 rounded-lg overflow-hidden group relative border border-white/10">
-              <img alt="Experienced Guides" className="w-full h-full object-cover grayscale-[0.5] group-hover:grayscale-0 transition-all duration-500" src="/img/work client/BMK-5581.jpg" />
+              <img alt="Experienced Guides" className="w-full h-full object-cover grayscale-[0.5] group-hover:grayscale-0 transition-all duration-500" src="/img/work-client/BMK-5581.jpg" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
                 <p className="text-[12px] leading-[16px] tracking-[0.1em] font-[600] text-white uppercase">DIVE SAFARIS</p>
               </div>
             </div>
             {/* Post 5 */}
             <div className="aspect-square bg-white/5 rounded-lg overflow-hidden group relative border border-white/10">
-              <img alt="Scuba Equipment" className="w-full h-full object-cover grayscale-[0.5] group-hover:grayscale-0 transition-all duration-500" src="/img/work client/BMK2_2x.webp" />
+              <img alt="Scuba Equipment" className="w-full h-full object-cover grayscale-[0.5] group-hover:grayscale-0 transition-all duration-500" src="/img/work-client/BMK2_2x.webp" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
                 <p className="text-[12px] leading-[16px] tracking-[0.1em] font-[600] text-white uppercase">GEAR & RETAIL</p>
               </div>
             </div>
             {/* Post 6 */}
             <div className="aspect-square bg-white/5 rounded-lg overflow-hidden group relative border border-white/10">
-              <img alt="Hospitality Hub" className="w-full h-full object-cover grayscale-[0.5] group-hover:grayscale-0 transition-all duration-500" src="/img/work client/BMK-5640.jpg" />
+              <img alt="Hospitality Hub" className="w-full h-full object-cover grayscale-[0.5] group-hover:grayscale-0 transition-all duration-500" src="/img/work-client/BMK-5640.jpg" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
                 <p className="text-[12px] leading-[16px] tracking-[0.1em] font-[600] text-white uppercase">DIVERS COMMUNITY</p>
               </div>

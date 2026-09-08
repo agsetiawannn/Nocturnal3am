@@ -22,7 +22,7 @@ export default function Samaya() {
         </div>
         {/* Full-width Hero Image */}
         <div className="mt-6 md:mt-24 w-full h-[160px] md:h-[600px] overflow-hidden rounded-md md:rounded-lg group">
-          <img alt="Pertamina Bali Station" className="w-full h-full object-cover grayscale-[0.2] hover:grayscale-0 transition-all duration-700 scale-100 group-hover:scale-105" src="/img/work client/samaya ubud/JGT04526.jpg" onError={(e) => { e.target.src = '/img/pertamina.webp' }} />
+          <img alt="Pertamina Bali Station" className="w-full h-full object-cover grayscale-[0.2] hover:grayscale-0 transition-all duration-700 scale-100 group-hover:scale-105" src="/img/work-client/samaya-ubud/JGT04526.jpg" onError={(e) => { e.target.src = '/img/pertamina.webp' }} />
         </div>
       </section>
 
@@ -66,7 +66,7 @@ export default function Samaya() {
           </div>
           <div className="col-span-5 md:col-span-5 md:col-start-8 mt-0">
             <div className="aspect-[4/5] rounded-lg overflow-hidden border border-white/10">
-              <img alt="Pertamina Staff" className="w-full h-full object-cover transition-transform duration-1000 hover:scale-110" src="/img/work client/samaya ubud/DSC01533.jpg" />
+              <img alt="Pertamina Staff" className="w-full h-full object-cover transition-transform duration-1000 hover:scale-110" src="/img/work-client/samaya-ubud/DSC01533.jpg" />
             </div>
           </div>
         </div>
@@ -81,42 +81,42 @@ export default function Samaya() {
           <div className="grid grid-cols-2 md:grid-cols-3 gap-1 md:gap-6">
             {/* Post 1 */}
             <div className="aspect-square bg-white/5 rounded-lg overflow-hidden group relative border border-white/10">
-              <img alt="Private Pool Villa" className="w-full h-full object-cover grayscale-[0.5] group-hover:grayscale-0 transition-all duration-500" src="/img/work client/samaya ubud/28May-Feed1.jpg" />
+              <img alt="Private Pool Villa" className="w-full h-full object-cover grayscale-[0.5] group-hover:grayscale-0 transition-all duration-500" src="/img/work-client/samaya-ubud/28May-Feed1.jpg" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
                 <p className="text-[12px] leading-[16px] tracking-[0.1em] font-[600] text-white uppercase">LUXURY ACCOMMODATION</p>
               </div>
             </div>
             {/* Post 2 */}
             <div className="aspect-square bg-white/5 rounded-lg overflow-hidden group relative border border-white/10">
-              <img alt="Riverside Sanctuary" className="w-full h-full object-cover grayscale-[0.5] group-hover:grayscale-0 transition-all duration-500" src="/img/work client/samaya ubud/feed1 copy.png" />
+              <img alt="Riverside Sanctuary" className="w-full h-full object-cover grayscale-[0.5] group-hover:grayscale-0 transition-all duration-500" src="/img/work-client/samaya-ubud/feed1-copy.png" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
                 <p className="text-[12px] leading-[16px] tracking-[0.1em] font-[600] text-white uppercase">NATURE RETREAT</p>
               </div>
             </div>
             {/* Post 3 */}
             <div className="aspect-square bg-white/5 rounded-lg overflow-hidden group relative border border-white/10">
-              <img alt="Authentic Hospitality" className="w-full h-full object-cover grayscale-[0.5] group-hover:grayscale-0 transition-all duration-500" src="/img/work client/samaya ubud/feed1.png" />
+              <img alt="Authentic Hospitality" className="w-full h-full object-cover grayscale-[0.5] group-hover:grayscale-0 transition-all duration-500" src="/img/work-client/samaya-ubud/feed1.png" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
                 <p className="text-[12px] leading-[16px] tracking-[0.1em] font-[600] text-white uppercase">CULINARY EXPERIENCE </p>
               </div>
             </div>
             {/* Post 4 */}
             <div className="aspect-square bg-white/5 rounded-lg overflow-hidden group relative border border-white/10">
-              <img alt="Fine Dining" className="w-full h-full object-cover grayscale-[0.5] group-hover:grayscale-0 transition-all duration-500" src="/img/work client/samaya ubud/22June-Feed1.jpg" />
+              <img alt="Fine Dining" className="w-full h-full object-cover grayscale-[0.5] group-hover:grayscale-0 transition-all duration-500" src="/img/work-client/samaya-ubud/22June-Feed1.jpg" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
                 <p className="text-[12px] leading-[16px] tracking-[0.1em] font-[600] text-white uppercase">RELAXATION</p>
               </div>
             </div>
             {/* Post 5 */}
             <div className="aspect-square bg-white/5 rounded-lg overflow-hidden group relative border border-white/10">
-              <img alt="Spa & Wellness" className="w-full h-full object-cover grayscale-[0.5] group-hover:grayscale-0 transition-all duration-500" src="/img/work client/samaya ubud/26July-Feed1.jpg" />
+              <img alt="Spa & Wellness" className="w-full h-full object-cover grayscale-[0.5] group-hover:grayscale-0 transition-all duration-500" src="/img/work-client/samaya-ubud/26July-Feed1.jpg" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
                 <p className="text-[12px] leading-[16px] tracking-[0.1em] font-[600] text-white uppercase">BALINESE CULTURE</p>
               </div>
             </div>
             {/* Post 6 */}
             <div className="aspect-square bg-white/5 rounded-lg overflow-hidden group relative border border-white/10">
-              <img alt="Romantic Getaway" className="w-full h-full object-cover grayscale-[0.5] group-hover:grayscale-0 transition-all duration-500" src="/img/work client/samaya ubud/DSC02884.jpg" />
+              <img alt="Romantic Getaway" className="w-full h-full object-cover grayscale-[0.5] group-hover:grayscale-0 transition-all duration-500" src="/img/work-client/samaya-ubud/DSC02884.jpg" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
                 <p className="text-[12px] leading-[16px] tracking-[0.1em] font-[600] text-white uppercase">HONEYMOON DESTINATION</p>
               </div>

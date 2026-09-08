@@ -5,7 +5,7 @@ export const works = [
     slug: 'pertamina',
     description: 'An Indonesian State-Owned Enterprise (BUMN) operating in the energy sector.',
     tags: ['Social Media Management'],
-    imgs: ['/img/work client/pertamnina/sbbu.png'],
+    imgs: ['/img/work-client/pertamnina/sbbu.png'],
   },
   {
     number: '02',
@@ -13,7 +13,7 @@ export const works = [
     slug: 'yamaha-bali',
     description: 'Yamaha Bali is an official dealer network and Yamaha motorcycle repair shop in the Bali region',
     tags: ['Content Creation'],
-    imgs: ['/img/work client/IMG_3285.jpg'],
+    imgs: ['/img/work-client/IMG_3285.jpg'],
   },
   {
     number: '03',
@@ -21,7 +21,7 @@ export const works = [
     slug: 'hot-stone',
     description: 'A specialized, science-based wellness center and retreat in Ubud, Bali, focusing on \'Air, Water, and Frequency\' for deep cellular rejuvenation.',
     tags: ['Social Media Management'],
-    imgs: ['/img/work client/hot stone/HOT STONE-6.jpg'],
+    imgs: ['/img/work-client/hot-stone/HOT-STONE-6.jpg'],
   },
   {
     number: '04',
@@ -29,7 +29,7 @@ export const works = [
     slug: 'the-smoke-house',
     description: "Labuan Bajo's only dedicated low-and-slow BBQ. It offers a menu of brisket, ribs, and pulled meats, alongside a live fire grill for local produce, craft beers, and sunset views.",
     tags: ['Social Media Management'],
-    imgs: ['/img/work client/SMOKE HOUSE/TSH 11-10-2.jpg'],
+    imgs: ['/img/work-client/smoke-house/TSH-11-10-2.jpg'],
   },
   {
     number: '05',
@@ -37,7 +37,7 @@ export const works = [
     slug: 'tanuki-sushi-bar',
     description: 'A modern, stylish Japanese restaurant located in Seminyak, specializing in high-quality sushi, sashimi, and inventive, freshly prepared rolls.',
     tags: ['Branding', 'Social Media Management', 'Photo Production'],
-    imgs: ['/img/work client/TANUKI/SPN00008.jpg'],
+    imgs: ['/img/work-client/TANUKI/SPN00008.jpg'],
   },
   {
     number: '06',
@@ -45,7 +45,7 @@ export const works = [
     slug: 'mallali',
     description: 'Mallali is a local Indonesian lifestyle and fragrance brand that specializes in creating "mood-enhancing" scents and personal care products.',
     tags: ['Social Media Management'],
-    imgs: ['/img/work client/MALLALI/JGT05087.jpg'],
+    imgs: ['/img/work-client/MALLALI/JGT05087.jpg'],
   },
   {
     number: '07',
@@ -53,7 +53,7 @@ export const works = [
     slug: 'summerhouse',
     description: 'Summerhouse Bali is a villa management brand that creates calm, well cared spaces designed for living, not just staying.',
     tags: ['Social Media Management'],
-    imgs: ['/img/work client/summer house/TPG-07756.jpg'],
+    imgs: ['/img/work-client/summer-house/TPG-07756.jpg'],
   },
   {
     number: '08',
@@ -61,7 +61,7 @@ export const works = [
     slug: 'samaya',
     description: 'The Samaya Bali is a riverside sanctuary focused on nature and spiritual tranquility, specializing in high-end private pool villa accommodations.',
     tags: ['Social Media Management'],
-    imgs: ['/img/work client/samaya ubud/JGT04526.jpg'],
+    imgs: ['/img/work-client/samaya-ubud/JGT04526.jpg'],
   },
   {
     number: '09',
@@ -69,7 +69,7 @@ export const works = [
     slug: 'surf-and-brew',
     description: 'Surf & Brew is a laid back beachside cafe in Kedungu, Bali serving Indonesian comfort food, coffee, and cocktails',
     tags: ['Social Media Management'],
-    imgs: ['/img/work client/surf n brew/s.jpg'],
+    imgs: ['/img/work-client/surf-n-brew/s.jpg'],
   },
   {
     number: '10',
@@ -77,6 +77,6 @@ export const works = [
     slug: 'blue-marlin-komodo',
     description: 'Blue Marlin Komodo is a premier PADI 5-Star Dive Resort and hospitality hub located in Labuan Bajo, Indonesia.',
     tags: ['Ads Management', 'Photo Production'],
-    imgs: ['/img/work client/BMK-6043.jpg'],
+    imgs: ['/img/work-client/BMK-6043.jpg'],
   },
 ];
