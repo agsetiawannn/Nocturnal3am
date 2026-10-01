@@ -57,7 +57,7 @@ function Home() {
 
     // Force Safari to evaluate the favicon by changing the title and injecting the final .ico directly
     useEffect(() => {
-        document.title = "Tigapagi - Creative Agency";
+        document.title = "Tigapagi | Bali Creative Agency";
 
         const updateIcon = (rel) => {
             let link = document.querySelector(`link[rel='${rel}']`);
@@ -96,6 +96,12 @@ function Home() {
                 body: JSON.stringify(payload),
             });
             if (response.ok) {
+                if (typeof window !== 'undefined' && window.gtag) {
+                    window.gtag('event', 'form_submit', {
+                        'event_category': 'Engagement',
+                        'event_label': 'Lead Form'
+                    });
+                }
                 setFormStep(7);
             } else {
                 const errorData = await response.json().catch(() => null);
