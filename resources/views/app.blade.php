@@ -12,7 +12,7 @@
   <meta name="referrer" content="strict-origin-when-cross-origin">
 
   <!-- Open Graph / Social Sharing -->
-  <meta property="og:title" content="Tigapagi - Creative Agency">
+  <meta property="og:title" content="Tigapagi | Bali Creative Agency">
   <meta property="og:type" content="website">
   <meta property="og:image" content="{{ asset('img/logo tp kotak.png') }}">
 
