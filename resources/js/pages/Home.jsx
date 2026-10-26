@@ -331,15 +331,22 @@ function Home() {
 
                     {/* Client Image Container */}
                     <div
-                        className="relative overflow-hidden transition-[max-height] duration-500 ease-in-out"
-                        style={{ maxHeight: showClientWrap ? '1500px' : '80px' }}
+                        className={`relative transition-[max-height] duration-500 ease-in-out ${
+                            showClientWrap ? 'overflow-visible' : 'overflow-hidden'
+                        }`}
+                        style={{
+                            maxHeight: showClientWrap ? '3000px' : '80px',
+                            WebkitTransform: 'translateZ(0)',
+                            transform: 'translateZ(0)',
+                        }}
                     >
-                        <picture>
-                            <source media="(max-width: 767px)" srcSet="/img/clientm.webp?v=3" />
+                        <picture className="block w-full">
+                            <source media="(max-width: 767px)" srcSet="/img/clientm.webp?v=4" />
                             <img
-                                src="/img/full%20client.webp?v=3"
+                                src="/img/full%20client.webp?v=4"
                                 alt="Our Clients"
-                                className="w-full"
+                                className="w-full h-auto block"
+                                style={{ width: '100%', height: 'auto', display: 'block' }}
                             />
                         </picture>
                         {/* Gradient fade at bottom when collapsed */}
@@ -351,7 +358,7 @@ function Home() {
                         )}
                     </div>
 
-                    <div className="mt-8 flex items-center gap-4 relative z-20">
+                    <div className="mt-8 flex items-center relative z-20">
                         <button
                             type="button"
                             aria-expanded={showClientWrap}
@@ -368,11 +375,6 @@ function Home() {
                                 </svg>
                             </span>
                         </button>
-                        {showClientWrap && (
-                            <span className="text-white/50 text-sm font-light italic">
-                                And many more
-                            </span>
-                        )}
                     </div>
 
                 </div>
