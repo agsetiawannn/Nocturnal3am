@@ -721,7 +721,7 @@ function Landing() {
             </section>
 
             {/* Clients Section */}
-            <section className="py-20 bg-black">
+            <section className="relative z-10 py-20 bg-black">
                 <div className="max-w-6xl mx-auto px-6 text-left">
                     <h2 className="text-2xl md:text-4xl font-light text-white mb-12">
                         Our <strong className="font-semibold">Clients</strong>
@@ -729,14 +729,14 @@ function Landing() {
 
                     {/* Client Image Container */}
                     <div
-                        className="relative overflow-hidden transition-[max-height] duration-700 ease-in-out"
-                        style={{ maxHeight: showClientWrap ? '2500px' : '80px' }}
+                        className="relative overflow-hidden transition-[max-height] duration-500 ease-in-out"
+                        style={{ maxHeight: showClientWrap ? '1500px' : '80px' }}
                     >
                         <picture>
                             <source media="(max-width: 767px)" srcSet="/img/clientm.webp?v=3" />
                             <img
-                                src="/img/full client.webp?v=3"
-                                alt="And many more"
+                                src="/img/full%20client.webp?v=3"
+                                alt="Our Clients"
                                 className="w-full"
                             />
                         </picture>
@@ -749,14 +749,16 @@ function Landing() {
                         )}
                     </div>
 
-                    <div className="mt-8 flex items-center gap-3">
+                    <div className="mt-8 flex items-center gap-4 relative z-20">
                         <button
-                            onClick={() => setShowClientWrap(!showClientWrap)}
-                            className="flex items-center gap-2 bg-transparent text-white text-lg font-light cursor-pointer border-none outline-none active:opacity-70 md:hover:opacity-70 transition-opacity duration-300 whitespace-nowrap"
+                            type="button"
+                            aria-expanded={showClientWrap}
+                            onClick={() => setShowClientWrap((prev) => !prev)}
+                            className="flex items-center gap-2 bg-transparent text-white text-lg font-light cursor-pointer border-none outline-none active:opacity-70 md:hover:opacity-70 transition-opacity duration-300 whitespace-nowrap select-none touch-manipulation"
                         >
-                            {showClientWrap ? 'And many more' : 'View all clients'}
+                            {showClientWrap ? 'Show less' : 'View all clients'}
                             <span
-                                className="inline-flex flex-shrink-0 items-center justify-center w-7 h-7 rounded-full border border-white/60 transition-transform duration-500"
+                                className="inline-flex flex-shrink-0 items-center justify-center w-7 h-7 rounded-full border border-white/60 transition-transform duration-500 pointer-events-none"
                                 style={{ transform: showClientWrap ? 'rotate(180deg)' : 'rotate(0deg)' }}
                             >
                                 <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
@@ -764,6 +766,11 @@ function Landing() {
                                 </svg>
                             </span>
                         </button>
+                        {showClientWrap && (
+                            <span className="text-white/50 text-sm font-light italic">
+                                And many more
+                            </span>
+                        )}
                     </div>
 
                 </div>
